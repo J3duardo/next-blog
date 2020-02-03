@@ -7,6 +7,7 @@ require("dotenv").config();
 
 // Router
 const blogRoutes = require("./routes/blogRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 // Conectar con la base de datos
 mongoose.connect(process.env.DATABASE, {
@@ -31,6 +32,7 @@ app.unsubscribe(cookieParser());
 
 // Rutas
 app.use("/api", blogRoutes);
+app.use("/api", authRoutes);
 
 //CORS
 if(process.env.NODE_ENV === "development") {
