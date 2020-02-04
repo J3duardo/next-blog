@@ -28,16 +28,12 @@ const app = express();
 // Middlewares
 app.use(morgan("dev"));
 app.use(express.json());
-app.unsubscribe(cookieParser());
+app.use(cookieParser());
+app.use(cors());
 
 // Rutas
 app.use("/api", blogRoutes);
 app.use("/api", authRoutes);
-
-//CORS
-if(process.env.NODE_ENV === "development") {
-  app.use(cors({origin: `http://${process.env.CLIENT_URL}`}));
-}
 
 // Puerto
 const PORT = process.env.PORT || 8000;
