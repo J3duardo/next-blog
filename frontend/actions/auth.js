@@ -16,3 +16,17 @@ export const signup = async (userData) => {
     }
   });
 }
+
+export const signin = async (userData) => {
+  return await axios({
+    method: "POST",
+    url: `${API}/api/login`,
+    data: {
+      email: userData.email,
+      password: userData.password
+    },
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+}
