@@ -91,6 +91,7 @@ const SignupComponent = () => {
             name="name"
             className="form-control"
             placeholder="Nombre"
+            disabled={state.loading || !state.showForm}
             onChange={onChangeHandler}
             value={state.name}
           />
@@ -101,6 +102,7 @@ const SignupComponent = () => {
             name="email"
             className="form-control"
             placeholder="Email"
+            disabled={state.loading || !state.showForm}
             onChange={onChangeHandler}
             value={state.email}
           />
@@ -111,6 +113,7 @@ const SignupComponent = () => {
             name="password"
             className="form-control"
             placeholder="Contraseña"
+            disabled={state.loading || !state.showForm}
             onChange={onChangeHandler}
             value={state.password}
           />
@@ -120,6 +123,7 @@ const SignupComponent = () => {
             type="password"
             name="passwordConfirm"
             className="form-control"
+            disabled={state.loading || !state.showForm}
             placeholder="Confirmar contraseña"
             onChange={onChangeHandler}
             value={state.passwordConfirm}
@@ -128,7 +132,7 @@ const SignupComponent = () => {
         <div>
           <button
             className="btn btn-primary"
-            disabled={state.loading}
+            disabled={state.loading || !state.showForm}
           >
             Registrarse
           </button>
