@@ -1,8 +1,8 @@
 import {useState} from "react";
-import {signin} from "../../actions/auth";
+import {signin, authenticateUser} from "../../actions/auth";
 import Router from "next/router";
 
-const SigninComponent = () => {
+const LoginComponent = () => {
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -35,7 +35,7 @@ const SigninComponent = () => {
       }
       const response = await signin(userData);
       console.log(response.data);
-
+      
       setState({
         email: "",
         password: "",
@@ -43,7 +43,9 @@ const SigninComponent = () => {
         error: null,
         loading: false,
         showForm: false
-      }, setTimeout(() => {Router.push("/")}, 2000));
+      });
+
+      authenticateUser(response.data.data, () => setTimeout(() => {Router.push("/")}, 2000))
 
     } catch (error) {
       if(error.response && error.response.data) {
@@ -117,4 +119,4 @@ const SigninComponent = () => {
   )
 }
 
-export default SigninComponent;
+export default LoginComponent;

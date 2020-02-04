@@ -1,6 +1,5 @@
 import Layout from "../components/Layout";
-import Link from "next/link";
-import SigninComponent from "../components/auth/SigninComponent";
+import LoginComponent from "../components/auth/LoginComponent";
 
 const Login = () => {
   return (
@@ -8,7 +7,7 @@ const Login = () => {
       <h2 className="text-center mb-4">Iniciar sesión</h2>
       <div className="row">
         <div className="col-md-6 offset-md-3">
-          <SigninComponent />
+          <LoginComponent />
         </div>
       </div>
     </Layout>
