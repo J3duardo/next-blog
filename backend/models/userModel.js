@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     trim: true,
     required: true,
     maxlength: 30,
-    unique: true,
+    unique: [true, "Username no disponible"],
     index: true,
     lowercase: true
   },
