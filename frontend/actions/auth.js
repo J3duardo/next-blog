@@ -34,6 +34,13 @@ export const signin = async (userData) => {
   })
 }
 
+// Funcionalidad para cerrar sesión
+export const signout = async () => {
+  removeCookie("token");
+  removeLocalStorage("user");
+  return await axios.get(`${API}/api/signout`);
+}
+
 // Crear cookie con el token de autenticación
 export const setCookie = (key, val) => {
   if(process.browser) {
@@ -45,7 +52,7 @@ export const setCookie = (key, val) => {
 
 // Remover el cookie con el token de autenticación
 export const removeCookie = (key) => {
-  if(process.broser) {
+  if(process.browser) {
     cookieJs.remove(key, {
       expires: 1
     })
@@ -54,8 +61,8 @@ export const removeCookie = (key) => {
 
 // Tomar el cookie con el token de autenticación
 export const getCookie = (key) => {
-  if(process.broser) {
-    cookieJs.get(key)
+  if(process.browser) {
+    return cookieJs.get(key)
   }
 }
 
@@ -83,11 +90,11 @@ export const authenticateUser = (data, callback) => {
 // Chequear si hay usuario autenticado
 export const isAuth = () => {
   if(process.browser) {
-    const checkCookie = getCookie("token");
+    const checkCookie = !!getCookie("token");
     if(checkCookie && localStorage.getItem("user")) {
-      return JSON.parse(localStorage.getItem("user"))
+      return true;
     }
   } else {
-    return false
+    return false;
   }
 }

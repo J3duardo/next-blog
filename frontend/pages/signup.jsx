@@ -1,8 +1,16 @@
+import {useEffect} from "react";
+import Router from "next/router";
 import Layout from "../components/Layout";
-import Link from "next/link";
 import SignupComponent from "../components/auth/SignupComponent";
+import {isAuth} from "../actions/auth";
 
 const Signup = () => {
+  useEffect(() => {
+    if(isAuth()) {
+      Router.push("/")
+    }
+  }, []);
+
   return (
     <Layout>
       <h2 className="text-center mb-4">Registrarse</h2>
