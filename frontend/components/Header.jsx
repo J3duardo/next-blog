@@ -22,28 +22,31 @@ const Header = (props) => {
   const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <div>
+    <div className="mb-4">
       <Navbar color="light" light expand="md">
-        <NavbarBrand href="/">{APP_NAME}</NavbarBrand>
+        <Link href="/">
+          <NavbarBrand>
+            <span>{APP_NAME}</span>
+          </NavbarBrand>
+        </Link>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
-          <Nav className="mr-auto" navbar>
+          <Nav className="ml-auto" navbar>
             <NavItem>
               <Link href="/login">
                 <NavLink>
-                  Login
+                  Iniciar sesión
                 </NavLink>
               </Link>
             </NavItem>
             <NavItem>
               <Link href="/signup">
                 <NavLink>
-                  Signup
+                  Registrarse
                 </NavLink>
               </Link>
             </NavItem>
           </Nav>
-          <NavbarText>Simple Text</NavbarText>
         </Collapse>
       </Navbar>
     </div>
