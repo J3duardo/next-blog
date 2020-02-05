@@ -92,7 +92,7 @@ export const isAuth = () => {
   if(process.browser) {
     const checkCookie = !!getCookie("token");
     if(checkCookie && localStorage.getItem("user")) {
-      return true;
+      return localStorage.getItem("user");
     }
   } else {
     return false;

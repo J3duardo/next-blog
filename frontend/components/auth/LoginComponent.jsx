@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {signin, authenticateUser} from "../../actions/auth";
+import {signin, authenticateUser, isAuth} from "../../actions/auth";
 import Router from "next/router";
 
 const LoginComponent = () => {
@@ -33,8 +33,8 @@ const LoginComponent = () => {
         email: state.email,
         password: state.password
       }
+      
       const response = await signin(userData);
-      console.log(response.data);
       
       setState({
         email: "",
@@ -45,7 +45,13 @@ const LoginComponent = () => {
         showForm: false
       });
 
-      authenticateUser(response.data.data, () => setTimeout(() => {Router.push("/")}, 2000))
+      authenticateUser(response.data.data, () => setTimeout(() => {
+        if(isAuth() && JSON.parse(isAuth()).role === 1) {
+          Router.push("/admin")
+        } else {
+          Router.push("/user")
+        }
+      }, 1500))
 
     } catch (error) {
       if(error.response && error.response.data) {
