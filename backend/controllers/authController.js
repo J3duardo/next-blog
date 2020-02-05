@@ -81,9 +81,7 @@ exports.login = async (req, res) => {
     // Generar el token de autenticación
     //Crear el token de autorización y enviarlo al cliente
     const tokenPayload = {
-      user: {
-        id: user._id
-      }
+      userId: user._id
     }
   
     jwt.sign(tokenPayload, process.env.JWT_SECRET, {expiresIn: "1d"}, (err, token) => {
@@ -122,6 +120,13 @@ exports.login = async (req, res) => {
   }
 }
 
+// Controller para tomar data del perfil del usuario autenticado
+exports.readProfile = (req, res) => {
+  return res.json({
+    profile: req.profile
+  })
+}
+
 // Controller para cerrar sesión de usuario
 exports.signout = async (req, res) => {
   res.clearCookie("token");
@@ -135,3 +140,51 @@ exports.signout = async (req, res) => {
 exports.protectRoute = expressJwt({
   secret: process.env.JWT_SECRET
 })
+
+// Middleware de autenticación: Chequea si hay usuario autenticado mediante el token guardado en los cookies
+exports.authMiddleware = async (req, res, next) => {
+  try {
+    const user = await User.findById({_id: req.user.userId});
+
+    if(!user) {
+      return res.status(404).json({
+        status: "failed",
+        error: "No se encontró el usuario"
+      })
+    }
+
+    req.profile = user;
+    next();
+
+  } catch (error) {
+    return res.status(500).json({
+      status: "failed",
+      message: "Internal server error",
+      error: error
+    })
+  }
+}
+
+// Middleware para otorgar acceso sólo a administradores
+exports.adminMiddleware = async (req, res, next) => {
+  try {
+    const admin = await User.findById({_id: req.user.userId});
+
+    if(!admin || admin && admin.role !== 1) {
+      return res.json({
+        status: "failed",
+        error: "Acceso denegado: Necesita provilegios de administrador para acceder a esta página"
+      })
+    }
+
+    req.profile = admin;
+    next();
+
+  } catch (error) {
+    return res.status(500).json({
+      status: "failed",
+      message: "Internal server error",
+      error: error
+    })
+  }
+}
