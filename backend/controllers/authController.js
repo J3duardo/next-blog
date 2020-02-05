@@ -174,7 +174,7 @@ exports.adminMiddleware = async (req, res, next) => {
     if(!admin || admin && admin.role !== 1) {
       return res.json({
         status: "failed",
-        error: "Acceso denegado: Necesita provilegios de administrador para acceder a esta página"
+        error: "Acceso denegado: Necesita provilegios de administrador para ejecutar esta acción"
       })
     }
 
