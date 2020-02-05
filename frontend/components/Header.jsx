@@ -16,16 +16,22 @@ import {
 const Header = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState(false);
+  const [role, setRole] = useState(null)
 
   useEffect(() => {
-    if(isAuth()) {
+    if(isAuth() && JSON.parse(isAuth()).role === 0) {
       setAuth(true);
+      setRole("user");
+    } else if(isAuth() && JSON.parse(isAuth()).role === 1) {
+      setAuth(true);
+      setRole("admin")
     }
   }, []);
 
   const signoutHandler = async () => {
     await signout();
     setAuth(false);
+    setRole(null)
     Router.push("/login");
   }
 
@@ -61,14 +67,46 @@ const Header = (props) => {
               </Nav>
             </React.Fragment>
             :
-            <React.Fragment>
+            auth && role === "user" ?
+              <Nav className="ml-auto" navbar>
+                <NavItem>
+                  <Link href="/user">
+                    <NavLink>
+                      Dashboard
+                    </NavLink>
+                  </Link>
+                </NavItem>
+                <button
+                  className="btn btn-primary ml-auto"
+                  onClick={signoutHandler}
+                >
+                  Cerrar sesión
+                </button>                
+              </Nav>
+            :
+            auth && role === "admin" &&
+            <Nav className="ml-auto" navbar>
+              <NavItem>
+                <Link href="/user">
+                  <NavLink>
+                    Dashboard
+                  </NavLink>
+                </Link>
+              </NavItem>
+              <NavItem>
+                <Link href="/admin">
+                  <NavLink>
+                    Administrar
+                  </NavLink>
+                </Link>
+              </NavItem>
               <button
                 className="btn btn-primary ml-auto"
                 onClick={signoutHandler}
               >
                 Cerrar sesión
               </button>
-            </React.Fragment>
+            </Nav>
           }
         </Collapse>
       </Navbar>
