@@ -8,6 +8,7 @@ require("dotenv").config();
 // Router
 const blogRoutes = require("./routes/blogRoutes");
 const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 // Conectar con la base de datos
 mongoose.connect(process.env.DATABASE, {
@@ -34,6 +35,19 @@ app.use(cors());
 // Rutas
 app.use("/api", blogRoutes);
 app.use("/api", authRoutes);
+app.use("/api", userRoutes);
+
+// Middleware para manejar errores de token
+app.use((err, req, res, next) => {
+  if(err.name === 'UnauthorizedError') {
+    res.status(401).json({
+      status: "failed",
+      error: "Debe iniciar sesión para acceder a este contenido"
+    });
+    return;
+  }
+next();
+});
 
 // Puerto
 const PORT = process.env.PORT || 8000;
