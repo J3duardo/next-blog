@@ -18,10 +18,12 @@ const adminIndex = () => {
                     <a>Crear categoría</a>
                   </Link>
                 </li>
+                <li className="list-group-item">
+                  <Link href="/admin/create/category-tag">
+                    <a>Crear Tag</a>
+                  </Link>
+                </li>
               </ul>
-            </div>
-            <div className="col-md-8">
-              Righ
             </div>
           </div>
         </div>

@@ -2,12 +2,12 @@ import {useState, useEffect} from "react";
 import Link from "next/link";
 import Router from "next/router";
 import {getCookie} from "../../actions/auth";
-import {createCategory, getAllCategories, deleteCategory} from "../../actions/category";
+import {createTag, getAllTags, deleteTag} from "../../actions/tag";
 
-const Category = () => {
+const Tag = () => {
   const [state, setState] = useState({
-    name: "",
-    categories: [],
+    tagName: "",
+    tags: [],
     token: getCookie("token"),
     success: false,
     successMessage: "",
@@ -19,7 +19,7 @@ const Category = () => {
   });
 
   // Funcionalidad para tomar todas las categorías
-  const getCategories = async () => {
+  const getTags = async () => {
     setState({
       ...state,
       loading: true,
@@ -27,11 +27,11 @@ const Category = () => {
     });
 
     try {
-      const response = await getAllCategories();        
+      const response = await getAllTags();        
       setState({
         ...state,
-        name: "",
-        categories: response.data.data.categories,
+        tagName: "",
+        tags: response.data.data.tags,
         loading: false,
         error: null
       })
@@ -46,7 +46,7 @@ const Category = () => {
   }
 
   // Funcionalidad para eliminar categoría
-  const deleteCategoryHandler = async (slug, token) => {
+  const deleteTagHandler = async (slug, token) => {
     setState({
       ...state,
       loadingDeletion: true,
@@ -54,7 +54,7 @@ const Category = () => {
     });
 
     try {
-      const res = await deleteCategory(slug, token);   
+      const res = await deleteTag(slug, token);   
 
       setState({
         ...state,
@@ -67,7 +67,7 @@ const Category = () => {
 
       // Tomar las categorías actualizadas
       setTimeout(async () => {
-        await getCategories();
+        await getTags();
       }, 1500);
       
     } catch (error) {
@@ -91,7 +91,7 @@ const Category = () => {
 
   // Tomar todas las categorías al montar el componente
   useEffect(() => {
-    getCategories();
+    getTags();
   }, []);
 
   const onChangeHandler = (e) => {
@@ -113,10 +113,10 @@ const Category = () => {
     });
 
     try {
-      const res = await createCategory(state.name, state.token);
+      const res = await createTag(state.tagName, state.token);
       setState({
         ...state,
-        name: "",
+        tagName: "",
         loadingCreation: false,
         success: true,
         successMessage: res.data.message,
@@ -125,7 +125,7 @@ const Category = () => {
 
       // Tomar las categorías actualizadas
       setTimeout(async () => {
-        await getCategories();
+        await getTags();
       }, 1500);
 
     } catch (error) {
@@ -148,17 +148,17 @@ const Category = () => {
   }
 
   // Mostrar las categorías en pantalla
-  const renderCategories = () => {
-    return state.categories.map((category, i) => {
+  const renderTags = () => {
+    return state.tags.map((tag, i) => {
       return (
         <button
-          title="Doble click para eliminar categoría"
-          key={category._id}
-          id={`category-${category._id}`}
-          onDoubleClick={() => deleteCategoryHandler(category.slug, state.token)}
+          title="Doble click para eliminar el tag"
+          key={tag._id}
+          id={`category-${tag._id}`}
+          onDoubleClick={() => deleteTagHandler(tag.slug, state.token)}
           className="btn btn-outline-primary mr-1 ml-1"
         >
-          {category.name}
+          {tag.name}
         </button>
       )
     })
@@ -166,11 +166,11 @@ const Category = () => {
   
   const showLoading = () => {
     return (
-      state.loading ? <div className="alert alert-info">Cargando categorías...</div>
+      state.loading ? <div className="alert alert-info">Cargando tags...</div>
       :
-      state.loadingCreation ? <div className="alert alert-info">Creando categoría...</div>
+      state.loadingCreation ? <div className="alert alert-info">Creando tag...</div>
       :
-      state.loadingDeletion ? <div className="alert alert-info">Eliminando categoría...</div>
+      state.loadingDeletion ? <div className="alert alert-info">Eliminando tag...</div>
       :
       null
     );
@@ -191,22 +191,22 @@ const Category = () => {
       {showSuccessMessage()}
       <form className="mb-3" onSubmit={onSubmitHandler}>
         <div className="form-group">
-          <label htmlFor="name" className="text-muted">Nombre</label>
+          <label htmlFor="tagName" className="text-muted">Nombre</label>
           <input
             type="text"
-            name="name"
-            id="name"
+            name="tagName"
+            id="tagName"
             autoComplete="off"
             className="form-control"
             onChange={onChangeHandler}
-            value={state.name}
+            value={state.tagName}
           />
         </div>
-        <button type="submit" className="btn btn-primary">Crear categoría</button>
+        <button type="submit" className="btn btn-primary">Crear tag</button>
       </form>
-      <div>{renderCategories()}</div>
+      <div>{renderTags()}</div>
     </React.Fragment>
   )
 }
 
-export default Category;
+export default Tag;
