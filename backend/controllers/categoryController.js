@@ -13,7 +13,7 @@ exports.createCategory = async (req, res) => {
 
     return res.json({
       status: "success",
-      message: "Categoría agregada exitosamente",
+      message: `Categoría ${name} agregada exitosamente`,
       data: {
         category
       }
@@ -102,7 +102,7 @@ exports.deleteCategory = async (req, res) => {
 
     return res.json({
       status: "success",
-      message: "Categoría eliminada exitosamente"
+      message: `Categoría ${category.name} eliminada`
     })
 
   } catch (error) {
