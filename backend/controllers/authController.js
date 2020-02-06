@@ -13,7 +13,8 @@ exports.signup = async (req, res) => {
     if(user) {
       return res.status(400).json({
         status: "failed",
-        error: "Ya existe un usuario con el email ingresado"
+        message: "Ya existe un usuario asociado al email ingresado",
+        error: "Ya existe un usuario asociado al email ingresado"
       })
     }
 
@@ -21,7 +22,7 @@ exports.signup = async (req, res) => {
     if(password !== passwordConfirm) {
       return res.status(400).json({
         status: "failed",
-        message: "Error de validación",
+        message: "Las contraseñas no coinciden",
         error: "Las contraseñas no coinciden"
       })
     }
@@ -66,7 +67,8 @@ exports.login = async (req, res) => {
     if(!user) {
       return res.status(404).json({
         status: "failed",
-        error: "No existe un usuario asociado al email ingresado"
+        message: "No existe un usuario asociado al email ingresado",
+        error: "No existe un usuario asociado al email ingresado",
       })
     };
   
@@ -74,7 +76,8 @@ exports.login = async (req, res) => {
     if(!(await user.checkPassword(req.body.password, user.password))) {
       return res.status(400).json({
         status: "failed",
-        error: "Contraseña incorrecta"
+        message: "Contraseña incorrecta",
+        error: "Contraseña incorrecta",
       })
     };
   
@@ -88,6 +91,7 @@ exports.login = async (req, res) => {
       if(err) {
         return res.status(500).json({
           status: "failed",
+          message: {...err},
           error: {...err}
         })
       }
@@ -150,7 +154,8 @@ exports.authMiddleware = async (req, res, next) => {
     if(!user) {
       return res.status(404).json({
         status: "failed",
-        error: "No se encontró el usuario"
+        message: "El usuario ingresado no existe",
+        error: "El usuario ingresado no existe"
       })
     }
 
@@ -172,8 +177,9 @@ exports.adminMiddleware = async (req, res, next) => {
     const admin = await User.findById({_id: req.user.userId});
 
     if(!admin || admin && admin.role !== 1) {
-      return res.json({
+      return res.status(401).json({
         status: "failed",
+        message: "Acceso denegado: Necesita provilegios de administrador para ejecutar esta acción",
         error: "Acceso denegado: Necesita provilegios de administrador para ejecutar esta acción"
       })
     }

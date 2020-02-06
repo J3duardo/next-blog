@@ -23,7 +23,7 @@ exports.createCategory = async (req, res) => {
     if(error.code && error.code === 11000) {
       return res.status(400).json({
         status: "failed",
-        message: "El nombre de la categoría ya fue utilizado",
+        message: "Esta categoría ya existe",
         error
       })
     }

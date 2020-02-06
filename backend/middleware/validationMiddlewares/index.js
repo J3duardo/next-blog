@@ -6,7 +6,7 @@ exports.runValidation = (req, res, next) => {
   if(!errors.isEmpty()) {
     return res.status(400).json({
       status: "failed",
-      message: "Error de validación",
+      message: errors.array()[0].msg,
       error: errors.array()[0].msg
     })
   }
