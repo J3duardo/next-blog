@@ -13,7 +13,7 @@ exports.createTag = async (req, res) => {
 
     return res.json({
       status: "success",
-      message: "Tag creado exitosamente",
+      message: `Categoría ${name} agregado exitosamente`,
       data: {
         tag
       }
@@ -23,7 +23,7 @@ exports.createTag = async (req, res) => {
     if(error.code && error.code === 11000) {
       return res.status(400).json({
         status: "failed",
-        message: "El tag ya fue creado",
+        message: "Este tag ya existe",
         error
       })
     }
@@ -102,7 +102,7 @@ exports.deleteTag = async (req, res) => {
 
     return res.json({
       status: "success",
-      message: "Tag eliminado exitosamente"
+      message: `Categoría ${tag.name} eliminada`
     })
 
   } catch (error) {
