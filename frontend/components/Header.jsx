@@ -3,6 +3,8 @@ import Link from "next/link";
 import Router from "next/router";
 import {APP_NAME} from "../config";
 import {isAuth, signout} from "../actions/auth";
+import NProgress from "nprogress";
+import "../node_modules/nprogress/nprogress.css";
 import {
   Collapse,
   Navbar,
@@ -12,6 +14,12 @@ import {
   NavItem,
   NavLink
 } from "reactstrap";
+
+// Mostrar barra de progreso al cambiar de página
+Router.onRouteChangeStart = (url) => NProgress.start();
+Router.onRouteChangeComplete = (url) => NProgress.done();
+Router.onRouteChangeError = (url) => NProgress.done();
+NProgress.configure({ showSpinner: false });
 
 const Header = (props) => {
   const [isOpen, setIsOpen] = useState(false);
