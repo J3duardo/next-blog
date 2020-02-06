@@ -10,6 +10,7 @@ const blogRoutes = require("./routes/blogRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
+const tagRoutes = require("./routes/tagRoutes");
 
 // Conectar con la base de datos
 mongoose.connect(process.env.DATABASE, {
@@ -38,6 +39,7 @@ app.use("/api", blogRoutes);
 app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", categoryRoutes);
+app.use("/api", tagRoutes);
 
 // Middleware para manejar errores de token
 app.use((err, req, res, next) => {
