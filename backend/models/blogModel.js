@@ -8,6 +8,7 @@ const blogSchema = new mongoose.Schema(
       min: 3,
       max: 160,
       index: true,
+      unique: true,
       required: true
     },
     slug: {
@@ -36,7 +37,7 @@ const blogSchema = new mongoose.Schema(
       data: Buffer,
       contentType: String
     },
-    category: [
+    categories: [
       {
         type: mongoose.Schema.ObjectId,
         ref: "Category",

@@ -1,7 +1,9 @@
 const express = require("express");
-const {time} = require("../controllers/blogController");
+const {createBlog} = require("../controllers/blogController");
+const {protectRoute, adminMiddleware} = require("../controllers/authController");
 
 const router = express.Router();
-router.get("/", time);
+
+router.post("/blog", protectRoute, adminMiddleware, createBlog);
 
 module.exports = router;
