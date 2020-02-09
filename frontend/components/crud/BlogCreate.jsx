@@ -42,7 +42,14 @@ const BlogCreate = (props) => {
       })
 
     } catch (error) {
-      setState({
+      if(error.message.toLowerCase().includes("network")) {
+        return setState({
+          ...state,
+          error: "Error al cargar los datos. Revise su conexión."
+        })
+      }
+
+      return setState({
         ...state,
         error: error.message
       })
