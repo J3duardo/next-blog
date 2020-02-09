@@ -129,3 +129,127 @@ exports.createBlog = async (req, res) => {
     })
   }
 }
+
+// Controller para tomar todos los blogs
+exports.getAllBlogs = async (req, res) => {
+  try {
+    const blogs = await Blog
+      .find()
+      .populate("categories", "_id name slug")
+      .populate("tags", "_id name slug")
+      .populate("postedBy", "_id name username profile")
+      .select("-photo -body -mtitle -mdescription");
+    return res.json({
+      status: "success",
+      message: "se muestran todos los blogs diponibles",
+      data: {blogs}
+    })
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: "internal server error",
+      error: error
+    })
+  }
+}
+
+// Controller para tomar un blog específico
+exports.getSingleBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findOne({slug: req.params.slug})
+      .populate("categories", "_id name slug")
+      .populate("tags", "_id name slug")
+      .populate("postedBy", "_id name username profile")
+      .select("-excerpt")
+
+    if(!blog) {
+      return res.status(404).json({
+        status: "failed",
+        message: "Blog no encontrado",
+        error: "Blog no encontrado"
+      })
+    }
+
+    return res.json({
+      status: "success",
+      message: "Blog encontrado",
+      data: blog
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: "internal server error",
+      error: error
+    })
+  }
+}
+
+// Controller para tomar las categorías y los tags
+exports.getCategoriesAndTags = async (req, res) => {
+  try {
+    const limit = req.body.limit ? req.body.limit * 1 : 10;
+    const skip = req.body.skip ? req.body.skip * 1 : 0;
+    const blogs = await Blog
+      .find()
+      .populate("categories", "_id name slug")
+      .populate("tags", "_id name slug")
+      .populate("postedBy", "_id name username profile")
+      .sort({createdAt: -1})
+      .skip(skip)
+      .limit(limit)
+      .select("-photo -body -mtitle -mdescription");
+    const categories = await Category.find();
+    const tags = await Tag.find();
+
+    res.json({
+      status: "success",
+      data:{
+        blogs,
+        categories,
+        tags,
+        results: blogs.length
+      }
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: "internal server error",
+      error: error
+    })
+  }
+}
+
+// Controller para eliminar un blog
+exports.deleteBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findOneAndDelete({slug: req.params.slug});
+
+    if(!blog) {
+      return res.status(404).json({
+        message: "failed",
+        message: "Blog no encontrado",
+        error: "Blog no encontrado"
+      })
+    }
+
+    return res.json({
+      status: "success",
+      message: `Blog ${blog.title} eliminado correctamente`,
+      data: `Blog ${blog.title} eliminado correctamente`
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: "internal server error",
+      error: error
+    })
+  }
+}
+
+// Controller para editar un blog
+exports.updateBlog = async (req, res) => {
+
+}
