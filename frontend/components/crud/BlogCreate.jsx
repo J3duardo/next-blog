@@ -97,6 +97,8 @@ const BlogCreate = (props) => {
       setLoading(false);
       setSuccess(true);
 
+      setTimeout(() => {setSuccess(false)}, 1500)
+
       return;
 
     } catch (error) {
@@ -240,7 +242,12 @@ const BlogCreate = (props) => {
   }
 
   const showSuccessMessage = () => {
-  return success ? <div className="alert alert-info text-center">Post creado exitosamente</div> : null
+  return success ?
+    <div className="alert alert-info text-center">
+      Post creado exitosamente
+    </div>
+    :
+    null
   }
 
   return (
