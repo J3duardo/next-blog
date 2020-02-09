@@ -204,6 +204,7 @@ const Tag = () => {
         </div>
         <button type="submit" className="btn btn-primary">Crear tag</button>
       </form>
+      <p className="text-muted mb-3"><small>Doble click en un tag para eliminarlo</small></p>
       <div>{renderTags()}</div>
     </React.Fragment>
   )

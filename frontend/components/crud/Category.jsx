@@ -204,6 +204,7 @@ const Category = () => {
         </div>
         <button type="submit" className="btn btn-primary">Crear categoría</button>
       </form>
+      <p className="text-muted mb-3"><small>Doble click en una categoría para eliminarla</small></p>
       <div>{renderCategories()}</div>
     </React.Fragment>
   )
