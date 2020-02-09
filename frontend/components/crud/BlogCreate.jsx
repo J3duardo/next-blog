@@ -17,18 +17,17 @@ const BlogCreate = (props) => {
     title: "",
     body: "",
     photo: "",
-    formData: null,
     categories: [],
     tags: [],
     token: getCookie("token"),
     error: null,
-    sizeError: null,
-    success: false,
-    loading: false
+    sizeError: null
   });
 
   const [blogCategories, setBlogCategories] = useState([]);
   const [blogTags, setBlogTags] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   // Funcionalidad para cargar las categorías y los tags
   const loadCategoriesAndTags = async () => {
@@ -67,75 +66,71 @@ const BlogCreate = (props) => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("title", state.title);
-    formData.append("body", state.body);
-    formData.append("photo", state.photo);
-    formData.append("categories", blogCategories);
-    formData.append("tags", blogTags);
+    setState({
+      ...state,
+      sizeError: null
+    });
 
-    // for(let [key, val] of formData.entries()) {
-    //   console.log(key, val)
-    // }
-
+    setLoading(true);
+    setSuccess(false);
     
     try {
-      setState({
-        ...state,
-        loading: true,
-        error: null,
-        sizeError: null
-      })
+      const formData = new FormData();
+      formData.append("title", state.title);
+      formData.append("body", state.body);
+      formData.append("photo", state.photo);
+      formData.append("categories", blogCategories);
+      formData.append("tags", blogTags);
 
-      const res = await createBlog(formData, state.token);
+      await createBlog(formData, state.token);
 
       localStorage.removeItem("blog");
 
       setState({
         ...state,
-        success: true,
-        loading: false,
         title: "",
         body: "",
         photo: "",
-        formData: null,
-        categories: [],
-        tags: [],
         error: null,
         sizeError: null
-      })
-      console.log(res.data)
+      });
+      setLoading(false);
+      setSuccess(true);
+
+      return;
+
     } catch (error) {
       if(error.response) {
         if(error.response.data.message.includes("imagen")) {
+          setLoading(false);
+          setSuccess(false);
           return setState({
             ...state,
-            loading: false,
-            success: false,
             error: null,
             sizeError: error.response.data.message
           })
+        } else {
+          setLoading(false);
+          setSuccess(false);
+          return setState({
+            ...state,
+            sizeError: null,
+            error: error.response.data.message
+          })
         }
-        return setState({
-          ...state,
-          loading: false,
-          success: false,
-          sizeError: null,
-          error: error.response.data.message
-        })
       } else if(error.message.toLowerCase().includes("network")) {
+        setLoading(false);
+        setSuccess(false);
         return setState({
           ...state,
-          loading: false,
-          success: false,
           sizeError: null,
           error: "Error de red. Revise su conexión a internet"
         })
       } else{
+        setLoading(false);
+        setSuccess(false);
         return setState({
           ...state,
-          loading: false,
-          success: false,
           sizeError: null,
           error: error.message
         })
@@ -173,12 +168,14 @@ const BlogCreate = (props) => {
       value = e.target.value
     }
 
-    setState({
-      ...state,
-      [e.target.name]: value,
-      error: null,
-      sizeError: null
-    })
+    if(e.target.name !== "blogCategory" && e.target.name !== "blogTag") {
+      setState({
+        ...state,
+        [e.target.name]: value,
+        error: null,
+        sizeError: null
+      })
+    }
   }
 
   const blogContentHandler = (e) => {
@@ -232,7 +229,7 @@ const BlogCreate = (props) => {
 
   const showLoading = () => {
     return (
-      state.loading ? <div className="alert alert-info text-center">Creando post...</div>
+      loading ? <div className="alert alert-info text-center">Creando post...</div>
       :
       null
     );
@@ -243,7 +240,7 @@ const BlogCreate = (props) => {
   }
 
   const showSuccessMessage = () => {
-  return state.success ? <div className="alert alert-info text-center">Post creado exitosamente</div> : null
+  return success ? <div className="alert alert-info text-center">Post creado exitosamente</div> : null
   }
 
   return (
@@ -255,7 +252,7 @@ const BlogCreate = (props) => {
         <div className="col-md-8">
           <form onSubmit={onSubmitHandler}>
             <div className="form-group">
-              <label htmlFor="title" className="text-muted">Título</label>
+              <h5>Título</h5>
               <input
                 type="text"
                 id="title"
@@ -266,6 +263,7 @@ const BlogCreate = (props) => {
               />
             </div>
             <div className="form-group">
+            <h5>Contenido</h5>
               <ReactQuill
                 value={state.body}
                 placeholder="Escribe algo asombroso!!!"
@@ -282,7 +280,7 @@ const BlogCreate = (props) => {
         <div className="col-md-4">
           <div className="form-group pb-2">
             <h5>Imagen principal del post</h5>
-            <label htmlFor="photoInput" className="btn btn-outline-info">Subir imagen</label>
+            <label htmlFor="photoInput" className="btn btn-outline-info">Seleccionar imagen</label>
             <input
               type="file"
               name="photo"
@@ -292,7 +290,15 @@ const BlogCreate = (props) => {
               onChange={onChangeHandler}
             />
             <br/>
-            <small className="text-muted">Debe ser menor de 1MB</small>
+            <React.Fragment>
+              {state.photo ?
+                <small className="text-muted">
+                  Imagen: {state.photo.name.length > 15 ? state.photo.name.substring(0,18) + "..." : state.photo.name}
+                </small>
+                :
+                <small className="text-muted">Debe ser menor de 1MB</small>                              
+              }
+            </React.Fragment>
             <hr style={{marginBottom: 0}}/>
           </div>
           <h5>Categorías</h5>
@@ -313,7 +319,7 @@ BlogCreate.modules = {
     [{size: []}],
     ["bold", "italic", "underline", "strike", "blockquote"],
     [{list: "ordered"}, {list: "bullet"}],
-    ["link"],
+    ["link", "video"],
     ["clean"],
     ["code-block"]
   ]
