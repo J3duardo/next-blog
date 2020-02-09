@@ -23,11 +23,19 @@ exports.createBlog = async (req, res) => {
         const {title, body, categories, tags} = fields;
 
         // Validar título del post
-        if(title === "") {
+        if(title === "" || title.length < 3) {
           return res.status(400).json({
             status: "failed",
-            message: "Debe agregar el título del post",
-            error: "Debe agregar el título del post"
+            message: "El título del post debe contener al menos 3 caracteres",
+            error: "El título del post debe contener al menos 3 caracteres"
+          })
+        }
+
+        if(title.length > 160) {
+          return res.status(400).json({
+            status: "failed",
+            message: "El título del post debe contener máximo 160 caracteres",
+            error: "El título del post debe contener máximo 160 caracteres"
           })
         }
 
@@ -251,5 +259,146 @@ exports.deleteBlog = async (req, res) => {
 
 // Controller para editar un blog
 exports.updateBlog = async (req, res) => {
+  try {
+    const updatedBlog = await Blog.findOne({slug: req.params.slug});
 
+    if(!updatedBlog) {
+      return res.status(404).json({
+        status: "failed",
+        message: "Blog no encontrado",
+        error: "Blog no encontrado"
+      })
+    }
+
+    const form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+    form.parse(req, async (err, fields, files) => {
+      if(err) {
+        return res.status(400).json({
+          status: "failed",
+          message: "Ocurrió un error al enviar la imagen",
+          error: "Ocurrió un error al enviar la imagen"
+        })
+      };
+      try {
+        // Conservar el slug aunque el título del post sea modificado.
+        // Esto es para evitar que se modifique la url original del post luego de que la misma haya sido indexada por google
+        let oldSlug = updatedBlog.slug;
+
+        // Extraer data actualizada del post
+        const {title, body, categories, tags} = fields;
+
+        // Validar título del post
+        if(title === "" || title.length < 3) {
+          return res.status(400).json({
+            status: "failed",
+            message: "El título del post debe contener al menos 3 caracteres",
+            error: "El título del post debe contener al menos 3 caracteres"
+          })
+        }
+
+        if(title.length > 160) {
+          return res.status(400).json({
+            status: "failed",
+            message: "El título del post debe contener máximo 160 caracteres",
+            error: "El título del post debe contener máximo 160 caracteres"
+          })
+        }
+
+        // Validar contenido del post
+        if(body === "" || body.length < 200) {
+          return res.status(400).json({
+            status: "failed",
+            message: "El contenido del post debe ser mayor de 200 caracteres",
+            error: "El contenido del post debe ser mayor de 200 caracteres"
+          })
+        }
+
+        // Validar categorías del post
+        if(!categories || categories.length < 1) {
+          return res.status(400).json({
+            status: "failed",
+            message: "Debe seleccionar al menos una categoría",
+            error: "Debe seleccionar al menos una categoría"
+          })
+        }
+
+        // Validar tags del post
+        if(!tags || tags.length < 1) {
+          return res.status(400).json({
+            status: "failed",
+            message: "Debe seleccionar al menos un tag",
+            error: "Debe seleccionar al menos un tag"
+          })
+        }
+
+        // Crear el excerpt el post
+        let excerpt = null;
+        if(stripHtml(body).length > 160) {
+          excerpt = `${stripHtml(body.substring(0, 160))}...`
+        } else {
+          excerpt = stripHtml(body)
+        }
+
+        // Actualizar la data del post a editar
+        updatedBlog.title = title;
+        updatedBlog.body = body;
+        updatedBlog.slug = oldSlug;
+        updatedBlog.excerpt = excerpt;
+        updatedBlog.mtitle = `${process.env.APP_NAME} | ${title}`;
+        updatedBlog.mdescription = stripHtml(body.substring(0, 160));
+        updatedBlog.postedBy = req.user.userId;
+        updatedBlog.categories = categories.split(",");
+        updatedBlog.tags = tags.split(",");
+  
+        // Aceptar sólo fotos que pesen menos de 1MB
+        if(files.photo) {
+          if(files.photo.size > 1000000) {
+            return res.status(400).json({
+              status: "failed",
+              message: "El tamaño de la imagen debe ser menor de 1MB",
+              error: "El tamaño de la imagen debe ser menor de 1MB"
+            })
+          };
+          updatedBlog.photo.data = fs.readFileSync(files.photo.path);
+          updatedBlog.photo.contentType = files.photo.type;
+        };
+  
+        // Guardar post actualizado en la base de datos y enviar respuesta al cliente
+        await updatedBlog.save();
+        updatedBlog.photo = undefined;
+        return res.json({
+          status: "success",
+          message: "Blog actualizado exitosamente",
+          data: {
+            updatedBlog
+          }
+        })
+
+      } catch (error) {
+        if(error.code && error.code === 11000) {
+          if(Object.keys(error.keyValue).includes("slug") || Object.keys(error.keyValue).includes("title")) {
+            return res.status(400).json({
+              status: "failed",
+              message: "El título ya fue utilizado en otro post",
+              error: error
+            })
+          }
+        }
+                
+        res.status(500).json({
+          status: "failed",
+          message: "internal server error",
+          error: error
+        })
+      }
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: "internal server error",
+      error: error
+    })
+  }
 }

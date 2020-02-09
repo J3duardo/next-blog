@@ -5,8 +5,6 @@ const blogSchema = new mongoose.Schema(
     title: {
       type: String,
       trim: true,
-      min: 3,
-      max: 160,
       index: true,
       unique: true,
       required: true
