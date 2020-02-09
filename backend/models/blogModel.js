@@ -5,9 +5,10 @@ const blogSchema = new mongoose.Schema(
     title: {
       type: String,
       trim: true,
-      index: true,
-      unique: true,
-      required: true
+      index: {
+        unique: true,
+        collation: {locale: "en", strength: 2}
+      }
     },
     slug: {
       type: String,
