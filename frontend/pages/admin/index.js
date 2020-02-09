@@ -23,6 +23,11 @@ const adminIndex = () => {
                     <a>Crear Tag</a>
                   </Link>
                 </li>
+                <li className="list-group-item">
+                  <Link href="/admin/create/blog">
+                    <a>Crear Blog</a>
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
