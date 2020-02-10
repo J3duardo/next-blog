@@ -15,15 +15,17 @@ export const createBlog = async (blogData, token) => {
 }
 
 // Tomar todos los blogs con sus categorías
-export const getBlogsWithCategoriesAndTags = async () => {
+export const getBlogsWithCategoriesAndTags = async (limit, skip) => {
   return await axios({
     method: "POST",
     url: `${API}/api/blogs-categories-tags`,
-    // data: {
-
-    // },
+    data: {
+      limit,
+      skip
+    },
     headers: {
-      Accept: "application/json"
+      Accept: "application/json",
+      "Content-Type": "application/json"
     }
   })
 }
