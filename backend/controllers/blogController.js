@@ -68,10 +68,10 @@ exports.createBlog = async (req, res) => {
 
         // Crear el excerpt el post
         let excerpt = null;
-        if(stripHtml(body).length > 160) {
-          excerpt = `${stripHtml(body.substring(0, 160))}...`
+        if(stripHtml(body).length > 350) {
+          excerpt = `${body.substring(0, 350)}...`
         } else {
-          excerpt = stripHtml(body)
+          excerpt = body
         }
 
         // Crear post
@@ -334,10 +334,10 @@ exports.updateBlog = async (req, res) => {
 
         // Crear el excerpt el post
         let excerpt = null;
-        if(stripHtml(body).length > 160) {
-          excerpt = `${stripHtml(body.substring(0, 160))}...`
+        if(stripHtml(body).length > 350) {
+          excerpt = `${body.substring(0, 350)}...`
         } else {
-          excerpt = stripHtml(body)
+          excerpt = body
         }
 
         // Actualizar la data del post a editar
