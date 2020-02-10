@@ -6,7 +6,7 @@ import {getBlogsWithCategoriesAndTags} from "../../actions/blog";
 import Card from "../../components/blog/Card";
 
 const Blogs = (props) => {
-  const {blogs, categories, tags, results} = props;
+  const {blogs, categories, tags, results, error} = props;
   console.log(props)
 
   const renderAllCategories = () => {
@@ -39,34 +39,52 @@ const Blogs = (props) => {
     })
   }
 
+  const showError = () => {
+    return <div className="alert alert-danger text-center py-4"><h5>{error}</h5></div>
+    }
+
   return (
     <Layout>
       <main>
-        <div className="container-fluid">
+        {error && showError()}
+        {!error && results === 0 &&
           <header>
             <div className="col-md-12">
               <h1 className="text-center font-weight-bold mb-4">
-                Blogs y tutoriales de programación
+                Aún no hay blogs creados.
               </h1>
             </div>
-            <section className="mb-4">
-              <div className="mb-3">
-                {renderAllCategories()}
-              </div>
-              <div>
-                {renderAllTags()}
-              </div>
-            </section>
           </header>
-        </div>
-        <hr/>
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-md-12">
-              {renderBlogs()}
+        }
+        {!error && results > 0 &&
+          <React.Fragment>
+            <div className="container-fluid">
+              <header>
+                <div className="col-md-12">
+                  <h1 className="text-center font-weight-bold mb-4">
+                    Blogs y tutoriales de programación
+                  </h1>
+                </div>
+                <section className="mb-4">
+                  <div className="mb-3">
+                    {renderAllCategories()}
+                  </div>
+                  <div>
+                    {renderAllTags()}
+                  </div>
+                </section>
+              </header>
             </div>
-          </div>
-        </div>
+            <hr/>
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-12">
+                  {renderBlogs()}
+                </div>
+              </div>
+            </div>
+          </React.Fragment>
+        }
       </main>
     </Layout>
   )
@@ -79,10 +97,19 @@ Blogs.getInitialProps = async () => {
       blogs: res.data.data.blogs,
       categories: res.data.data.categories,
       tags: res.data.data.tags,
-      results: res.data.data.results
+      results: res.data.data.results,
+      error: null
     }
   } catch (error) {
-    console.log(error)
+    if(error.message.includes("ECONNREFUSED") || error.message.includes("connect")) {
+      return{
+        error: "Ocurrió un error al cargar los datos. Intente de nuevo."
+      }
+    }
+
+    return {
+      error: error.message
+    }
   }
 }
 
