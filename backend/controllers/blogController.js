@@ -168,7 +168,7 @@ exports.getSingleBlog = async (req, res) => {
       .populate("categories", "_id name slug")
       .populate("tags", "_id name slug")
       .populate("postedBy", "_id name username profile")
-      .select("-excerpt")
+      .select("-excerpt", "-photo")
 
     if(!blog) {
       return res.status(404).json({
@@ -393,6 +393,31 @@ exports.updateBlog = async (req, res) => {
         })
       }
     })
+
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: "internal server error",
+      error: error
+    })
+  }
+}
+
+// Controller para tomar la foto de un blog específico
+exports.getBlogPhoto = async (req, res) => {
+  try {
+    const blog = await Blog.findOne({slug: req.params.slug}).select("photo");
+
+    if(!blog) {
+      return res.status(404).json({
+        status: "failed",
+        message: "Blog no encontrado",
+        error: "Blog no encontrado"
+      })
+    }
+
+    res.set("Content-Type", blog.photo.contentType);
+    return res.send(blog.photo.data)
 
   } catch (error) {
     res.status(500).json({
