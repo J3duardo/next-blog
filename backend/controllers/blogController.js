@@ -194,10 +194,10 @@ exports.getSingleBlog = async (req, res) => {
 }
 
 // Controller para tomar las categorías y los tags
-exports.getCategoriesAndTags = async (req, res) => {
+exports.getBlogsCategoriesAndTags = async (req, res) => {
   try {
-    const limit = req.body.limit ? req.body.limit * 1 : 10;
-    const skip = req.body.skip ? req.body.skip * 1 : 0;
+    const limit = req.body.limit ? JSON.parse(req.body.limit) : 10;
+    const skip = req.body.skip ? JSON.parse(req.body.skip) : 0;
     const blogs = await Blog
       .find()
       .populate("categories", "_id name slug")
