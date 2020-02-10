@@ -1,46 +1,39 @@
 import {useState} from "react";
-import moment from "moment";
-moment.locale("es");
 import Head from "next/head";
 import Link from "next/link";
 import Layout from "../../components/Layout";
 import {getBlogsWithCategoriesAndTags} from "../../actions/blog";
-import {API} from "../../config";
+import Card from "../../components/blog/Card";
 
 const Blogs = (props) => {
   const {blogs, categories, tags, results} = props;
   console.log(props)
 
+  const renderAllCategories = () => {
+    return categories.map(category => {
+      return (
+        <Link key={category._id} href={`/category/${category.slug}`}>
+          <a className="btn btn-primary btn-sm mr-1 ml-1">{category.name}</a>
+        </Link>
+      )
+    })
+  }
+
+  const renderAllTags = () => {
+    return tags.map(tag => {
+      return (
+        <Link key={tag._id} href={`/category/${tag.slug}`}>
+          <a className="btn btn-outline-primary btn-sm mr-1 ml-1">{tag.name}</a>
+        </Link>
+      )
+    })
+  }
+
   const renderBlogs = () => {
     return blogs.map(blog => {
       return (
-        <article key={blog._id}>
-          <div className="lead">
-            <header>
-              <Link href={`/blog/${blog.slug}`}>
-                <a><h2 className="font-weight-bold">{blog.title}</h2></a>
-              </Link>
-            </header>
-            <section>
-              <p className="mark ml-1">
-                Autor: {blog.postedBy.name} | Actualizado: {moment(blog.updatedAt).calendar()}
-              </p>
-            </section>
-            <section>
-              <p>Categorías y tags</p>
-            </section>
-            <div className="row">
-              <div className="col-md-4">Imagen</div>
-              <div className="col-md-8">
-                <section>
-                  {blog.excerpt}{" "}
-                  <Link href={`/blog/${blog.slug}`}>
-                    <a>Leer más...</a>
-                  </Link>
-                </section>
-              </div>
-            </div>
-          </div>
+        <article key={blog._id} className="mb-4">
+          <Card blog={blog} />
           <hr/>
         </article>
       )
@@ -53,15 +46,21 @@ const Blogs = (props) => {
         <div className="container-fluid">
           <header>
             <div className="col-md-12">
-              <h1 className="text-center font-weight-bold">
+              <h1 className="text-center font-weight-bold mb-4">
                 Blogs y tutoriales de programación
               </h1>
             </div>
-            <section>
-              <p>Mostrar categorías y tags</p>
+            <section className="mb-4">
+              <div className="mb-3">
+                {renderAllCategories()}
+              </div>
+              <div>
+                {renderAllTags()}
+              </div>
             </section>
           </header>
         </div>
+        <hr/>
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-12">
