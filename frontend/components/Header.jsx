@@ -59,6 +59,13 @@ const Header = (props) => {
             <React.Fragment>
               <Nav className="ml-auto" navbar>
                 <NavItem>
+                  <Link href="/blogs">
+                    <NavLink>
+                      Blogs
+                    </NavLink>
+                  </Link>
+                </NavItem>
+                <NavItem>
                   <Link href="/login">
                     <NavLink>
                       Iniciar sesión
@@ -78,6 +85,13 @@ const Header = (props) => {
             auth && role === "user" ?
               <Nav className="ml-auto" navbar>
                 <NavItem>
+                  <Link href="/blogs">
+                    <NavLink>
+                      Blogs
+                    </NavLink>
+                  </Link>
+                </NavItem>
+                <NavItem>
                   <Link href="/user">
                     <NavLink>
                       Dashboard
@@ -94,6 +108,13 @@ const Header = (props) => {
             :
             auth && role === "admin" &&
             <Nav className="ml-auto" navbar>
+              <NavItem>
+                <Link href="/blogs">
+                  <NavLink>
+                    Blogs
+                  </NavLink>
+                </Link>
+              </NavItem>
               <NavItem>
                 <Link href="/user">
                   <NavLink>
