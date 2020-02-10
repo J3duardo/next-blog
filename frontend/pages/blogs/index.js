@@ -1,13 +1,60 @@
 import {useState} from "react";
+import {withRouter} from "next/router";
 import Head from "next/head";
 import Link from "next/link";
 import Layout from "../../components/Layout";
 import {getBlogsWithCategoriesAndTags} from "../../actions/blog";
 import Card from "../../components/blog/Card";
+import {API, DOMAIN, APP_NAME} from "../../config";
 
 const Blogs = (props) => {
-  const {blogs, categories, tags, results, error} = props;
-  console.log(props)
+  const {blogs, categories, tags, results, error, router} = props;
+
+  // Contenido del Head de la página para SEO
+  const head = () => {
+    return (
+      <Head>
+        <title>Blogs de Programación | {APP_NAME}</title>
+        <meta
+          name="description"
+          content="Blogs y tutoriales de programación sobre JavaScript, ReactJS, NodeJS, VueJS y más..."
+        />
+        <meta
+          property="og:title"
+          content={`Los blogs más recientes sobre ${APP_NAME}`}
+        />
+        <meta
+          property="og:description"
+          content="Blogs y tutoriales de programación sobre JavaScript, ReactJS, NodeJS, VueJS y más..."
+        />
+        <meta
+          property="og:type"
+          content="web site"
+        />
+        <meta
+          property="og:url"
+          content={`${DOMAIN}${router.pathname}`}
+        />
+        <meta
+          property="og:site_name"
+          content={`${DOMAIN}`}
+        />
+        <meta
+          property="og:image"
+          content={`/images/ogimage.jpg`}
+        />
+        <meta
+          property="og:image:secure_url"
+          content={`/images/ogimage.jpg`}
+        />
+        <meta
+          property="og:image:type"
+          content={`/images/ogimage.jpg`}
+        />
+        <link rel="canonical" href={`${DOMAIN}${router.pathname}`}/>
+      </Head>
+    )
+  }
 
   const renderAllCategories = () => {
     return categories.map(category => {
@@ -44,49 +91,52 @@ const Blogs = (props) => {
     }
 
   return (
-    <Layout>
-      <main>
-        {error && showError()}
-        {!error && results === 0 &&
-          <header>
-            <div className="col-md-12">
-              <h1 className="text-center font-weight-bold mb-4">
-                Aún no hay blogs creados.
-              </h1>
-            </div>
-          </header>
-        }
-        {!error && results > 0 &&
-          <React.Fragment>
-            <div className="container-fluid">
-              <header>
-                <div className="col-md-12">
-                  <h1 className="text-center font-weight-bold mb-4">
-                    Blogs y tutoriales de programación
-                  </h1>
-                </div>
-                <section className="mb-4">
-                  <div className="mb-3">
-                    {renderAllCategories()}
+    <React.Fragment>
+      {head()}
+      <Layout>
+        <main>
+          {error && showError()}
+          {!error && results === 0 &&
+            <header>
+              <div className="col-md-12">
+                <h1 className="text-center font-weight-bold mb-4">
+                  Aún no hay blogs creados.
+                </h1>
+              </div>
+            </header>
+          }
+          {!error && results > 0 &&
+            <React.Fragment>
+              <div className="container-fluid">
+                <header>
+                  <div className="col-md-12">
+                    <h1 className="text-center font-weight-bold mb-4">
+                      Blogs y tutoriales de programación
+                    </h1>
                   </div>
-                  <div>
-                    {renderAllTags()}
+                  <section className="mb-4">
+                    <div className="mb-3">
+                      {renderAllCategories()}
+                    </div>
+                    <div>
+                      {renderAllTags()}
+                    </div>
+                  </section>
+                </header>
+              </div>
+              <hr/>
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col-md-12">
+                    {renderBlogs()}
                   </div>
-                </section>
-              </header>
-            </div>
-            <hr/>
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-md-12">
-                  {renderBlogs()}
                 </div>
               </div>
-            </div>
-          </React.Fragment>
-        }
-      </main>
-    </Layout>
+            </React.Fragment>
+          }
+        </main>
+      </Layout>
+    </React.Fragment>
   )
 }
 
@@ -113,4 +163,4 @@ Blogs.getInitialProps = async () => {
   }
 }
 
-export default Blogs;
+export default withRouter(Blogs);
