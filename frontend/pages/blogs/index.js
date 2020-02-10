@@ -14,16 +14,20 @@ const Blogs = (props) => {
   const [skip, setSkip] = useState(blogSkip);
   const [blogsResults, setBlogsResults] = useState(results);
   const [loadedBlogs, setLoadedBlogs] = useState(blogs);
+  const [loading, setLoading] = useState(false);
 
   // Funcionalidad para cargar más blogs
   const loadMoreBlogs = async () => {
     let skippedBlogs = skip + limit;
+    setLoading(true);
     try {
-      const res = await getBlogsWithCategoriesAndTags(skippedBlogs, limit);      
+      const res = await getBlogsWithCategoriesAndTags(limit, skippedBlogs);      
+      setLoading(false);
       setLoadedBlogs([...loadedBlogs, ...res.data.data.blogs]);
       setBlogsResults(res.data.data.results)
       setSkip(skippedBlogs)
     } catch (error) {
+      setLoading(false);
       console.log(error.message) 
     }
   }
@@ -69,10 +73,12 @@ const Blogs = (props) => {
       results > 0 && blogsResults >= blogsLimit &&
       <div className="text-center">
         <button
+          disabled={loading}
           className="btn btn-warning"
           onClick={loadMoreBlogs}
         >
-          Cargar más blogs
+          {loading && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"/>}
+          {!loading ? "Cargar más blogs" : " Cargando..."}
         </button>
       </div>
     )
