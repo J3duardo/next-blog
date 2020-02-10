@@ -1,3 +1,4 @@
+import {useRef} from "react";
 import Link from "next/link";
 import moment from "moment";
 moment.locale("es");
@@ -6,6 +7,7 @@ import {API} from "../../config";
 
 const Card = (props) => {
   const {blog} = props;
+  const imageRef = useRef()
 
   const renderCategories = () => {
     return blog.categories.map(category => {
@@ -25,6 +27,10 @@ const Card = (props) => {
         </Link>
       )
     })
+  }
+
+  const setDefaultImage = () => {
+    return imageRef.current.src="/images/noimage.png"
   }
 
   return (
@@ -54,9 +60,11 @@ const Card = (props) => {
         <div className="col-md-4">
           <section>
             <img
+              ref={imageRef}
               className="img img-fluid"
               style={{display: "block", maxHeight: "150px", width: "auto"}}
               src={`${API}/api/blog/${blog.slug}/photo`}
+              onError={setDefaultImage}
               alt={`${blog.title}`}
             />
           </section>
