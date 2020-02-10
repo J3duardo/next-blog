@@ -28,7 +28,7 @@ const Card = (props) => {
   }
 
   return (
-    <div className="lead">
+    <div className="lead py-3 px-4 shadow">
       <header>
         <Link href={`/blog/${blog.slug}`}>
           <a><h2 className="font-weight-bold mb-3">{blog.title}</h2></a>
@@ -39,7 +39,7 @@ const Card = (props) => {
           Autor: {blog.postedBy.name} | Actualizado: {moment(blog.updatedAt).calendar()}
         </small>
       </section>
-      <section className="mb-3" style={{display: "flex"}}>
+      <section className="mb-4" style={{display: "flex"}}>
         <div className="mr-2">
           <small className="text-muted">Categorías: </small>
           {renderCategories()}

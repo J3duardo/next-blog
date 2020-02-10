@@ -34,7 +34,6 @@ const Blogs = (props) => {
       return (
         <article key={blog._id} className="mb-4">
           <Card blog={blog} />
-          <hr/>
         </article>
       )
     })

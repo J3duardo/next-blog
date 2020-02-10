@@ -329,7 +329,7 @@ const BlogCreate = (props) => {
 
 BlogCreate.modules = {
   toolbar: [
-    [{header: [1, 2, 3, 4, 5, 6]}, {font: []}],
+    [{header: [3, 4, 5, 6]}, {font: []}],
     [{size: []}],
     [{"align": []}, "bold", "italic", "underline", "strike", {"color": []}, {"background": []}, "blockquote"],
     [{ "script": "sub"}, { "script": "super" }],
