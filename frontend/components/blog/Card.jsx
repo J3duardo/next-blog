@@ -86,7 +86,7 @@ const Card = (props) => {
         <div className="col-md-8">
           <section>
             {reactHTML(blog.excerpt)}{" "}
-            <Link href={`/blog/${blog.slug}`}>
+            <Link href="/blogs/[slug]" as={`/blogs/${blog.slug}`}>
               <a className="btn btn-primary btn-sm">Leer más...</a>
             </Link>
           </section>
