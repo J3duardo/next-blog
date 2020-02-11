@@ -334,7 +334,7 @@ BlogCreate.modules = {
     [{"align": []}, "bold", "italic", "underline", "strike", {"color": []}, {"background": []}, "blockquote"],
     [{ "script": "sub"}, { "script": "super" }],
     [{list: "ordered"}, {list: "bullet"}],
-    ["link", "video"],
+    ["link", "image", "video"],
     ["clean"],
     ["code-block"]
   ]
