@@ -2,6 +2,7 @@ import {useState, useRef, useEffect} from "react";
 import Head from "next/head";
 import Link from "next/link";
 import {withRouter} from "next/router";
+import axios from "axios";
 import moment from "moment";
 import reactHTML from "react-render-html";
 import {getSingleBlog} from "../../actions/blog";
@@ -16,10 +17,25 @@ const SingleBlog = (props) => {
   useEffect(() => {
     setBlog(props.blog);
     setError(props.error)
-  }, [props.blog])
+  }, [props.blog]);
 
-  const loadDefaultImg = () => {
-    blogImgRef.current.src = "/images/noimage.png"
+  useEffect(() => {
+    loadBlogImage()
+  }, []);
+
+  // Funcionalidad para cargar la imagen del blog o la imagen por defecto si el blog no contiene imagen
+  const loadBlogImage = async () => {
+    try {
+      const res = await axios.get(`${API}/api/blog/${blog.slug}/photo`);
+      if(!res.data) {
+        blogImgRef.current.src = "/images/noimage.png"
+      } else {
+        blogImgRef.current.src = `${API}/api/blog/${blog.slug}/photo`
+      }
+    } catch (error) {
+      blogImgRef.current.src = "/images/noimage.png"
+      console.log(error)
+    }
   }
 
   const renderCategories = () => {
@@ -105,9 +121,8 @@ const SingleBlog = (props) => {
                     <img
                       ref={blogImgRef}
                       className="img img-fluid blog-image"
-                      src={`${API}/api/blog/${blog.slug}/photo`}
+                      src="/images/noimage.png"
                       alt={`${blog.title}`}
-                      onError={loadDefaultImg}
                     />
                   </div>
                 </section>
