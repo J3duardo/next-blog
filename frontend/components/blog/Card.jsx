@@ -1,4 +1,4 @@
-import {useRef, useEffect} from "react";
+import {useRef, useEffect, useState} from "react";
 import Link from "next/link";
 import axios from "axios";
 import moment from "moment";
@@ -9,6 +9,7 @@ import {API} from "../../config";
 const Card = (props) => {
   const {blog} = props;
   const imageRef = useRef();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     loadBlogImage()
@@ -16,14 +17,18 @@ const Card = (props) => {
 
   const loadBlogImage = async () => {
     try {
+      setLoading(true);
       const res = await axios.get(`${API}/api/blog/${blog.slug}/photo`);
       if(!res.data) {
         imageRef.current.src = "/images/noimage.png"
+        imageRef.current.onload = () => setLoading(false);
       } else {
         imageRef.current.src = `${API}/api/blog/${blog.slug}/photo`
+        imageRef.current.onload = () => setLoading(false);  
       }
     } catch (error) {
       imageRef.current.src = "/images/noimage.png"
+      setLoading(false);
       console.log(error)
     }
   }
@@ -73,12 +78,22 @@ const Card = (props) => {
       <hr/>
       <div className="row">
         <div className="col-md-4">
-          <section>
+          <section style={{position: "relative", minHeight: "150px"}}>
+            {loading &&
+              <div
+                style={{position: "absolute", width: "250px", height: "150px", backgroundColor: "#fff"}}
+                className="d-flex align-items-center justify-content-center"
+              >
+                <div className="spinner-border text-primary" role="status">
+                  <span class="sr-only">Cargando...</span>
+                </div>
+              </div>
+            }
             <img
               ref={imageRef}
               className="img img-fluid"
               style={{display: "block", maxHeight: "150px", width: "auto"}}
-              src="/images/noimage.png"
+              src=""
               alt={`${blog.title}`}
             />
           </section>

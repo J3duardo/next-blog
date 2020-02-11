@@ -11,6 +11,7 @@ import {API, DOMAIN, APP_NAME} from "../../config";
 
 const SingleBlog = (props) => {
   const [blog, setBlog] = useState(props.blog);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(props.error);
   const blogImgRef = useRef();
 
@@ -26,14 +27,18 @@ const SingleBlog = (props) => {
   // Funcionalidad para cargar la imagen del blog o la imagen por defecto si el blog no contiene imagen
   const loadBlogImage = async () => {
     try {
+      setLoading(true);
       const res = await axios.get(`${API}/api/blog/${blog.slug}/photo`);
       if(!res.data) {
         blogImgRef.current.src = "/images/noimage.png"
+        blogImgRef.current.onload = () => setLoading(false);
       } else {
         blogImgRef.current.src = `${API}/api/blog/${blog.slug}/photo`
+        blogImgRef.current.onload = () => setLoading(false);
       }
     } catch (error) {
       blogImgRef.current.src = "/images/noimage.png"
+      setLoading(false);
       console.log(error)
     }
   }
@@ -117,11 +122,21 @@ const SingleBlog = (props) => {
             <article>
               <div className="container-fluid">
                 <section className="mb-4">
-                  <div className="row">
+                  <div style={{position: "relative", minHeight: "250px"}} className="row">
+                    {loading &&
+                      <div
+                        style={{position: "absolute", width: "100%", minHeight: "250px", backgroundColor: "#fff"}}
+                        className="d-flex align-items-center justify-content-center"
+                      >
+                        <div className="spinner-border text-primary" role="status">
+                          <span class="sr-only">Cargando...</span>
+                        </div>
+                      </div>
+                    }
                     <img
                       ref={blogImgRef}
                       className="img img-fluid blog-image"
-                      src="/images/noimage.png"
+                      src=""
                       alt={`${blog.title}`}
                     />
                   </div>
