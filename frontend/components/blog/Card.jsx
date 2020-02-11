@@ -12,7 +12,7 @@ const Card = (props) => {
   const renderCategories = () => {
     return blog.categories.map(category => {
       return (
-        <Link key={category._id} href={`/category/${category.slug}`}>
+        <Link key={category._id} href="/category/[slug]" as={`/category/${category.slug}`}>
           <a className="btn btn-primary btn-sm mr-1 ml-1">{category.name}</a>
         </Link>
       )
@@ -22,7 +22,7 @@ const Card = (props) => {
   const renderTags = () => {
     return blog.tags.map(tag => {
       return (
-        <Link key={tag._id} href={`/category/${tag.slug}`}>
+        <Link key={tag._id} href="/tag/[slug]" as={`/tag/${tag.slug}`}>
           <a className="btn btn-outline-primary btn-sm mr-1 ml-1">{tag.name}</a>
         </Link>
       )
@@ -36,7 +36,7 @@ const Card = (props) => {
   return (
     <div className="lead py-3 px-4 shadow">
       <header>
-        <Link href={`/blog/${blog.slug}`}>
+        <Link href="/blogs/[slug]" as={`/blogs/${blog.slug}`}>
           <a><h2 className="font-weight-bold mb-3">{blog.title}</h2></a>
         </Link>
       </header>
