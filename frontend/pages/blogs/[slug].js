@@ -5,19 +5,24 @@ import {withRouter} from "next/router";
 import axios from "axios";
 import moment from "moment";
 import reactHTML from "react-render-html";
-import {getSingleBlog} from "../../actions/blog";
+import {getSingleBlog, getRelatedBlogs} from "../../actions/blog";
 import Layout from "../../components/Layout";
+import SmallCard from "../../components/blog/SmallCard";
 import {API, DOMAIN, APP_NAME} from "../../config";
 
 const SingleBlog = (props) => {
   const [blog, setBlog] = useState(props.blog);
+  const [relatedBlogs, setRelatedBlogs] = useState([]);
+  const [loadingRelated, setLoadingRelated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(props.error);
   const blogImgRef = useRef();
 
   useEffect(() => {
     setBlog(props.blog);
-    setError(props.error)
+    setError(props.error);
+    // Buscar los blog relacionados
+    loadRelatedBlogs();
   }, [props.blog]);
 
   useEffect(() => {
@@ -25,6 +30,19 @@ const SingleBlog = (props) => {
       loadBlogImage()
     }
   }, []);
+
+  // Funcionalidad para buscar los blogs relacionados
+  const loadRelatedBlogs = async () => {
+    try {
+      setLoadingRelated(true);
+      const res = await getRelatedBlogs({id: blog._id, categories: blog.categories});
+      setRelatedBlogs(res.data.data.relatedBlogs);
+      setLoadingRelated(false);
+    } catch (error) {
+      setLoadingRelated(false);
+      console.log(error.message)
+    }
+  }
 
   // Funcionalidad para cargar la imagen del blog o la imagen por defecto si el blog no contiene imagen
   const loadBlogImage = async () => {
@@ -61,6 +79,18 @@ const SingleBlog = (props) => {
         <Link key={tag._id} href="/tag/[slug]" as={`/tag/${tag.slug}`}>
           <a className="btn btn-outline-primary btn-sm mr-1 ml-1">{tag.name}</a>
         </Link>
+      )
+    })
+  }
+
+  const renderRelatedBlogs = () => {
+    return relatedBlogs.map(blog => {
+      return (
+        <div key={blog._id} className="col-md-4">
+          <article>
+            <SmallCard blog={blog} />
+          </article>
+        </div>
       )
     })
   }
@@ -131,7 +161,7 @@ const SingleBlog = (props) => {
                         className="d-flex align-items-center justify-content-center"
                       >
                         <div className="spinner-border text-primary" role="status">
-                          <span class="sr-only">Cargando...</span>
+                          <span className="sr-only">Cargando...</span>
                         </div>
                       </div>
                     }
@@ -165,8 +195,22 @@ const SingleBlog = (props) => {
                   </section>
                 </div>
               </div>
-              <div className="container mb-4">
+              <div style={{position: "relative"}} className="container mb-4">
                 <h5 className="text-center">Blogs relacionados:</h5>
+                {loadingRelated &&
+                  <div
+                    style={{position: "absolute", width: "100%", height: "150px", backgroundColor: "#fff"}}
+                    className="d-flex align-items-center justify-content-center pb-5"
+                  >
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="sr-only">Cargando...</span>
+                    </div>
+                  </div>
+                }
+                <hr/>
+                <div className="row">
+                  {renderRelatedBlogs()}
+                </div>
               </div>
               <div className="container mb-4">
                 <h5 className="text-center">Comentarios:</h5>

@@ -37,3 +37,19 @@ export const getSingleBlog = async (slug) => {
     url: `${API}/api/blog/${slug}`
   })
 }
+
+// Buscar los blogs relacionados
+export const getRelatedBlogs = async (blogData) => {
+  return await axios({
+    method: "POST",
+    url: `${API}/api/blogs/blogs-related`,
+    data: {
+      blogId: blogData.id,
+      blogCategories: blogData.categories
+    },
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    }
+  })
+}
