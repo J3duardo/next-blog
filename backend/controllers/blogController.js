@@ -165,11 +165,11 @@ exports.getAllBlogs = async (req, res) => {
 exports.getSingleBlog = async (req, res) => {
   try {
     const blog = await Blog.findOne({slug: req.params.slug})
-      .populate("categories", "_id name slug")
-      .populate("tags", "_id name slug")
-      .populate("postedBy", "_id name username profile")
-      .select("-excerpt", "-photo")
-
+    .select("-excerpt -photo")
+    .populate({path: "categories", select: "_id name slug"})
+    .populate({path: "tags", select: "_id name slug"})
+    .populate({path: "postedBy", select: "_id name username profile"})
+    
     if(!blog) {
       return res.status(404).json({
         status: "failed",
@@ -177,7 +177,7 @@ exports.getSingleBlog = async (req, res) => {
         error: "Blog no encontrado"
       })
     }
-
+    
     return res.json({
       status: "success",
       message: "Blog encontrado",
