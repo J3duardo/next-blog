@@ -123,7 +123,7 @@ const Blogs = (props) => {
         />
         <meta
           property="og:image:type"
-          content={`/images/ogimage.jpg`}
+          content={"image/jpg"}
         />
         <link rel="canonical" href={`${DOMAIN}${router.pathname}`}/>
       </Head>
