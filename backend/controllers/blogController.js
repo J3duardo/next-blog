@@ -427,3 +427,32 @@ exports.getBlogPhoto = async (req, res) => {
     })
   }
 }
+
+// Controller para buscar los blogs relacionados con un post específico
+exports.getRelatedPosts = async (req, res) => {
+  try {
+    const limit = req.body.limit ? req.body.limit * 1 : 3;
+    
+    // Enviar el id y las categorías del blog en el body del request
+    const {blogId, blogCategories} = req.body;
+    
+    const blogs = await Blog.find({_id: {$ne: blogId}, categories: {$in: blogCategories}})
+    .limit(limit)
+    .populate({path: "postedBy", select: "_id name profile"})
+    .select("title slug excerpt postedBy createdAt updatedAt");
+
+    return res.json({
+      status: "success",
+      data: {
+        relatedBlogs: blogs
+      }
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: "internal server error",
+      error: error
+    })
+  }
+}
