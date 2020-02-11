@@ -29,3 +29,11 @@ export const getBlogsWithCategoriesAndTags = async (limit, skip) => {
     }
   })
 }
+
+// Tomar un blog específico
+export const getSingleBlog = async (slug) => {
+  return await axios({
+    method: "GET",
+    url: `${API}/api/blog/${slug}`
+  })
+}
