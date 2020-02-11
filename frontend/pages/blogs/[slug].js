@@ -21,7 +21,9 @@ const SingleBlog = (props) => {
   }, [props.blog]);
 
   useEffect(() => {
-    loadBlogImage()
+    if(!error || error && !error.includes("encontrado")) {
+      loadBlogImage()
+    }
   }, []);
 
   // Funcionalidad para cargar la imagen del blog o la imagen por defecto si el blog no contiene imagen
