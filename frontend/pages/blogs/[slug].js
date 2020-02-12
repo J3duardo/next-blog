@@ -18,6 +18,7 @@ const SingleBlog = (props) => {
   const [error, setError] = useState(props.error);
   const blogImgRef = useRef();
 
+  // Cargar la data del blog seleccionado
   useEffect(() => {
     setBlog(props.blog);
     setError(props.error);
@@ -25,11 +26,12 @@ const SingleBlog = (props) => {
     loadRelatedBlogs();
   }, [props.blog]);
 
+  // Cargar la imagen del blog al inicio y al cambiar la ruta
   useEffect(() => {
     if(!error || error && !error.includes("encontrado")) {
       loadBlogImage()
     }
-  }, []);
+  }, [props.router.asPath]);
 
   // Funcionalidad para buscar los blogs relacionados
   const loadRelatedBlogs = async () => {
@@ -48,12 +50,13 @@ const SingleBlog = (props) => {
   const loadBlogImage = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${API}/api/blog/${blog.slug}/photo`);
+      blogImgRef.current.src = "";
+      const res = await axios.get(`${API}/api/blog/${props.router.query.slug}/photo`);
       if(!res.data) {
         blogImgRef.current.src = "/images/noimage.png"
         blogImgRef.current.onload = () => setLoading(false);
       } else {
-        blogImgRef.current.src = `${API}/api/blog/${blog.slug}/photo`
+        blogImgRef.current.src = `${API}/api/blog/${props.router.query.slug}/photo`
         blogImgRef.current.onload = () => setLoading(false);
       }
     } catch (error) {
@@ -63,6 +66,7 @@ const SingleBlog = (props) => {
     }
   }
 
+  // Mostrar las categorías del blog
   const renderCategories = () => {
     return blog.categories.map(category => {
       return (
@@ -73,6 +77,7 @@ const SingleBlog = (props) => {
     })
   }
 
+  // Mostrar los tags del blog
   const renderTags = () => {
     return blog.tags.map(tag => {
       return (
@@ -83,6 +88,7 @@ const SingleBlog = (props) => {
     })
   }
 
+  // Mostrar los blogs relacionados
   const renderRelatedBlogs = () => {
     return relatedBlogs.map(blog => {
       return (
@@ -95,6 +101,7 @@ const SingleBlog = (props) => {
     })
   }
 
+  // Meta tags específicos para cada blog
   const head = () => {
     return (
       <Head>
