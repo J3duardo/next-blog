@@ -4,6 +4,7 @@ import Router from "next/router";
 import {withRouter} from "next/router/";
 import moment from "moment";
 moment.locale("es");
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import {getCookie, isAuth, setCookie} from "../../actions/auth";
 import {getAllBlogs, deleteBlog} from "../../actions/blog";
 
@@ -14,6 +15,12 @@ const BlogRead = (props) => {
   const [loading, setLoading] = useState(false);
   const [blogDeleted, setBlogDeleted] = useState(null);
 
+  // Slug del blog a eliminar para que el modal pueda ejecutar la aliminación
+  const [blogSlug, setBlogSlug] = useState(null);
+  // State del modal
+  const [modal, setModal] = useState(false);
+
+  // Cargar la data de todos los blogs
   useEffect(() => {
     loadAllBlogs()
   }, []);
@@ -30,41 +37,40 @@ const BlogRead = (props) => {
     }
   }
 
-  // Funcionalidad para borrar un blog
+  // Mostrar/ocultar modal de eliminación del blog
+  const toggle = () => setModal(!modal);
+
+  // Funcionalidad para borrar el blog
   const deleteBlogHandler = async (slug) => {
-    const confirm = window.confirm("Está seguro de eliminar este blog?");
-    
-    if(confirm) {
-      try {
-        setBlogDeleted(slug);
-        setLoading(true);
+    try {
+      setBlogDeleted(slug);
+      setLoading(true);
 
-        const token = getCookie("token");
-        const res = await deleteBlog(slug, token);
-        await loadAllBlogs();
-        
-        setLoading(false);
-        setMessage(res.data.message)
-        setBlogDeleted(null);
+      const token = getCookie("token");
+      const res = await deleteBlog(slug, token);
+      await loadAllBlogs();
+      
+      setLoading(false);
+      setMessage(res.data.message)
+      setBlogDeleted(null);
+      clearMessages();
+
+    } catch (error) {
+      setLoading(false);
+      setBlogDeleted(null);
+      
+      if(error.response) {
         clearMessages();
-
-      } catch (error) {
-        setLoading(false);
-        setBlogDeleted(null);
-        
-        if(error.response) {
-          clearMessages();
-          return setError(error.response.data.message)
-        }
-
-        if(error.message.includes("Network")){
-          clearMessages();
-          return setError("Error de conexión. Intente nuevamente.")          
-        }
-        
-        clearMessages();
-        return setError(error.message)
+        return setError(error.response.data.message)
       }
+
+      if(error.message.includes("Network")){
+        clearMessages();
+        return setError("Error de conexión. Intente nuevamente.")          
+      }
+      
+      clearMessages();
+      return setError(error.message)
     }
   }
 
@@ -91,7 +97,7 @@ const BlogRead = (props) => {
           }
           <button
             className="btn btn-sm btn-danger"
-            onClick={() => deleteBlogHandler(blog.slug)}
+            onClick={() => {setBlogSlug(blog.slug); toggle()}}
             disabled={loading && blogDeleted === blog.slug}
           >
             {loading && blogDeleted === blog.slug &&
@@ -103,6 +109,20 @@ const BlogRead = (props) => {
               />}
             Borrar blog
           </button>
+
+          {/* Modal para comfirmar eliminación del blog */}
+          <div>
+            <Modal isOpen={modal} toggle={toggle}>
+              <ModalHeader toggle={toggle}>Eliminar blog</ModalHeader>
+              <ModalBody>
+                ¿Está seguro de que desea eliminar este blog?
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" onClick={() => {deleteBlogHandler(blogSlug); toggle()}}>Eliminar</Button>{" "}
+                <Button color="secondary" onClick={() => {setBlogSlug(null); toggle()}}>Cancelar</Button>
+              </ModalFooter>
+            </Modal>
+          </div>
         </div>
       )
     })
