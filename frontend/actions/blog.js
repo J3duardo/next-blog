@@ -14,6 +14,43 @@ export const createBlog = async (blogData, token) => {
   })
 }
 
+// Editar un blog
+export const updateBlog = async (blogData, slug, token) => {
+  return await axios({
+    method: "PATCH",
+    url: `${API}/api/blog/${slug}`,
+    data: blogData,
+    headers: {
+      "Content-Type":'multipart/form-data',
+      Authorization: `Bearer ${token}`
+    }
+  })
+}
+
+// Borrar un blog
+export const deleteBlog = async (slug, token) => {
+  return await axios({
+    method: "DELETE",
+    url: `${API}/api/blog/${slug}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    }
+  })
+}
+
+// Buscar todos los blogs
+export const getAllBlogs = async () => {
+  return await axios({
+    method: "GET",
+    url: `${API}/api/blogs`,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+}
+
 // Tomar todos los blogs con sus categorías
 export const getBlogsWithCategoriesAndTags = async (limit, skip) => {
   return await axios({
