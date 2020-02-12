@@ -79,6 +79,16 @@ const BlogRead = (props) => {
             {" | "}
             Creado: {moment(blog.updatedAt).calendar()}
           </p>
+          {isAuth() && JSON.parse(isAuth()).role === 0 &&
+            <Link href="/user/create/[slug]" as={`/user/create/${blog.slug}`}>
+              <a className="btn btn-sm btn-primary mr-2">Editar blog</a>
+            </Link>
+          }
+          {isAuth() && JSON.parse(isAuth()).role === 1 &&
+            <Link href="/admin/create/[slug]" as={`/admin/create/${blog.slug}`}>
+              <a className="btn btn-sm btn-primary mr-2">Editar blog</a>
+            </Link>
+          }
           <button
             className="btn btn-sm btn-danger"
             onClick={() => deleteBlogHandler(blog.slug)}
