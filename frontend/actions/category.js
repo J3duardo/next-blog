@@ -28,7 +28,7 @@ export const getAllCategories = async () => {
 export const getCategory = async (slug) => {
   return await axios({
     method: "GET",
-    url: `${API}/api/categoty/${slug}`
+    url: `${API}/api/category/${slug}`
   })
 }
 
