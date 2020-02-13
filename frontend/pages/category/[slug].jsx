@@ -22,18 +22,18 @@ const BlogsByCategory = (props) => {
   const head = () => {
     return (
       <Head>
-        <title>Blogs sobre {props.category.name} | {APP_NAME}</title>
+        <title>Blogs sobre {!props.error && props.category.name} | {APP_NAME}</title>
         <meta
           name="description"
-          content={`Blogs y tutoriales sobre ${props.category.name}`}
+          content={`Blogs y tutoriales sobre ${!props.error && props.category.name}`}
         />
         <meta
           property="og:title"
-          content={`Los blogs más recientes sobre ${props.category.name}`}
+          content={`Los blogs más recientes sobre ${!props.error && props.category.name}`}
         />
         <meta
           property="og:description"
-          content={`Blogs y tutoriales sobre ${props.category.name}`}
+          content={`Blogs y tutoriales sobre ${!props.error && props.category.name}`}
         />
         <meta
           property="og:type"
@@ -64,16 +64,30 @@ const BlogsByCategory = (props) => {
     )
   }
 
+  const showError = () => {
+    return <div className="alert alert-danger text-center py-4"><h5>{props.error}</h5></div>
+  }
+
   return (
     <React.Fragment>
       {head()}
       <Layout>
         <main>
+          {props.error && showError()}
           <div className="container-fluid">
             <header>
               <div className="col-md-12">
-                <h1 className="mb-5 text-center">Blogs sobre <span style={{textTransform: "capitalize"}}>{props.category.name}</span></h1>
-                {renderBlogs()}
+                {!props.error ?
+                  <h1 className="mb-5 text-center">
+                      Blogs sobre{" "}
+                      <span style={{fontWeight: "bolder", textTransform: "capitalize"}}>
+                        {props.category.name}
+                      </span>                  
+                  </h1>
+                  :
+                  <h1 className="mb-5 text-center">Error</h1>
+                }
+                {!props.error && renderBlogs()}
               </div>
             </header>
           </div>
@@ -91,6 +105,11 @@ BlogsByCategory.getInitialProps = async (props) => {
       blogs: res.data.data.blogs
     }
   } catch (error) {
+    if(error.message.includes("Network") || error.message.includes("ECONNREFUSED")) {
+      return {
+        error: "Error de conexión. Intente nuevamente."
+      }
+    }
     return {
       error: error.message
     }
