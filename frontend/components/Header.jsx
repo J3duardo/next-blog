@@ -5,6 +5,7 @@ import {APP_NAME} from "../config";
 import {isAuth, signout} from "../actions/auth";
 import NProgress from "nprogress";
 import "../node_modules/nprogress/nprogress.css";
+import SearchBlogs from "./blog/SearchBlogs";
 import {
   Collapse,
   Navbar,
@@ -139,6 +140,7 @@ const Header = (props) => {
           }
         </Collapse>
       </Navbar>
+      <SearchBlogs />
     </div>
   );
 }

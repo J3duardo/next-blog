@@ -1,4 +1,5 @@
 import axios from "axios";
+import queryString from "query-string";
 import {API} from "../config";
 
 // Crear un blog
@@ -88,5 +89,14 @@ export const getRelatedBlogs = async (blogData) => {
       Accept: "application/json",
       "Content-Type": "application/json"
     }
+  })
+}
+
+// Buscar blogs mediante argumento de búsqueda
+export const searchBlogs = async (params) => {
+  const query = queryString.stringify(params);
+  return await axios({
+    method: "GET",
+    url: `${API}/api/blogs/search?${query}`
   })
 }
