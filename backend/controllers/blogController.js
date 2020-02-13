@@ -87,7 +87,7 @@ exports.createBlog = async (req, res) => {
         blog.tags = tags.split(",");
 
         // Aceptar contenido no mayor de 15MB
-        if(blog.body.size > 15000000) {
+        if(body.size > 15000000) {
           return res.status(400).json({
             status: "failed",
             message: "El contenido del post no debe superar los 15MB",
@@ -361,7 +361,7 @@ exports.updateBlog = async (req, res) => {
         updatedBlog.tags = tags.split(",");
 
         // Aceptar contenido no mayor de 15MB
-        if(blog.body.size > 15000000) {
+        if(body.size > 15000000) {
           return res.status(400).json({
             status: "failed",
             message: "El contenido del post no debe superar los 15MB",
