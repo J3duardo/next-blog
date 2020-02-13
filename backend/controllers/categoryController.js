@@ -1,4 +1,5 @@
 const Category = require("../models/categoryModel");
+const Blog = require("../models/blogModel");
 const slugify = require("slugify");
 
 // Controller para crear categorías
@@ -35,11 +36,12 @@ exports.createCategory = async (req, res) => {
   }
 }
 
-// Controller para tomar una categoría
+// Controller para buscar los blogs de una categoría
 exports.getCategory = async (req, res) => {
   try {
     const category = await Category.findOne({slug: req.params.slug});
 
+    // Chequear si la categoría buscada existe
     if(!category) {
       return res.status(404).json({
         status: "failed",
@@ -47,12 +49,17 @@ exports.getCategory = async (req, res) => {
       })
     }
 
+    // Si existe, buscar los blogs asociados a esa categoría
+    const blogs = await Blog.find({categories: category})
+    .populate("categories", "_id name slug")
+    .populate("tags", "_id name slug")
+    .populate("postedBy", "_id name")
+    .select("_id title slug excerpt categories postedBy tags createdAt updatedAt")
+
     return res.json({
       status: "success",
-      message: "Categoría encontrada con éxito",
-      data: {
-        category
-      }
+      message: "",
+      data: {category, blogs}
     })
 
   } catch (error) {
