@@ -474,3 +474,31 @@ exports.getRelatedPosts = async (req, res) => {
     })
   }
 }
+
+// Controller para buscar blogs mediante argumento de búsqueda
+exports.searchBlogs = async (req, res) => {
+  try {
+    const {search} = req.query;
+    if(search) {
+      // Buscar blogs cuyo título o contenido contengan el argumento de búsqueda
+      const blogs = await Blog.find({
+        $or: [
+          {title: {$regex: search, $options: "i"}},
+          {body: {$regex: search, $options: "i"}}
+        ]
+      }).select("-photo -body")
+
+      return res.json({
+        status: "sucess",
+        data: blogs
+      })
+    }
+
+  } catch (error) {
+    res.status(500).json({
+      status: "failed",
+      message: "internal server error",
+      error: error
+    })
+  }
+}

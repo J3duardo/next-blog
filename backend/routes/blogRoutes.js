@@ -1,5 +1,5 @@
 const express = require("express");
-const {createBlog, getAllBlogs, getSingleBlog, getBlogsCategoriesAndTags, deleteBlog, updateBlog, getBlogPhoto, getRelatedPosts} = require("../controllers/blogController");
+const {createBlog, getAllBlogs, getSingleBlog, getBlogsCategoriesAndTags, deleteBlog, updateBlog, getBlogPhoto, getRelatedPosts, searchBlogs} = require("../controllers/blogController");
 const {protectRoute, adminMiddleware} = require("../controllers/authController");
 
 const router = express.Router();
@@ -19,6 +19,8 @@ router.delete("/blog/:slug", protectRoute, adminMiddleware, deleteBlog);
 // Editar un blog
 router.patch("/blog/:slug", protectRoute, adminMiddleware, updateBlog);
 // Buscar los blogs relacionados
-router.post("/blogs/blogs-related", getRelatedPosts)
+router.post("/blogs/blogs-related", getRelatedPosts);
+// Buscar blogs mediante argumento de búsqueda
+router.get("/blogs/search", searchBlogs)
 
 module.exports = router;
