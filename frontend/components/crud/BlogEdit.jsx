@@ -286,7 +286,13 @@ const BlogEdit = (props) => {
               />
             </div>
             <div>
-              <button className="btn btn-primary">Publicar</button>
+              <button className="btn btn-primary mr-2">Publicar</button>
+              <button
+                className="btn btn-danger"
+                onClick={() => Router.push("/admin/create/blogs")}
+              >
+                Cancelar
+              </button>
             </div>
           </form>
         </div>
