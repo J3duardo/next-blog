@@ -85,6 +85,15 @@ exports.createBlog = async (req, res) => {
         blog.postedBy = req.user.userId;
         blog.categories = categories.split(",");
         blog.tags = tags.split(",");
+
+        // Aceptar contenido no mayor de 15MB
+        if(blog.body.size > 15000000) {
+          return res.status(400).json({
+            status: "failed",
+            message: "El contenido del post no debe superar los 15MB",
+            error: "El contenido del post no debe superar los 15MB"
+          })
+        }
   
         // Aceptar sólo fotos que pesen menos de 1MB
         if(files.photo) {
@@ -350,6 +359,15 @@ exports.updateBlog = async (req, res) => {
         updatedBlog.postedBy = req.user.userId;
         updatedBlog.categories = categories.split(",");
         updatedBlog.tags = tags.split(",");
+
+        // Aceptar contenido no mayor de 15MB
+        if(blog.body.size > 15000000) {
+          return res.status(400).json({
+            status: "failed",
+            message: "El contenido del post no debe superar los 15MB",
+            error: "El contenido del post no debe superar los 15MB"
+          })
+        }
   
         // Aceptar sólo fotos que pesen menos de 1MB
         if(files.photo) {
