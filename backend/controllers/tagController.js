@@ -1,4 +1,5 @@
 const Tag = require("../models/tagModel");
+const Blog = require("../models/blogModel");
 const slugify = require("slugify");
 
 // Controller para crear tags
@@ -40,6 +41,7 @@ exports.getTag = async (req, res) => {
   try {
     const tag = await Tag.findOne({slug: req.params.slug});
 
+    // Chequear si el tag existe
     if(!tag) {
       return res.status(404).json({
         status: "failed",
@@ -47,12 +49,17 @@ exports.getTag = async (req, res) => {
       })
     }
 
+    // Si existe, buscar los blogs relacionados con ese tag
+    const blogs = await Blog.find({tags: tag})
+    .populate("categories", "_id name slug")
+    .populate("tags", "_id name slug")
+    .populate("postedBy", "_id name")
+    .select("_id title slug excerpt categories postedBy tags createdAt updatedAt")
+
     return res.json({
       status: "success",
-      message: "Tag encontrado con éxito",
-      data: {
-        tag
-      }
+      message: "",
+      data: {tag, blogs}
     })
 
   } catch (error) {
