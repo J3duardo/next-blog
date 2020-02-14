@@ -124,7 +124,7 @@ const SingleBlog = (props) => {
         />
         <meta
           property="og:url"
-          content={`${DOMAIN}/blogs/${props.router.pathname}`}
+          content={`${DOMAIN}/blogs/${props.router.asPath}`}
         />
         <meta
           property="og:site_name"
@@ -142,7 +142,7 @@ const SingleBlog = (props) => {
           property="og:image:type"
           content="image/jpg"
         />
-        <link rel="canonical" href={`${DOMAIN}/blogs/${props.router.pathname}`}/>
+        <link rel="canonical" href={`${DOMAIN}/blogs/${props.router.asPath}`}/>
       </Head>
     )
   }

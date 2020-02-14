@@ -41,7 +41,7 @@ const BlogsByTag = (props) => {
         />
         <meta
           property="og:url"
-          content={`${DOMAIN}${props.router.pathname}`}
+          content={`${DOMAIN}${props.router.asPath}`}
         />
         <meta
           property="og:site_name"
@@ -59,7 +59,7 @@ const BlogsByTag = (props) => {
           property="og:image:type"
           content={"image/jpg"}
         />
-        <link rel="canonical" href={`${DOMAIN}${props.router.pathname}`}/>
+        <link rel="canonical" href={`${DOMAIN}${props.router.asPath}`}/>
       </Head>
     )
   }
