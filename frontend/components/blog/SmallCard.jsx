@@ -75,7 +75,11 @@ const SmallCard = (props) => {
           </Link>
           <hr/>
           <p className="mb-0 text-muted">Creado: {moment(blog.updatedAt).calendar()}</p>
-          <p className="mb-0 text-muted">Autor: {blog.postedBy.name}</p>
+          <p className="mb-0 text-muted">
+            Autor:  <Link href="/profile/[username]" as={`/profile/${blog.postedBy.username}`}>
+                      <a>{blog.postedBy.name}</a>
+                    </Link>
+          </p>
         </div>
       </div>
     </React.Fragment>

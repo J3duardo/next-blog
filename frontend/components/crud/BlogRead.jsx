@@ -81,7 +81,7 @@ const BlogRead = (props) => {
         <div key={blog._id} className="col-sm-12 mb-4">
           <h3 className="mb-3">{blog.title}</h3>
           <p className="mark mb-3">
-            Autor: {blog.postedBy.name}
+            Autor: <Link href="/profile/[username]" as={`/profile/${blog.postedBy.username}`}><a>{blog.postedBy.name}</a></Link> 
             {" | "}
             Creado: {moment(blog.updatedAt).calendar()}
           </p>
