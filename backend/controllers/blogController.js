@@ -456,7 +456,7 @@ exports.getRelatedPosts = async (req, res) => {
     
     const blogs = await Blog.find({_id: {$ne: blogId}, categories: {$in: blogCategories}})
     .limit(limit)
-    .populate({path: "postedBy", select: "_id name profile"})
+    .populate({path: "postedBy", select: "_id name username profile"})
     .select("title slug excerpt postedBy createdAt updatedAt");
 
     return res.json({
