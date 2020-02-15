@@ -2,7 +2,7 @@ const User = require("../models/userModel");
 const Blog = require("../models/blogModel");
 const formidable = require("formidable");
 const fs = require("fs");
-const {validationResult} = require("express-validator");
+const bcrypt = require("bcryptjs");
 
 // Buscar el perfil público de un usuario específico
 exports.publicProfile = async (req, res) => {
@@ -42,16 +42,6 @@ exports.publicProfile = async (req, res) => {
 
 // Actualizar perfil del usuario actual
 exports.updateUserProfile = async (req, res) => {
-  // Validar name y email
-  const errors = validationResult(req);
-  if(!errors.isEmpty()) {
-    return res.status(400).json({
-      status: "failed",
-      message: errors.array()[0].msg,
-      error: errors.array()[0].msg
-    })
-  }
-
   try {
     // Procesar la data ingresada en el formulario
     const form = new formidable.IncomingForm();
@@ -65,7 +55,7 @@ exports.updateUserProfile = async (req, res) => {
       }  
 
       // Chequear si el usuario existe
-      const user = await User.findOne({email: req.user.email});      
+      const user = await User.findOne({_id: req.user.userId}).select("+password");
       if(!user) {
         return res.status(404).json({
           status: "failed",
@@ -75,19 +65,22 @@ exports.updateUserProfile = async (req, res) => {
       }
 
       // Extraer los campos del formulario
-      const {username, name, email, about} = fields;
+      const {username, name, email, currentPassword, password, passwordConfirm, about} = fields;
 
       // Validar el username
-      if(username === "") {
+      if(username === "" || username.length < 5 || username.length > 30) {
         return res.status(400).json({
           status: "failed",
-          message: "El username es obligatorio"
+          message: "El username debe contener entre 5 y 30 caracteres"
         })
       }
-      if(username.length > 30) {
+
+      // Validar el nombre
+      if(name.length === "" || name.length < 5 || name.length > 30) {
         return res.status(400).json({
           status: "failed",
-          message: "El username no puede contener más de 30 caracteres"
+          message: "El nombre debe contener entre 5 y 30 caracteres",
+          error: "El nombre debe contener entre 5 y 30 caracteres"
         })
       }
 
@@ -101,6 +94,49 @@ exports.updateUserProfile = async (req, res) => {
             error: "Ya existe un usuario asociado al email ingresado"
           })
         }
+      }
+
+      if(!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) {
+        return res.status(400).json({
+          status: "failed",
+          message: "Debe introducir un email válido",
+          error: "Debe introducir un email válido"
+        })
+      }
+
+      // Validar la nueva contraseña
+      if(currentPassword) {
+        // Chequear si la contraseña es correcta antes de actualizarla
+        const checkPassword = await user.checkPassword(currentPassword, user.password);
+        if(!checkPassword) {
+          return res.status(400).json({
+            status: "failed",
+            message: "Contraseña incorrecta",
+            error: "Contraseña incorrecta",
+          })
+        }
+        
+        // Chequear si las contraseñas coinciden
+        if(password !== passwordConfirm) {
+          return res.status(400).json({
+            status: "failed",
+            message: "Las contraseñas no coinciden",
+            error: "Las contraseñas no coinciden",
+          })
+        }
+
+        // Chequear que la contraseña contenga al menos 6 caracteres
+        if(password.length < 6) {
+          return res.status(400).json({
+            status: "failed",
+            message: "La contraseña debe contener al menos 6 caracteres",
+            error: "La contraseña debe contener al menos 6 caracteres"
+          })
+        }
+
+        // Si todo es correcto, encriptar la nueva contraseña
+        const updatedPassword = await bcrypt.hash(password, 12);
+        await user.update({password: updatedPassword});
       }
 
       // Validar que la foto del perfil no sea mayor de 1MB

@@ -40,7 +40,8 @@ const userSchema = new mongoose.Schema({
     select: false
   },
   about: {
-    type: String
+    type: String,
+    default: ""
   },
   role: {
     type: Number,
