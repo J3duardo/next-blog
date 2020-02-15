@@ -65,23 +65,30 @@ const SignupComponent = () => {
     }
   }
 
-  console.log(state.error);
-
-  const showLoading = () => {
-    return state.loading ? <div className="alert alert-info">Cargando...</div> : null;
-  }
-
   const showError = () => {
-  return state.error ? <div className="alert alert-danger">{state.error.error || state.error}</div> : null
+  return state.error ?
+    <div
+      style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
+      className="alert alert-danger"
+    >
+      {state.error.error || state.error}
+    </div>
+    : null
   }
 
   const showMessage = () => {
-  return state.message ? <div className="alert alert-info">{state.message}</div> : null
+  return state.message ?
+    <div
+      style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
+      className="alert alert-info"
+    >
+      {state.message}
+    </div>
+    : null
   }
 
   return (
     <React.Fragment>
-      {showLoading()}
       {showMessage()}
       {showError()}
       <form onSubmit={onSubmitHandler}>
