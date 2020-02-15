@@ -25,7 +25,7 @@ export const getCurrentUserProfile = async (token) => {
 }
 
 // Actualizar perfil del usuario actual
-export const updateCurrentUserProfile = async (userdata, token) => {
+export const updateCurrentUserProfile = async (userData, token) => {
   return await axios({
     method: "PATCH",
     url: `${API}/api/user/update`,
