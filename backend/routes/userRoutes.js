@@ -5,7 +5,7 @@ const {publicProfile, updateUserProfile, getUserPhoto} = require("../controllers
 const {check} = require("express-validator");
 
 // Buscar el perfil del usuario actual
-router.get("/profile", protectRoute, authMiddleware, readProfile);
+router.get("/user/profile", protectRoute, authMiddleware, readProfile);
 // Buscar el perfil público de un usuario específico
 router.get("/user/:username", publicProfile);
 // Actualizar el perfil del usuario actual
