@@ -12,7 +12,15 @@ const SearchBlogs = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+
+    // Limpiar errores anteriores
+    setError(null);
+
     try {
+      if(!search.length > 0) {
+        setError("Debe introducir un término de búsqueda");
+        return;
+      }
       setLoading(true);
       const res = await searchBlogs({search});
       setLoading(false);
