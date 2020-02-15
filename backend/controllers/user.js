@@ -4,7 +4,7 @@ const formidable = require("formidable");
 const fs = require("fs");
 const {validationResult} = require("express-validator");
 
-// Buscar el perfil público del usuario
+// Buscar el perfil público de un usuario específico
 exports.publicProfile = async (req, res) => {
   try {
     const user = await User.findOne({username: req.params.username}).select("-photo")
@@ -40,7 +40,7 @@ exports.publicProfile = async (req, res) => {
   }
 }
 
-// Actualizar perfil del usuario
+// Actualizar perfil del usuario actual
 exports.updateUserProfile = async (req, res) => {
   // Validar name y email
   const errors = validationResult(req);
@@ -116,14 +116,18 @@ exports.updateUserProfile = async (req, res) => {
         user.photo.contentType = files.photo.type;
       }
 
-      // Actualizar perfil y guardarlo en la base de datos
+      // Actualizar información del usuario
       user.username = username;
       user.name = name;
       user.email = email;
       user.about = about;
       user.profile = `${process.env.CLIENT_URL}/profile/${username}`;
 
+      // Actualizar perfil en la base de datos
       await user.save();
+
+      // No enviar la foto del perfil al cliente
+      user.photo = null;
 
       return res.json({
         status: "success",
@@ -143,5 +147,30 @@ exports.updateUserProfile = async (req, res) => {
 
 // Buscar foto del perfil del usuario
 exports.getUserPhoto = async (req, res) => {
+  try {
+    // Buscar el usuario
+    const user = await User.find({username: req.params.username});
 
+    // Chaequear si el usuario existe
+    if(!user) {
+      return res.status(404).json({
+        status: "failed",
+        message: "Usuario no encontrado",
+        error: "Usuario no encontrado",
+      })
+    }
+
+    // Si existe, buscar su foto y enviarla al cliente
+    if(user.photo.data) {
+      res.set("Content-Type", user.photo.contentType);
+      return res.send(user.photo.data);
+    }
+
+  } catch (error) {
+    return res.status(500).json({
+      status: "failed",
+      message: "Internal server error",
+      error: error.message
+    })
+  }
 }

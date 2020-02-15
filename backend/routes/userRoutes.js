@@ -4,11 +4,11 @@ const {protectRoute, authMiddleware, readProfile} = require("../controllers/auth
 const {publicProfile, updateUserProfile, getUserPhoto} = require("../controllers/user");
 const {check} = require("express-validator");
 
-// Buscar el perfil del usuario
+// Buscar el perfil del usuario actual
 router.get("/profile", protectRoute, authMiddleware, readProfile);
-// Buscar el perfil público del usuario
+// Buscar el perfil público de un usuario específico
 router.get("/user/:username", publicProfile);
-// Actualizar el perfil del usuario
+// Actualizar el perfil del usuario actual
 router.patch("/user/update",
   protectRoute,
   authMiddleware, [
@@ -18,7 +18,7 @@ router.patch("/user/update",
     check("email", "Email inválido").isEmail()
   ],
   updateUserProfile);
-// Buscar la foto del perfil del usuario
+// Buscar la foto del perfil de un usuario
 router.get("/user/photo/:username", getUserPhoto);
 
 module.exports = router;
