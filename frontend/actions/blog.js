@@ -6,7 +6,7 @@ import {API} from "../config";
 export const createBlog = async (blogData, token) => {
   // Chequear el rol del usuario para determinar a qué ruta debe enviar la data del blog
   const userRole = JSON.parse(localStorage.getItem("user")).role;
-  
+
   return await axios({
     method: "POST",
     url: userRole === 1 ? `${API}/api/blog` : `${API}/api/user/blog`,
@@ -20,9 +20,12 @@ export const createBlog = async (blogData, token) => {
 
 // Editar un blog
 export const updateBlog = async (blogData, slug, token) => {
+  // Chequear el rol del usuario para determinar a qué ruta debe enviar la data del blog
+  const userRole = JSON.parse(localStorage.getItem("user")).role;
+
   return await axios({
     method: "PATCH",
-    url: `${API}/api/blog/${slug}`,
+    url: userRole === 1 ? `${API}/api/blog/${slug}` : `${API}/api/user/blog/${slug}`,
     data: blogData,
     headers: {
       "Content-Type":'multipart/form-data',
@@ -33,9 +36,12 @@ export const updateBlog = async (blogData, slug, token) => {
 
 // Borrar un blog
 export const deleteBlog = async (slug, token) => {
+  // Chequear el rol del usuario para determinar a qué ruta debe enviar la data del blog
+  const userRole = JSON.parse(localStorage.getItem("user")).role;
+  
   return await axios({
     method: "DELETE",
-    url: `${API}/api/blog/${slug}`,
+    url: userRole === 1 ? `${API}/api/blog/${slug}` : `${API}/api/user/blog/${slug}`,
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
@@ -101,5 +107,17 @@ export const searchBlogs = async (params) => {
   return await axios({
     method: "GET",
     url: `${API}/api/blogs/search?${query}`
+  })
+}
+
+// Buscar los blogs del usuario autenticado
+export const getAllUserBlogs = async (token) => {
+  return await axios({
+    method: "GET",
+    url: `${API}/api/user-blogs`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
   })
 }

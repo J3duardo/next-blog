@@ -6,7 +6,7 @@ import moment from "moment";
 moment.locale("es");
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import {getCookie, isAuth, setCookie} from "../../actions/auth";
-import {getAllBlogs, deleteBlog} from "../../actions/blog";
+import {getAllBlogs, getAllUserBlogs, deleteBlog} from "../../actions/blog";
 
 const BlogRead = (props) => {
   const [blogs, setBlogs] = useState([]);
@@ -28,12 +28,26 @@ const BlogRead = (props) => {
   // Funcionalidad para cargar todos los blogs
   const loadAllBlogs = async () => {
     try {
-      const res = await getAllBlogs();
-      setBlogs(res.data.data.blogs);
+      // Buscar los blogs del usuario si no es administrador
+      if(JSON.parse(isAuth()).role === 0) {
+        const res = await getAllUserBlogs(getCookie("token"));
+        setBlogs(res.data.data.blogs);
+        return
+        // Buscar los blogs del usuario si es administrador
+      } else if(JSON.parse(isAuth()).role === 1) {
+        const res = await getAllBlogs();
+        setBlogs(res.data.data.blogs);
+        return
+      }
 
     } catch (error) {
-      console.log(error);
-      setError(error.message);
+      if(error.response) {
+        return setError(error.response.data.message)
+      }
+      if(error.message.includes("Network") || error.message.includes("ECONNREFUSED")){
+        return setError("Error de conexión. Intente de nuevo")
+      }
+      return setError(error.message);
     }
   }
 
@@ -153,6 +167,7 @@ const BlogRead = (props) => {
       {showSuccessMessage()}
       {showError()}
       <div className="row">
+        {blogs.length === 0 && <h4 style={{width: "100%"}} className="text-center">Aún no has creado blogs.</h4>}
         {renderBlogs()}
       </div>
     </React.Fragment>
