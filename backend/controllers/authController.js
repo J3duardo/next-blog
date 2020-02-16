@@ -97,7 +97,7 @@ exports.login = async (req, res) => {
       }
 
       // Enviar el token en los cookies
-      res.cookie("token", token, {expiresIn: "1d"});
+      res.cookie("token", token, {expiresIn: "1d", httpOnly: true, secure: req.protocol === "https"});
 
       // Enviar el token y la data del usuario en la respuesta
       return res.json({
