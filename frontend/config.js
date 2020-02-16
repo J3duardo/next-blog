@@ -13,3 +13,5 @@ if(!publicRuntimeConfig.PRODUCTION) {
 }
 
 export const DOMAIN = domain;
+
+export const DISQUS_SHORTNAME = publicRuntimeConfig.DISQUS_SHORTNAME;

@@ -8,6 +8,7 @@ import reactHTML from "react-render-html";
 import {getSingleBlog, getRelatedBlogs} from "../../actions/blog";
 import Layout from "../../components/Layout";
 import SmallCard from "../../components/blog/SmallCard";
+import DisqusThread from "../../components/DisqusThread";
 import {API, DOMAIN, APP_NAME} from "../../config";
 
 const SingleBlog = (props) => {
@@ -99,6 +100,19 @@ const SingleBlog = (props) => {
         </div>
       )
     })
+  }
+
+  // Mostrar comentarios con Disqus
+  const renderComments = () => {
+    return (
+      <div>
+        <DisqusThread
+          id={blog._id}
+          title={blog.title}
+          path={`/blog/${blog.slug}`}
+        />
+      </div>
+    )
   }
 
   // Meta tags específicos para cada blog
@@ -222,7 +236,7 @@ const SingleBlog = (props) => {
                 </div>
               </div>
               <div className="container mb-4">
-                <h5 className="text-center">Comentarios:</h5>
+                {renderComments()}
               </div>
             </article>          
           }
