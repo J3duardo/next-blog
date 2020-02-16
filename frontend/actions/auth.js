@@ -98,3 +98,13 @@ export const isAuth = () => {
     return false;
   }
 }
+
+// Actualizar data del usuario en localStorage al actualizar perfil del usuario
+export const updateUserAuthData = (userData) => {
+  if(process.browser) {
+    if(localStorage.getItem("user")) {
+      const updatedData = JSON.stringify(userData)
+      localStorage.setItem("user", updatedData);
+    }
+  }
+}

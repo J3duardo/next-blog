@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef} from "react";
 import Router, {withRouter} from "next/router";
 import {getCurrentUserProfile, updateCurrentUserProfile} from "../../actions/user";
-import {getCookie} from "../../actions/auth";
+import {getCookie, updateUserAuthData} from "../../actions/auth";
 import {API} from "../../config";
 
 const ProfileUpdate = () => {
@@ -111,6 +111,20 @@ const ProfileUpdate = () => {
       setLoading(false);
       setSuccess(true);
 
+      const {_id, name, username, email, role} = res.data.data;
+
+      const userData = {
+        id: _id,
+        name,
+        username,
+        email,
+        role
+      }
+
+      // Actualizar data del usuario almacenada en el localStorage
+      updateUserAuthData(userData);
+
+      // Redirigir al panel de control del usuario
       setTimeout(() => {
         Router.push("/user");        
       }, 2500);
