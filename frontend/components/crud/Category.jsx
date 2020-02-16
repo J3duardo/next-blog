@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import Link from "next/link";
 import Router from "next/router";
-import {getCookie} from "../../actions/auth";
+import {getCookie, sessionExpiredHandler} from "../../actions/auth";
 import {createCategory, getAllCategories, deleteCategory} from "../../actions/category";
 
 const Category = () => {
@@ -71,6 +71,10 @@ const Category = () => {
       }, 1500);
       
     } catch (error) {
+      if(error.response && error.response.data.message.includes("expirada")) {
+        sessionExpiredHandler();
+      }
+
       if(error.response) {
         return setState({
           ...state,
@@ -129,6 +133,10 @@ const Category = () => {
       }, 1500);
 
     } catch (error) {
+      if(error.response && error.response.data.message.includes("expirada")) {
+        sessionExpiredHandler();
+      }
+
       if(error.response) {
         return setState({
           ...state,
@@ -157,36 +165,44 @@ const Category = () => {
           id={`category-${category._id}`}
           onDoubleClick={() => deleteCategoryHandler(category.slug, state.token)}
           className="btn btn-outline-primary mr-1 ml-1"
+          disabled={state.loadingDeletion}
         >
+          {state.loadingDeletion &&
+            <span
+              style={{marginRight: "5px"}}
+              className="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            />
+          }
           {category.name}
         </button>
       )
     })
   }
-  
-  const showLoading = () => {
-    return (
-      state.loading ? <div className="alert alert-info">Cargando categorías...</div>
-      :
-      state.loadingCreation ? <div className="alert alert-info">Creando categoría...</div>
-      :
-      state.loadingDeletion ? <div className="alert alert-info">Eliminando categoría...</div>
-      :
-      null
-    );
-  }
 
   const showError = () => {
-  return state.error ? <div className="alert alert-danger">{state.error}</div> : null
+    return state.error ?
+    <div
+      style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
+      className="alert alert-danger"
+    >
+      {state.error}
+    </div> : null
   }
 
   const showSuccessMessage = () => {
-  return state.success ? <div className="alert alert-info">{state.successMessage}</div> : null
+    return state.success ?
+      <div
+        style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
+        className="alert alert-info"
+      >
+        {state.successMessage}
+      </div> : null
   }
 
   return (
     <React.Fragment>
-      {showLoading()}
       {showError()}
       {showSuccessMessage()}
       <form className="mb-3" onSubmit={onSubmitHandler}>
@@ -202,7 +218,21 @@ const Category = () => {
             value={state.name}
           />
         </div>
-        <button type="submit" className="btn btn-primary">Crear categoría</button>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={state.loadingCreation}
+        >
+          {state.loadingCreation &&
+            <span
+              style={{marginRight: "5px"}}
+              className="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            />
+          }
+          Crear categoría
+        </button>
       </form>
       <p className="text-muted mb-3"><small>Doble click en una categoría para eliminarla</small></p>
       <div>{renderCategories()}</div>

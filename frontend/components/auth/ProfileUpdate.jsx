@@ -1,12 +1,12 @@
 import {useState, useEffect, useRef} from "react";
 import Router, {withRouter} from "next/router";
 import {getCurrentUserProfile, updateCurrentUserProfile} from "../../actions/user";
-import {getCookie, updateUserAuthData} from "../../actions/auth";
+import {getCookie, updateUserAuthData, sessionExpiredHandler} from "../../actions/auth";
 import {API} from "../../config";
 
 const ProfileUpdate = () => {
   const [username, setUsername] = useState("");
-  const[photoSrcUsername, setPhotoSrcUsername] = useState("")
+  const [photoSrcUsername, setPhotoSrcUsername] = useState("")
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -132,6 +132,10 @@ const ProfileUpdate = () => {
     } catch (error) {
       setLoading(false);
       setSuccess(false);
+      
+      if(error.response && error.response.data.message.includes("expirada")) {
+        sessionExpiredHandler();
+      }
 
       if(error.response) {
         return setError(error.response.data.message)

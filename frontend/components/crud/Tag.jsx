@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import Link from "next/link";
 import Router from "next/router";
-import {getCookie} from "../../actions/auth";
+import {getCookie, sessionExpiredHandler} from "../../actions/auth";
 import {createTag, getAllTags, deleteTag} from "../../actions/tag";
 
 const Tag = () => {
@@ -71,6 +71,10 @@ const Tag = () => {
       }, 1500);
       
     } catch (error) {
+      if(error.response && error.response.data.message.includes("expirada")) {
+        sessionExpiredHandler();
+      }
+
       if(error.response) {
         return setState({
           ...state,
@@ -129,6 +133,10 @@ const Tag = () => {
       }, 1500);
 
     } catch (error) {
+      if(error.response && error.response.data.message.includes("expirada")) {
+        sessionExpiredHandler();
+      }
+
       if(error.response) {
         return setState({
           ...state,
@@ -157,36 +165,44 @@ const Tag = () => {
           id={`category-${tag._id}`}
           onDoubleClick={() => deleteTagHandler(tag.slug, state.token)}
           className="btn btn-outline-primary mr-1 ml-1"
+          disabled={state.loadingDeletion}
         >
+          {state.loadingDeletion &&
+            <span
+              style={{marginRight: "5px"}}
+              className="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            />
+          }
           {tag.name}
         </button>
       )
     })
   }
-  
-  const showLoading = () => {
-    return (
-      state.loading ? <div className="alert alert-info">Cargando tags...</div>
-      :
-      state.loadingCreation ? <div className="alert alert-info">Creando tag...</div>
-      :
-      state.loadingDeletion ? <div className="alert alert-info">Eliminando tag...</div>
-      :
-      null
-    );
-  }
 
   const showError = () => {
-  return state.error ? <div className="alert alert-danger">{state.error}</div> : null
+    return state.error ?
+    <div
+      style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
+      className="alert alert-danger"
+    >
+      {state.error}
+    </div> : null
   }
 
   const showSuccessMessage = () => {
-  return state.success ? <div className="alert alert-info">{state.successMessage}</div> : null
+    return state.success ?
+    <div
+      style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
+      className="alert alert-info"
+    >
+      {state.successMessage}
+    </div> : null
   }
 
   return (
     <React.Fragment>
-      {showLoading()}
       {showError()}
       {showSuccessMessage()}
       <form className="mb-3" onSubmit={onSubmitHandler}>
@@ -202,7 +218,21 @@ const Tag = () => {
             value={state.tagName}
           />
         </div>
-        <button type="submit" className="btn btn-primary">Crear tag</button>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={state.loadingCreation}
+        >
+          {state.loadingCreation &&
+            <span
+              style={{marginRight: "5px"}}
+              className="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            />
+          }
+          Crear tag
+        </button>
       </form>
       <p className="text-muted mb-3"><small>Doble click en un tag para eliminarlo</small></p>
       <div>{renderTags()}</div>

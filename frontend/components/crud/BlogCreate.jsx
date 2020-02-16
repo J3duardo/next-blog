@@ -3,7 +3,7 @@ import Link from "next/link";
 import Router from "next/router";
 import {withRouter} from "next/router/";
 import dynamic from "next/dynamic";
-import {getCookie, isAuth} from "../../actions/auth";
+import {getCookie, isAuth, sessionExpiredHandler} from "../../actions/auth";
 import {getAllCategories} from "../../actions/category";
 import {getAllTags} from "../../actions/tag";
 import {createBlog} from "../../actions/blog";
@@ -109,6 +109,9 @@ const BlogCreate = (props) => {
       return;
 
     } catch (error) {
+      if(error.response && error.response.data.message.includes("expirada")) {
+        sessionExpiredHandler();
+      }
       if(error.response) {
         if(error.response.data.message.includes("imagen")) {
           setLoading(false);
@@ -237,20 +240,34 @@ const BlogCreate = (props) => {
   }
 
   const showLoading = () => {
-    return (
-      loading ? <div className="alert alert-info text-center">Creando post...</div>
+    return loading ?
+      <div
+        style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
+        className="alert alert-info text-center"
+      >
+        Creando post...
+      </div>
       :
-      null
-    );
+      null;
   }
 
   const showError = () => {
-  return state.error || state.sizeError ? <div className="alert alert-danger text-center">{state.error || state.sizeError}</div> : null
+    return state.error || state.sizeError ?
+    <div
+      style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
+      className="alert alert-danger text-center"
+    >
+      {state.error || state.sizeError}
+    </div>
+    : null
   }
 
   const showSuccessMessage = () => {
   return success ?
-    <div className="alert alert-info text-center">
+    <div
+      style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
+      className="alert alert-info text-center"
+    >
       Post creado exitosamente
     </div>
     :

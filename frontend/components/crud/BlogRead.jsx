@@ -5,7 +5,7 @@ import {withRouter} from "next/router/";
 import moment from "moment";
 moment.locale("es");
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import {getCookie, isAuth, setCookie} from "../../actions/auth";
+import {getCookie, isAuth, setCookie, sessionExpiredHandler} from "../../actions/auth";
 import {getAllBlogs, getAllUserBlogs, deleteBlog} from "../../actions/blog";
 
 const BlogRead = (props) => {
@@ -72,6 +72,10 @@ const BlogRead = (props) => {
     } catch (error) {
       setLoading(false);
       setBlogDeleted(null);
+
+      if(error.response && error.response.data.message.includes("expirada")) {
+        sessionExpiredHandler();
+      }
       
       if(error.response) {
         clearMessages();
@@ -143,12 +147,21 @@ const BlogRead = (props) => {
   }
 
   const showError = () => {
-    return error ? <div className="alert alert-danger text-center">{error}</div> : null
+    return error ?
+    <div
+      style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
+      className="alert alert-danger text-center"
+    >
+      {error}
+    </div> : null
   }
   
   const showSuccessMessage = () => {
     return message ?
-    <div className="alert alert-info text-center">
+    <div
+      style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
+      className="alert alert-info text-center"
+    >
       {message}
     </div>
     :

@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import Router from "next/router";
 import {withRouter} from "next/router/";
 import dynamic from "next/dynamic";
-import {getCookie} from "../../actions/auth";
+import {getCookie, sessionExpiredHandler} from "../../actions/auth";
 import {getAllCategories} from "../../actions/category";
 import {getAllTags} from "../../actions/tag";
 import {getSingleBlog, updateBlog} from "../../actions/blog";
@@ -179,6 +179,9 @@ const BlogEdit = (props) => {
       return;
 
     } catch (error) {
+      if(error.response && error.response.data.message.includes("expirada")) {
+        sessionExpiredHandler();
+      }
       if(error.response) {
         setLoading(false);
         setSuccess(false);
@@ -236,20 +239,33 @@ const BlogEdit = (props) => {
   }
 
   const showLoading = () => {
-    return (
-      loading ? <div className="alert alert-info text-center">Editando blog...</div>
-      :
-      null
-    );
+    return loading ?
+    <div
+      style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
+      className="alert alert-info text-center"
+    >
+      Editando blog...
+    </div>
+    :
+    null
   }
 
   const showError = () => {
-  return error ? <div className="alert alert-danger text-center">{error}</div> : null
+    return error ?
+    <div
+      style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
+      className="alert alert-danger text-center"
+    >
+      {error}
+    </div> : null
   }
 
   const showSuccessMessage = () => {
-  return success ?
-    <div className="alert alert-info text-center">
+    return success ?
+    <div
+      style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
+      className="alert alert-info text-center"
+    >
       Blog editado exitosamente
     </div>
     :
