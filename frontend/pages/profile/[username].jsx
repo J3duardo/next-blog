@@ -1,3 +1,4 @@
+import {useRef} from "react";
 import Head from "next/head";
 import Link from "next/link";
 import {withRouter} from "next/router";
@@ -8,7 +9,7 @@ import {getPublicUserProfile} from "../../actions/user";
 import {API, DOMAIN, APP_NAME} from "../../config";
 
 const UserPublicProfile = (props) => {
-  console.log(props);
+  const imgRef = useRef();
   const {user, error} = props;
 
   const renderUserBlogs = () => {
@@ -42,6 +43,11 @@ const UserPublicProfile = (props) => {
     )
   }
 
+  // cargar imagen por defecto en caso de error
+  const loadDefaultImg = () => {
+    imgRef.current.src = "/images/default-profile.jpg";
+  }
+
   return (
     <React.Fragment>
       {head()}
@@ -51,13 +57,24 @@ const UserPublicProfile = (props) => {
             <div className="col-md-12">
               <div className="card">
                 <div className="card-body">
-                  <h5>{props.user.name}</h5>
-                  <Link href={`${props.user.profile}`}>
-                    <a>Ver perfil</a>
-                  </Link>
-                  <p className="text-muted">
-                    Miembro desde: {moment(props.user.createdAt).calendar()}
-                  </p>
+                  <div className="row">
+                    <div className="col-md-8">
+                      <h5>{props.user.name}</h5>
+                      <p className="text-muted">
+                        Miembro desde: {moment(props.user.createdAt).calendar()}
+                      </p>                   
+                    </div>
+                    <div className="col-md-4">
+                      <img
+                        ref={imgRef}
+                        src={`${API}/api/user/photo/${props.user.username}`}
+                        alt={`Foto de ${props.user.username}`}
+                        className="img img-fluid img-thumbnail"
+                        style={{display: "block", maxHeight: "180px", maxWidth: "100%", margin: "0 auto"}}
+                        onError={loadDefaultImg}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
