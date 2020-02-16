@@ -150,14 +150,22 @@ exports.createBlog = async (req, res) => {
 // Controller para tomar todos los blogs
 exports.getAllBlogs = async (req, res) => {
   try {
+    let filter = {};
+
+    // Filtro para buscar los blogs de un usuario
+    if(req.originalUrl.includes("user-blogs") && req.profile.role === 0) {
+      filter = {postedBy: req.user.userId}
+    }
+
     const blogs = await Blog
-      .find()
+      .find(filter)
       .populate("categories", "_id name slug")
       .populate("tags", "_id name slug")
       .populate("postedBy", "_id name username profile")
       .select("-photo -body -mtitle -mdescription");
     return res.json({
       status: "success",
+      results: blogs.length,
       message: "se muestran todos los blogs diponibles",
       data: {blogs}
     })

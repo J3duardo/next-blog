@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {protectRoute, authMiddleware, readProfile} = require("../controllers/authController");
 const {publicProfile, updateUserProfile, getUserPhoto} = require("../controllers/user");
-const {createBlog, deleteBlog, updateBlog} = require("../controllers/blogController");
+const {getAllBlogs, createBlog, deleteBlog, updateBlog} = require("../controllers/blogController");
 
 // Buscar el perfil del usuario actual
 router.get("/user/profile", protectRoute, authMiddleware, readProfile);
@@ -13,6 +13,8 @@ router.patch("/user/update", protectRoute, authMiddleware, updateUserProfile);
 // Buscar la foto del perfil de un usuario
 router.get("/user/photo/:username", getUserPhoto);
 
+// Buscar todos los blogs del usuario
+router.get("/user-blogs", protectRoute, authMiddleware, getAllBlogs);
 // Permitir que los usuarios autenticados creen blogs
 router.post("/user/blog", protectRoute, authMiddleware, createBlog);
 // Borrar un blog
