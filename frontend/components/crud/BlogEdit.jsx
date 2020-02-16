@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import Router from "next/router";
 import {withRouter} from "next/router/";
 import dynamic from "next/dynamic";
-import {getCookie, sessionExpiredHandler} from "../../actions/auth";
+import {getCookie, sessionExpiredHandler, isAuth} from "../../actions/auth";
 import {getAllCategories} from "../../actions/category";
 import {getAllTags} from "../../actions/tag";
 import {getSingleBlog, updateBlog} from "../../actions/blog";
@@ -305,7 +305,7 @@ const BlogEdit = (props) => {
               <button className="btn btn-primary mr-2">Publicar</button>
               <button
                 className="btn btn-danger"
-                onClick={() => Router.push("/admin/create/blogs")}
+                onClick={() => Router.push(JSON.parse(isAuth()).role === 1 ? "/admin/create/blogs" : "/user/create/blogs")}
               >
                 Cancelar
               </button>
