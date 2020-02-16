@@ -1,10 +1,12 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
 import Router, {withRouter} from "next/router";
 import {getCurrentUserProfile, updateCurrentUserProfile} from "../../actions/user";
 import {getCookie} from "../../actions/auth";
+import {API} from "../../config";
 
 const ProfileUpdate = () => {
   const [username, setUsername] = useState("");
+  const[photoSrcUsername, setPhotoSrcUsername] = useState("")
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -16,12 +18,16 @@ const ProfileUpdate = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
 
+  const imgRef = useRef();
+  const [imgPreview, setImgPreview] = useState(null);
+
   // Funcionalidad para cargar el perfil del usuario actual
   const getProfile = async () => {
     try {
       const res = await getCurrentUserProfile(getCookie("token"));
       
       setUsername(res.data.profile.username);
+      setPhotoSrcUsername(res.data.profile.username);
       setName(res.data.profile.name);
       setEmail(res.data.profile.email);
       setPhoto(res.data.profile.photo);
@@ -71,6 +77,7 @@ const ProfileUpdate = () => {
       break;
       case("photo"):
         setPhoto(e.target.files[0]);
+        setImgPreview(URL.createObjectURL(e.target.files[0]))
       break;
       case("about"):
         setAbout(e.target.value);
@@ -124,6 +131,11 @@ const ProfileUpdate = () => {
     }
   }
 
+  // Cargar imagen por defecto si el usuario no tiene imagen de perfil
+  const loadDefaultImg = () => {
+    imgRef.current.src = "/images/default-profile.jpg";
+  }
+
   const showError = () => {
   return error ?
     <div
@@ -153,16 +165,38 @@ const ProfileUpdate = () => {
       <div className="container">
         <h3 className="mb-4">Actualizar perfil</h3>
         <div className="row">
-          <div className="col-md-4">Imagen del perfil</div>
+          <div className="col-md-4">
+            <img
+              ref={imgRef}
+              src={`${API}/api/user/photo/${photoSrcUsername}`}
+              alt={`Foto de ${photoSrcUsername}`}
+              className="img img-fluid img-thumbnail mb-2"
+              style={{maxHeight: "auto", maxWidth:"100%"}}
+              onError={loadDefaultImg}
+            />
+            <label
+              htmlFor="photo"
+              className="btn btn-outline-info"
+            >
+              Actualiza tu foto de perfil
+            </label>
+            <br/>
+            <small className="text-muted">La imagen debe ser menor de 1MB</small>
+            <hr className="mb-2"/>
+            {imgPreview &&
+              <div style={{maxWidth: "250px", margin: "0 auto"}}>
+                <img
+                  style={{display: "block", width: "100%"}}
+                  className="img img-fluid img-thumbnail"
+                  src={imgPreview} alt="avatar preview"
+                />
+                <small style={{display: "block", textAlign: "center"}} className="text-muted">Preview de la imagen</small>
+              </div>
+            }
+          </div>
           <div className="col-md-8">
             <form onSubmit={onSubmitHandler}>
-              <div style={{overflow: "hidden"}} className="form-group">
-                <label
-                  htmlFor="photo"
-                  className="btn btn-outline-info"
-                >
-                  Actualiza tu foto de perfil
-                </label>
+              <div>
                 <input
                   className="form-control"
                   type="file"
@@ -172,17 +206,6 @@ const ProfileUpdate = () => {
                   accept="image/*"
                   onChange={onChangeHandler}
                 />
-                <br/>
-                <React.Fragment>
-                  {photo ?
-                    <small className="text-muted">
-                      Imagen: {photo.name}
-                    </small>
-                    :
-                    <small className="text-muted">Debe ser menor de 1MB</small>                              
-                  }
-                </React.Fragment>
-                <hr style={{marginBottom: 0}}/>
               </div>
               <div className="form-group">
                 <label htmlFor="username" className="text-muted font-weight-bold">Username</label>

@@ -31,6 +31,11 @@ const adminIndex = () => {
                     <a>Editar y Borrar Blogs</a>
                   </Link>
                 </li>
+                <li className="list-group-item">
+                  <Link href="/user/update">
+                    <a>Editar tu perfil de usuario</a>
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
