@@ -43,6 +43,15 @@ app.use("/api", tagRoutes);
 
 // Middleware para manejar errores de token
 app.use((err, req, res, next) => {
+  if(err.message.includes("jwt expired")) {
+    res.clearCookie("token");
+    res.status(401).json({
+      status: "failed",
+      message: "Sesión expirada. Inicie sesión nuevamente para continuar",
+      error: "Sesión expirada. Inicie sesión nuevamente para continuar"
+    });
+    return;
+  }
   if(err.name === 'UnauthorizedError') {
     res.status(401).json({
       status: "failed",
