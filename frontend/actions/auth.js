@@ -1,3 +1,4 @@
+import Router from "next/router";
 import axios from "axios";
 import {API} from "../config";
 import cookieJs from "js-cookie";
@@ -107,4 +108,13 @@ export const updateUserAuthData = (userData) => {
       localStorage.setItem("user", updatedData);
     }
   }
+}
+
+// Manejar sesión expirada
+export const sessionExpiredHandler = () => {
+  removeCookie("token");
+  localStorage.removeItem("user");
+  setTimeout(() => {
+    Router.push("/login")
+  }, 2000);
 }
