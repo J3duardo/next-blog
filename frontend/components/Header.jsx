@@ -93,6 +93,13 @@ const Header = (props) => {
                   </Link>
                 </NavItem>
                 <NavItem>
+                  <Link href="/user/create/blog">
+                    <NavLink>
+                      Crear Blog
+                    </NavLink>
+                  </Link>
+                </NavItem>
+                <NavItem>
                   <Link href="/user">
                     <NavLink>
                       Dashboard
@@ -113,6 +120,13 @@ const Header = (props) => {
                 <Link href="/blogs">
                   <NavLink>
                     Blogs
+                  </NavLink>
+                </Link>
+              </NavItem>
+              <NavItem>
+                <Link href="/user/create/blog">
+                  <NavLink>
+                    Crear Blog
                   </NavLink>
                 </Link>
               </NavItem>

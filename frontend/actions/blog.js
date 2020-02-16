@@ -4,9 +4,12 @@ import {API} from "../config";
 
 // Crear un blog
 export const createBlog = async (blogData, token) => {
+  // Chequear el rol del usuario para determinar a qué ruta debe enviar la data del blog
+  const userRole = JSON.parse(localStorage.getItem("user")).role;
+  
   return await axios({
     method: "POST",
-    url: `${API}/api/blog`,
+    url: userRole === 1 ? `${API}/api/blog` : `${API}/api/user/blog`,
     data: blogData,
     headers: {
       "Content-Type":'multipart/form-data',
