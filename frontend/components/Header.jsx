@@ -80,6 +80,13 @@ const Header = (props) => {
                     </NavLink>
                   </Link>
                 </NavItem>
+                <NavItem>
+                  <Link href="/contact">
+                    <NavLink>
+                      Contactar
+                    </NavLink>
+                  </Link>
+                </NavItem>
               </Nav>
             </React.Fragment>
             :
@@ -103,6 +110,13 @@ const Header = (props) => {
                   <Link href="/user">
                     <NavLink>
                       Dashboard
+                    </NavLink>
+                  </Link>
+                </NavItem>
+                <NavItem>
+                  <Link href="/contact">
+                    <NavLink>
+                      Contactar
                     </NavLink>
                   </Link>
                 </NavItem>
@@ -141,6 +155,13 @@ const Header = (props) => {
                 <Link href="/admin">
                   <NavLink>
                     Administrar
+                  </NavLink>
+                </Link>
+              </NavItem>
+              <NavItem>
+                <Link href="/contact">
+                  <NavLink>
+                    Contactar
                   </NavLink>
                 </Link>
               </NavItem>
