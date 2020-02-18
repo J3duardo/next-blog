@@ -132,3 +132,19 @@ export const sendResetPasswordEmail = async (email) => {
     }
   })
 }
+
+// Restablecer la contraseña
+export const resetPassword = async (data) => {
+  return axios({
+    method: "POST",
+    url: `${API}/api/reset-password`,
+    data: {
+      token: data.token,
+      password: data.password,
+      passwordConfirm: data.passwordConfirm
+    },
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+}
