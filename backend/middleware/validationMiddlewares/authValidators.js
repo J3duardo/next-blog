@@ -16,4 +16,17 @@ exports.loginValidator = [
   check("email", "Debe ingresar su email").not().isEmpty(),
   check("email", "Email inválido.").isEmail(),
   check("password", "Debe ingresar su contraseña").not().isEmpty()
-]
+];
+
+// Validar email para reseteo de contraseña
+exports.forgotPasswordValidator = [
+  check("email", "Debe ingresar su email").not().isEmpty(),
+  check("email", "Email inválido.").isEmail()
+];
+
+// Validar la nueva contraseña
+exports.resetPasswordValidator = [
+  check("password", "Debe ingresar su contraseña").not().isEmpty(),
+  check("password", "La contraseña debe contener al menos 6 caracteres").isLength({min: 6, max: undefined}),
+  check("passwordConfirm", "Debe confirmar su contraseña").not().isEmpty()
+];
