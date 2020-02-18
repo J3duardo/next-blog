@@ -219,9 +219,10 @@ exports.forgotPassword = async (req, res) => {
       html: `
         <h4>Restablecimiento de contraseña</h4>
         <p>Por favor, use el siguiente link para restablecer la contraseña de su cuenta de ${process.env.APP_NAME}</p>
-        <a href=${process.env.CLIENT_URL}/reset-password/${resetPasswordToken}>${process.env.CLIENT_URL}/reset-password/${resetPasswordToken}</a>
+        <a href=${process.env.CLIENT_URL}/reset-password?token=${resetPasswordToken}>${process.env.CLIENT_URL}/reset-password?token=${resetPasswordToken}</a>
+        <p style="text-align: center">El link es válido por 10 minutos, de no completar la operación en este periodo de tiempo tendrá que enviar un nuevo email</p>
         <hr/>
-        <p>Si no solicitó el restablecimiento de su contraseña, puede ignorar este mensaje</p>
+        <p>Si usted no solicitó el restablecimiento de su contraseña, puede ignorar este mensaje</p>
         <hr/>
         <p>SeoBlog Team</p>
       `
@@ -249,11 +250,15 @@ exports.forgotPassword = async (req, res) => {
 // Resetear la contraseña
 exports.resetPassword = async (req, res) => {
   try {
-    const {resetPasswordLink, password, passwordConfirm} = req.body;
+    const {token, password, passwordConfirm} = req.body;
 
-    // Chequear si el token no ha expirado
-    // Si el token expiró, lanza error con message: "jwt expired"
-    jwt.verify(resetPasswordLink, process.env.JWT_SECRET);
+    // Chequear si se recibió el token
+    if(!token) {
+      return res.status(400).json({
+        status: "failed",
+        message: "Token inválido. Envíe un nuevo email de restablecimiento de contraseña."
+      })
+    }
 
     // Verificar que las contraseñas coincidan
     if(password !== passwordConfirm) {
@@ -264,23 +269,42 @@ exports.resetPassword = async (req, res) => {
     }
 
     // Buscar el usuario con el token enviado
-    const user = await User.findOne({resetPasswordLink});
+    const user = await User.findOne({resetPasswordLink: token});
     if(!user) {
       return res.status(400).json({
         status: "failed",
-        message: "Token inválido"
+        message: "Token inválido. Envíe un nuevo email de restablecimiento de contraseña."
       })
     }
 
-    // Crear y actualizar la nueva contraseña del usuario
-    user.password = password;
-    user.resetPasswordLink = "";
-    await user.save();
+    // Chequear si el token no ha expirado
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      if(err) {
+        return res.status(400).json({
+          status: "failed",
+          message: "Token expirado. Envíe un nuevo email de restablecimiento de contraseña."
+        })
+      }  
+  
+      // Crear y actualizar la nueva contraseña del usuario
+      user.password = password;
+      user.resetPasswordLink = "";
 
-    return res.json({
-      status: "success",
-      message: "Contraseña actualizada exitosamente"
-    })
+      try {
+        await user.save();    
+        return res.json({
+          status: "success",
+          message: "Contraseña actualizada exitosamente"
+        })
+        
+      } catch (error) {
+        return res.status(500).json({
+          status: "failed",
+          message: "Internal server error",
+          error: {...error}
+        })
+      }
+    });
 
   } catch (error) {
     return res.status(500).json({
