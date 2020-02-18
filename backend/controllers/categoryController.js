@@ -105,7 +105,11 @@ exports.deleteCategory = async (req, res) => {
       })
     }
     
+    // Eliminar la categoría de la colección de categorías
     await Category.findOneAndDelete({slug: req.params.slug});
+
+    // Eliminar la categoría de los blogs que contengan la cetgoría eliminada
+    await Blog.updateMany({$pull: {categories: category._id}});
 
     return res.json({
       status: "success",

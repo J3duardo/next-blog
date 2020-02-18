@@ -105,7 +105,11 @@ exports.deleteTag = async (req, res) => {
       })
     }
     
+    // Eliminar el tag de la colección de tags
     await Tag.findOneAndDelete({slug: req.params.slug});
+
+    // Eliminar el tag de los blogs que contengan el tag eliminado
+    await Blog.updateMany({$pull: {tags: tag._id}});
 
     return res.json({
       status: "success",
