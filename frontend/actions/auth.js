@@ -118,3 +118,17 @@ export const sessionExpiredHandler = () => {
     Router.push("/login")
   }, 2000);
 }
+
+// Enviar correo de restablecimiento de contraseña
+export const sendResetPasswordEmail = async (email) => {
+  return axios({
+    method: "POST",
+    url: `${API}/api/forgot-password`,
+    data: {email},
+    headers: {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+  })
+}

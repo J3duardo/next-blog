@@ -1,4 +1,5 @@
 import {useState} from "react";
+import Link from "next/link";
 import {signin, authenticateUser, isAuth} from "../../actions/auth";
 import Router from "next/router";
 
@@ -121,7 +122,7 @@ const LoginComponent = () => {
             value={state.password}
           />
         </div>
-        <div>
+        <div className="mb-2">
           <button
             className="btn btn-primary"
             disabled={state.loading || !state.showForm}
@@ -130,6 +131,20 @@ const LoginComponent = () => {
           </button>
         </div>
       </form>
+      <div className="text-center" style={{width: "100%"}}>
+        <small>¿Olvidó su contraseña?
+          <Link href="/forgot-password">
+            <a>{" "}Restablecer contraseña</a>
+          </Link>
+        </small>
+      </div>
+      <div className="text-center" style={{width: "100%"}}>
+        <small>¿No posee cuenta en NextBlog?
+          <Link href="/signup">
+            <a>{" "}Registrarse</a>
+          </Link>
+        </small>
+      </div>
     </React.Fragment>
   )
 }
