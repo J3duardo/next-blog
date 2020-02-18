@@ -1,9 +1,7 @@
-import {useEffect} from "react";
-import Router from "next/router";
 import Layout from "../components/Layout";
 import ForgotPasswordComponent from "../components/auth/ForgotPasswordComponent";
 
-const Login = () => {
+const ForgotPassword = () => {
   return (
     <Layout>
       <h2 className="text-center mb-2">Restablecer contraseña</h2>
@@ -17,4 +15,4 @@ const Login = () => {
   );
 }
 
-export default Login;
+export default ForgotPassword;

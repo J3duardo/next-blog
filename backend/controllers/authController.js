@@ -219,7 +219,7 @@ exports.forgotPassword = async (req, res) => {
       html: `
         <h4>Restablecimiento de contraseña</h4>
         <p>Por favor, use el siguiente link para restablecer la contraseña de su cuenta de ${process.env.APP_NAME}</p>
-        <a href=${process.env.CLIENT_URL}/auth/password-reset/${resetPasswordToken}>${process.env.CLIENT_URL}/auth/password-reset/${resetPasswordToken}</a>
+        <a href=${process.env.CLIENT_URL}/reset-password/${resetPasswordToken}>${process.env.CLIENT_URL}/reset-password/${resetPasswordToken}</a>
         <hr/>
         <p>Si no solicitó el restablecimiento de su contraseña, puede ignorar este mensaje</p>
         <hr/>
