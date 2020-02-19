@@ -7,7 +7,7 @@ const adminIndex = () => {
     <Layout>
       <Admin>
         <div className="container-fluid">
-          <div className="row">
+          <div className="row mx-0">
             <div className="col-md-12 mb-5">
               <h2>Admin dashboard</h2>
             </div>

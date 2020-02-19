@@ -76,7 +76,7 @@ const Card = (props) => {
         </div>
       </section>
       <hr/>
-      <div className="row">
+      <div className="row mx-0">
         <div className="col-md-4">
           <section style={{position: "relative", minHeight: "150px"}}>
             {loading &&

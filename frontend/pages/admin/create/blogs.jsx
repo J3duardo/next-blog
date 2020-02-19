@@ -7,7 +7,7 @@ const Blog = () => {
     <Layout>
       <Admin>
         <div className="container">
-          <div className="row">
+          <div className="row mx-0">
             <div className="col-md-12 mb-3">
               <h2>Administrar Blogs</h2>
             </div>

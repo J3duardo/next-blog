@@ -54,7 +54,7 @@ const UserPublicProfile = (props) => {
       {head()}
       <Layout>
         <div className="container">
-          <div className="row">
+          <div className="row mx-0">
             <div className="col-md-12">
               <div className="card">
                 <div className="card-body">

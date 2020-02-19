@@ -80,7 +80,7 @@ const SearchBlogs = () => {
   return (
     <div className="container-fluid mt-3">
       <form onSubmit={onSubmitHandler}>
-        <div className="row">
+        <div className="row mx-0">
           <div className="col-md-8">
             <input
               type="text"

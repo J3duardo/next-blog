@@ -7,7 +7,7 @@ const UserProfileUpdate = () => {
     <Layout>
       <Private>
         <div className="container-fluid">
-          <div className="row">
+          <div className="row mx-0">
             <ProfileUpdate />
           </div>
         </div>

@@ -8,7 +8,7 @@ const Blog = () => {
     <Layout>
       <Admin>
         <div className="container-fluid">
-          <div className="row">
+          <div className="row mx-0">
             <div className="col-md-12 mb-3">
               <h2>Crear un nuevo blog</h2>
             </div>

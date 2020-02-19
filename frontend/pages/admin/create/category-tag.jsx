@@ -9,7 +9,7 @@ const categoryTag = () => {
     <Layout>
       <Admin>
         <div className="container-fluid">
-          <div className="row">
+          <div className="row mx-0">
             <div className="col-md-12 mb-5">
               <h2>Administrar Categorías y Tags</h2>
             </div>

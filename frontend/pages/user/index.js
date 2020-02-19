@@ -7,7 +7,7 @@ const userIndex = () => {
     <Layout>
       <Private>
         <div className="container-fluid">
-          <div className="row">
+          <div className="row mx-0">
             <div className="col-md-12 mb-5">
               <h2>User dashboard</h2>
             </div>

@@ -54,7 +54,7 @@ const ActivateAccount = (props) => {
 
   return (
     <Layout>
-      <div className="row">
+      <div className="row mx-0">
         <div className="col-md-6 offset-md-3">
           <div className="jumbotron text-center">
             <h1>Activación de cuenta</h1>

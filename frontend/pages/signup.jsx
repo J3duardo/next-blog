@@ -20,7 +20,7 @@ const Signup = () => {
       >
         Se eviará un email a su correo para activar su cuenta
       </small>
-      <div className="row">
+      <div className="row mx-0">
         <div className="col-md-6 offset-md-3">
           <SignupComponent />
         </div>
