@@ -75,15 +75,15 @@ const ActivateAccount = (props) => {
                   <button onClick={() => Router.push("/signup")} className="btn btn-secondary mt-3">Intentar de nuevo</button>
                 }
                 {error.includes("conexión") &&
-                  <button onClick={() => Router.reload()} className="btn btn-secondary mt-3">Intentar de nuevo</button>
+                  <button onClick={() => activateUserAccount(props.token)} className="btn btn-secondary mt-3">Intentar de nuevo</button>
                 }
               </React.Fragment>
             }
             {message &&
               <React.Fragment>
-                <p className="text-success lead font-weight-bold">{message}</p>
+                <p className="lead font-weight-bold">{message}</p>
                 <Link href="/login">
-                  <a className="btn btn-success">Iniciar sesión</a>
+                  <a className="btn btn-primary">Iniciar sesión</a>
                 </Link>
               </React.Fragment>
             }
