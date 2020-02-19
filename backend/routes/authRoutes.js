@@ -2,12 +2,19 @@ const express = require("express");
 const router = express.Router();
 const {runValidation} = require("../middleware/validationMiddlewares");
 const {signupValidator, loginValidator, forgotPasswordValidator, resetPasswordValidator} = require("../middleware/validationMiddlewares/authValidators");
-const {signup, login, signout, forgotPassword, resetPassword} = require("../controllers/authController");
+const {preSignup, signup, createAccount, login, signout, forgotPassword, resetPassword} = require("../controllers/authController");
 
+// Registrar usuarios implementando activación de cuenta por email
+router.post("/pre-signup", signupValidator, runValidation, preSignup);
+// Registrar usuarios sin implementar activación de cuenta por email
 router.post("/signup", signupValidator, runValidation, signup);
+// Iniciar sesión
 router.post("/login", loginValidator, runValidation, login);
+// Cerrar sesión
 router.get("/signout", signout);
 
+// Activar la cuenta del usuario
+router.get("/activate-account", createAccount);
 // Enviar el token de reseteo de contraseña
 router.post("/forgot-password", forgotPasswordValidator, runValidation, forgotPassword);
 // Resetear la contraseña

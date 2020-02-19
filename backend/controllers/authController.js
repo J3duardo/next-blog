@@ -5,7 +5,7 @@ const shortId = require("shortid");
 const sendgridMail = require("@sendgrid/mail");
 sendgridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// Controller para registro de usuarios
+// Controller para registro de usuarios sin activación mediante comprobación de email
 exports.signup = async (req, res) => {
   const {name, email, password, passwordConfirm} = req.body;
 
@@ -59,6 +59,129 @@ exports.signup = async (req, res) => {
     })
   }
 };
+
+// Controller para registro de usuarios mediante comprobación de email
+exports.preSignup = async (req, res) => {
+  try {
+    const {name, email, password, passwordConfirm} = req.body;
+
+    // Chequear si ya existe un usuario con los mismos datos
+    const user = await User.findOne({email: email.toLowerCase()});
+
+    if(user) {
+      return res.status(400).json({
+        status: "failed",
+        message: "Ya existe un usuario asociado al email ingresado",
+        error: "Ya existe un usuario asociado al email ingresado"
+      })
+    }
+
+    // Chequear si las contraseñas coinciden
+    if(password !== passwordConfirm) {
+      return res.status(400).json({
+        status: "failed",
+        message: "Las contraseñas no coinciden",
+        error: "Las contraseñas no coinciden"
+      })
+    }
+
+    // Crear el token para comprobación mediante email
+    const tokenPayload = {
+      name,
+      email,
+      password,
+      passwordConfirm
+    }
+    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {expiresIn: "15m"});
+
+    // Crear el email con la información del usuario
+    const emailData = {
+      to: email,
+      from: "noreply@nextblog.com",
+      subject: `Comprobación de su cuenta de ${process.env.APP_NAME}`,
+      html: `
+        <h4>Comprobación de su cuenta</h4>
+        <p>Por favor, use el siguiente link para confirmar y activar su cuenta de ${process.env.APP_NAME}</p>
+        <a href=${process.env.CLIENT_URL}/activate-account?token=${token}>${process.env.CLIENT_URL}/activate-account?token=${token}</a>
+        <p style="text-align: center">El link es válido por 15 minutos, de no completar la operación en este periodo de tiempo tendrá que enviar un nuevo email</p>
+        <hr/>
+        <p>SeoBlog Team</p>
+      `
+    }
+
+    // Enviar el email al usuario
+    await sendgridMail.send(emailData);
+
+    return res.json({
+      status: "success",
+      message: `Se ha enviado un email a ${email} con las instrucciones para activar su cuenta.`
+    })
+
+  } catch (error) {
+    return res.status(500).json({
+      status: "failed",
+      message: "Internal server error",
+      error: error.message
+    })
+  }
+}
+
+// Controller para crear el usuario una vez comprobado el email
+exports.createAccount = async (req, res) => {
+  try {
+    const token = req.query.token;
+
+    // Chequear si el token no ha expirado
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      if(err) {
+        return res.status(400).json({
+          status: "failed",
+          message: "Token expirado. Envíe un nuevo email para activar su cuenta."
+        })
+      }
+
+      const {name, email, password, passwordConfirm} = decoded;
+
+      // Crear el username y el profile
+      let username = shortId.generate();
+      let profile = `${process.env.CLIENT_URL}/profile/${username}`;
+
+      try {
+        // Crear el nuevo usuario
+        const newUser = await User.create({
+          name,
+          username,
+          email,
+          profile,
+          password,
+          passwordConfirm
+        });
+      
+        return res.json({
+          status: "success",
+          message: "Su cuenta ha sido activada exitosamente. Inicie sesión con sus datos",
+          data: {
+            user: newUser
+          }
+        });
+        
+      } catch (error) {
+        return res.status(500).json({
+          status: "failed",
+          message: "Internal server error",
+          error: error.message
+        })
+      }
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      status: "failed",
+      message: "Internal server error",
+      error: error.message
+    })
+  }
+}
 
 // Controller para inicio de sesión
 exports.login = async (req, res) => {
