@@ -20,6 +20,34 @@ export const signup = async (userData) => {
   });
 }
 
+// Funcionalidad para registrar nuevos usuarios mediante activación por email
+export const preSignup = async (userData) => {
+  return axios({
+    method: "POST",
+    url: `${API}/api/pre-signup`,
+    data: {
+      name: userData.name,
+      email: userData.email,
+      password: userData.password,
+      passwordConfirm: userData.passwordConfirm
+    },
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+}
+
+// Funcionalidad para activar la cuenta del usuario al comprobar el email
+export const activateAccount = async (token) => {
+  return axios({
+    method: "GET",
+    url: `${API}/api/activate-account?token=${token}`,
+    headers: {
+      Accept: "application/json"
+    }
+  })
+}
+
 // Funcionalidad para iniciar sesión
 export const signin = async (userData) => {
   return await axios({

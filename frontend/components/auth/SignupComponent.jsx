@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {signup} from "../../actions/auth";
+import {preSignup} from "../../actions/auth";
 
 const SignupComponent = () => {
   const [state, setState] = useState({
@@ -34,8 +34,9 @@ const SignupComponent = () => {
         password: state.password,
         passwordConfirm: state.passwordConfirm
       }
-      const response = await signup(userData);
-      console.log(response.data);
+      // Enviar email con información para activar la cuenta
+      const response = await preSignup(userData);
+      
       setState({
         name: "",
         email: "",
