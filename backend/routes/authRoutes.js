@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {runValidation} = require("../middleware/validationMiddlewares");
 const {signupValidator, loginValidator, forgotPasswordValidator, resetPasswordValidator} = require("../middleware/validationMiddlewares/authValidators");
-const {preSignup, signup, createAccount, login, signout, forgotPassword, resetPassword} = require("../controllers/authController");
+const {preSignup, signup, createAccount, login, googleLogin, signout, forgotPassword, resetPassword} = require("../controllers/authController");
 
 // Registrar usuarios implementando activación de cuenta por email
 router.post("/pre-signup", signupValidator, runValidation, preSignup);
@@ -10,6 +10,8 @@ router.post("/pre-signup", signupValidator, runValidation, preSignup);
 router.post("/signup", signupValidator, runValidation, signup);
 // Iniciar sesión
 router.post("/login", loginValidator, runValidation, login);
+// Iniciar sesión con google
+router.post("/google-login", googleLogin);
 // Cerrar sesión
 router.get("/signout", signout);
 

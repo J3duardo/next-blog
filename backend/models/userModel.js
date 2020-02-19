@@ -51,6 +51,10 @@ const userSchema = new mongoose.Schema({
     data: Buffer,
     contentType: String
   },
+  isGoogleUser: {
+    type: Boolean,
+    default: false
+  },
   resetPasswordLink: {
     data: String,
     default: ""

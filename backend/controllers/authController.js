@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const shortId = require("shortid");
 const sendgridMail = require("@sendgrid/mail");
+const {OAuth2Client} = require("google-auth-library");
 sendgridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Controller para registro de usuarios sin activación mediante comprobación de email
@@ -241,6 +242,98 @@ exports.login = async (req, res) => {
       })
     });
     
+  } catch (error) {
+    return res.status(500).json({
+      status: "failed",
+      message: "Internal server error",
+      error: error
+    })
+  }
+}
+
+// Controller para iniciar sesión con google
+exports.googleLogin = async (req, res) => {
+  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  try {
+    const idToken = req.body.token;
+    const clientResponse = await client.verifyIdToken({idToken, audience: process.env.GOOGLE_CLIENT_ID});
+    const {email_verified, name, email, jti} = clientResponse.payload;
+
+    // Verificar si el usuario ya existe
+    const user = await User.findOne({email: email});
+
+    // Si existe, enviarle el token de inicio de sesión
+    if(user) {
+      jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn: "1d"}, (err, token) => {
+        if(err) {
+          return res.status(500).json({
+            status: "failed",
+            message: {...err},
+            error: {...err}
+          })
+        }
+
+        // Enviar el token en los cookies
+        res.cookie("token", token, {expiresIn: "1d", httpOnly: true, secure: req.protocol === "https"});
+        // Enviar token y data del usuario en la respuesta  
+        return res.json({
+          status: "success",
+          message: "Sesión iniciada exitosamente",
+          data: {
+            token,
+            user: {
+              id: user._id,
+              email: user.email,
+              name: user.name,
+              username: user.username,
+              isGoogleUser: user.isGoogleUser,
+              role: user.role
+            }
+          }
+        })
+      });
+    } else {
+      // Si el usuario no existe, crear un nuevo usuario con su información de google
+      const username = shortId.generate();
+      const profile = `${process.env.CLIENT_URL}/profile/${username}`;
+      const password = jti;
+      const passwordConfirm = jti;
+      const isGoogleUser = true;
+
+      const newUser = new User({name, email, username, profile, password, passwordConfirm, isGoogleUser});
+      const response = await newUser.save();
+      
+      // Crear y enviar el token con la data del usuario
+      jwt.sign({userId: response._id}, process.env.JWT_SECRET, {expiresIn: "1d"}, (err, token) => {
+        if(err) {
+          return res.status(500).json({
+            status: "failed",
+            message: {...err},
+            error: {...err}
+          })
+        }
+  
+        // Enviar el token en los cookies
+        res.cookie("token", token, {expiresIn: "1d", httpOnly: true, secure: req.protocol === "https"});
+
+        return res.json({
+          status: "success",
+          message: "Sesión iniciada exitosamente",
+          data: {
+            token,
+            user: {
+              id: response._id,
+              email: response.email,
+              name: response.name,
+              username: response.username,
+              role: response.role,
+              isGoogleUser: response.isGoogleUser
+            }
+          }
+        })
+      });
+    }
+
   } catch (error) {
     return res.status(500).json({
       status: "failed",
