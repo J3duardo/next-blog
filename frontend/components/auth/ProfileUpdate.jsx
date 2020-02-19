@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef} from "react";
 import Router, {withRouter} from "next/router";
 import {getCurrentUserProfile, updateCurrentUserProfile} from "../../actions/user";
-import {getCookie, updateUserAuthData, sessionExpiredHandler} from "../../actions/auth";
+import {getCookie, updateUserAuthData, sessionExpiredHandler, isAuth} from "../../actions/auth";
 import {API} from "../../config";
 
 const ProfileUpdate = () => {
@@ -14,12 +14,20 @@ const ProfileUpdate = () => {
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [photo, setPhoto] = useState("");
   const [about, setAbout] = useState("");
+  const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
 
   const imgRef = useRef();
   const [imgPreview, setImgPreview] = useState(null);
+
+  useEffect(() => {
+    // Obtener el perfil del usuario actual
+    getProfile();
+    // Verificar si el usuario se autenticó mediante Google
+    setIsGoogleUser(JSON.parse(localStorage.getItem("user")).isGoogleUser);
+  }, []);
 
   // Funcionalidad para cargar el perfil del usuario actual
   const getProfile = async () => {
@@ -48,10 +56,6 @@ const ProfileUpdate = () => {
       return setError(error.message);
     }
   }
-  
-  useEffect(() => {
-    getProfile()
-  }, []);
 
   const onChangeHandler = (e) => {
     setError(null);
@@ -111,13 +115,14 @@ const ProfileUpdate = () => {
       setLoading(false);
       setSuccess(true);
 
-      const {_id, name, username, email, role} = res.data.data;
+      const {_id, name, username, email, isGoogleUser, role} = res.data.data;
 
       const userData = {
         id: _id,
         name,
         username,
         email,
+        isGoogleUser,
         role
       }
 
@@ -250,7 +255,15 @@ const ProfileUpdate = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="email" className="text-muted font-weight-bold">Email</label>
+                <label htmlFor="email" className="text-muted font-weight-bold mb-0">Email</label>
+                <br/>
+                {isGoogleUser &&
+                  <small
+                    style={{display: "block"}}
+                    className="text-muted mb-2"                  
+                  >
+                    Usuarios de Google no pueden modificar su dirección de Email
+                  </small>}
                 <input
                   className={`form-control ${error && error.toLowerCase().includes("email") && "input-error"}`}
                   type="email"
@@ -258,6 +271,7 @@ const ProfileUpdate = () => {
                   id="email"
                   onChange={onChangeHandler}
                   value={email}
+                  disabled={isGoogleUser}
                   placeholder="Introduce un email válido"
                 />
               </div>
@@ -272,43 +286,47 @@ const ProfileUpdate = () => {
                   placeholder="Escribe algo interesante sobre ti"
                 />
               </div>
-              <div className="mb-3" style={{padding: "10px", border: "1px solid #ccc", borderRadius: "5px"}}>
-                <h5 className="mb-0">Actualizar contraseña</h5>
-                <small style={{display: "block"}} className="text-muted mb-3">Dejar en blanco para conservar su contraseña actual</small>
-                <div className="form-group">
-                  <input
-                    className={`form-control ${error && error.toLowerCase().includes("contraseña incorrecta") && "input-error"}`}
-                    type="password"
-                    name="currentPassword"
-                    id="currentPassword"
-                    onChange={onChangeHandler}
-                    value={currentPassword}
-                    placeholder="Contraseña actual"
-                  />
-                </div>
-                <div className="form-group">
-                  <input
-                    className={`form-control ${error && error.includes("contraseñas no coinciden") ? "input-error" : error && error.includes("debe contener al menos 6 caracteres") ? "input-error" : ""}`}
-                    type="password"
-                    name="password"
-                    id="password"
-                    onChange={onChangeHandler}
-                    value={password}
-                    placeholder="Tu nueva contraseña"
-                  />
-                </div>
-                <div className="form-group">
-                  <input
-                    className={`form-control ${error && error.includes("contraseñas no coinciden") ? "input-error" : error && error.includes("debe contener al menos 6 caracteres") ? "input-error" : ""}`}
-                    type="password"
-                    name="passwordConfirm"
-                    id="passwordConfirm"
-                    onChange={onChangeHandler}
-                    value={passwordConfirm}
-                    placeholder="Confirma tu nueva contraseña"
-                  />
-                </div>
-              </div>
+              {/* Ocultar los campos de modificación de contraseña a los usuarios de Google */}
+              {/* Los usuarios de Google se autentican mediante sus credenciales de Google y no poseen contraseña para iniciar sesión en la aplicación */}
+              {!isGoogleUser &&
+                <div className="mb-3" style={{padding: "10px", border: "1px solid #ccc", borderRadius: "5px"}}>
+                  <h5 className="mb-0">Actualizar contraseña</h5>
+                  <small style={{display: "block"}} className="text-muted mb-3">Dejar en blanco para conservar su contraseña actual</small>
+                  <div className="form-group">
+                    <input
+                      className={`form-control ${error && error.toLowerCase().includes("contraseña incorrecta") && "input-error"}`}
+                      type="password"
+                      name="currentPassword"
+                      id="currentPassword"
+                      onChange={onChangeHandler}
+                      value={currentPassword}
+                      placeholder="Contraseña actual"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      className={`form-control ${error && error.includes("contraseñas no coinciden") ? "input-error" : error && error.includes("debe contener al menos 6 caracteres") ? "input-error" : ""}`}
+                      type="password"
+                      name="password"
+                      id="password"
+                      onChange={onChangeHandler}
+                      value={password}
+                      placeholder="Tu nueva contraseña"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      className={`form-control ${error && error.includes("contraseñas no coinciden") ? "input-error" : error && error.includes("debe contener al menos 6 caracteres") ? "input-error" : ""}`}
+                      type="password"
+                      name="passwordConfirm"
+                      id="passwordConfirm"
+                      onChange={onChangeHandler}
+                      value={passwordConfirm}
+                      placeholder="Confirma tu nueva contraseña"
+                    />
+                  </div>
+                </div>              
+              }
               <div>
                 <button
                   disabled={loading}

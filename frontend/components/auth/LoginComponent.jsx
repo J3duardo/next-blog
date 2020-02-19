@@ -2,6 +2,7 @@ import {useState} from "react";
 import Link from "next/link";
 import {signin, authenticateUser, isAuth} from "../../actions/auth";
 import Router from "next/router";
+import GoogleLoginComponent from "./GoogleLoginComponent";
 
 const LoginComponent = () => {
   const [state, setState] = useState({
@@ -122,13 +123,16 @@ const LoginComponent = () => {
             value={state.password}
           />
         </div>
-        <div className="mb-2">
+        <div
+          style={{display: "flex", justifyContent: "center"}} className="mb-2"
+        >
           <button
-            className="btn btn-primary"
+            className="btn btn-primary mr-2"
             disabled={state.loading || !state.showForm}
           >
             Iniciar sesión
           </button>
+          <GoogleLoginComponent />
         </div>
       </form>
       <div className="text-center" style={{width: "100%"}}>

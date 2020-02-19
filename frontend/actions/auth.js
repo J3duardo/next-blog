@@ -63,6 +63,19 @@ export const signin = async (userData) => {
   })
 }
 
+// Funcionalidad para iniciar sesión con google
+export const googleLogin = async (token) => {
+  return await axios({
+    method: "POST",
+    url: `${API}/api/google-login`,
+    data: {token},
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    }
+  })
+}
+
 // Funcionalidad para cerrar sesión
 export const signout = async () => {
   removeCookie("token");
