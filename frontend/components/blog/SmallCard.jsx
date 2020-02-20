@@ -4,7 +4,8 @@ import axios from "axios";
 import moment from "moment";
 moment.locale("es");
 import reactHTML from "react-render-html";
-import {API} from "../../config";
+// import {API} from "../../config";
+const API = process.env.NODE_ENV === "production" ? process.env.API : process.env.API_DEV;
 
 const SmallCard = (props) => {
   const {blog} = props;

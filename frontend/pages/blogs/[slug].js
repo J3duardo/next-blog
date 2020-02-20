@@ -12,8 +12,8 @@ import DisqusThread from "../../components/DisqusThread";
 // import {API, DOMAIN} from "../../config";
 
 const APP_NAME = process.env.APP_NAME;
-const API = process.env.API;
-const DOMAIN = process.env.DOMAIN;
+const API = process.env.NODE_ENV === "production" ? process.env.API : process.env.API_DEV;
+const DOMAIN = process.env.NODE_ENV === "production" ? process.env.DOMAIN_PROD : process.env.DOMAIN_DEV;
 
 const SingleBlog = (props) => {
   const [blog, setBlog] = useState(props.blog);

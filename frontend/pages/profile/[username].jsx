@@ -10,8 +10,8 @@ import ContactForm from "../../components/contactForm/ContactForm";
 // import {API, DOMAIN, APP_NAME} from "../../config";
 
 const APP_NAME = process.env.APP_NAME;
-const API = process.env.API;
-const DOMAIN = process.env.DOMAIN;
+const API = process.env.NODE_ENV === "production" ? process.env.API : process.env.API_DEV;
+const DOMAIN = process.env.NODE_ENV === "production" ? process.env.DOMAIN_PROD : process.env.DOMAIN_DEV;
 
 const UserPublicProfile = (props) => {
   const imgRef = useRef();

@@ -6,7 +6,7 @@ import Card from "../../components/blog/Card";
 // import {DOMAIN, APP_NAME} from "../../config";
 
 const APP_NAME = process.env.APP_NAME;
-const DOMAIN = process.env.DOMAIN;
+const DOMAIN = process.env.NODE_ENV === "production" ? process.env.DOMAIN_PROD : process.env.DOMAIN_DEV;
 
 const BlogsByTag = (props) => {
 
