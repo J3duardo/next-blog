@@ -6,7 +6,7 @@ import {getCookie, sessionExpiredHandler, isAuth} from "../../actions/auth";
 import {getAllCategories} from "../../actions/category";
 import {getAllTags} from "../../actions/tag";
 import {getSingleBlog, updateBlog} from "../../actions/blog";
-import "../../node_modules/react-quill/dist/quill.snow.css";
+// import "../../node_modules/react-quill/dist/quill.snow.css";
 
 const ReactQuill = dynamic(() => import("react-quill"), {ssr: false});
 

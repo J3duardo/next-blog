@@ -8,7 +8,7 @@ import {getAllCategories} from "../../actions/category";
 import {getAllTags} from "../../actions/tag";
 import {createBlog} from "../../actions/blog";
 const ReactQuill = dynamic(() => import("react-quill"), {ssr: false});
-import "../../node_modules/react-quill/dist/quill.snow.css";
+// import "../../node_modules/react-quill/dist/quill.snow.css";
 
 const BlogCreate = (props) => {
   const {router} = props;
