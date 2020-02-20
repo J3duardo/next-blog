@@ -5,11 +5,13 @@ import Layout from "../components/Layout";
 import LoginComponent from "../components/auth/LoginComponent";
 import {isAuth} from "../actions/auth";
 const APP_NAME = process.env.APP_NAME;
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 
 const head = () => {
   return (
     <Head>
       <title>Iniciar sesión | {APP_NAME}</title>
+      <meta name="google-signin-client_id" content={GOOGLE_CLIENT_ID}></meta>
     </Head>
   )
 }

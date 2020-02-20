@@ -2,8 +2,11 @@ import Head from "next/head";
 import {withRouter} from "next/router";
 import {getCategory} from "../../actions/category";
 import Layout from "../../components/Layout";
-import {DOMAIN, APP_NAME} from "../../config";
 import Card from "../../components/blog/Card";
+// import {DOMAIN, APP_NAME} from "../../config";
+
+const APP_NAME = process.env.APP_NAME;
+const DOMAIN = process.env.DOMAIN;
 
 const BlogsByCategory = (props) => {
 

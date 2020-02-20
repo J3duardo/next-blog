@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
-import {DISQUS_SHORTNAME, DOMAIN} from "../config";
+// import {DISQUS_SHORTNAME, DOMAIN} from "../config";
 
-const SHORTNAME = DISQUS_SHORTNAME;
-const WEBSITE_URL = DOMAIN;
+const SHORTNAME = process.env.DISQUS_SHORTNAME;
+const WEBSITE_URL = process.env.NODE_ENV === "production" ? process.env.DOMAIN_PROD : process.env.DOMAIN_DEV;
 
 function renderDisqus() {
   if (window.DISQUS === undefined) {

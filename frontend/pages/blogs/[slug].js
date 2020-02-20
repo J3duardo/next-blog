@@ -9,9 +9,11 @@ import {getSingleBlog, getRelatedBlogs} from "../../actions/blog";
 import Layout from "../../components/Layout";
 import SmallCard from "../../components/blog/SmallCard";
 import DisqusThread from "../../components/DisqusThread";
-import {API, DOMAIN} from "../../config";
+// import {API, DOMAIN} from "../../config";
 
 const APP_NAME = process.env.APP_NAME;
+const API = process.env.API;
+const DOMAIN = process.env.DOMAIN;
 
 const SingleBlog = (props) => {
   const [blog, setBlog] = useState(props.blog);

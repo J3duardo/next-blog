@@ -15,8 +15,6 @@ import {
   NavLink
 } from "reactstrap";
 
-const APP_NAME = process.env.APP_NAME;
-
 // Mostrar barra de progreso al cambiar de página
 Router.onRouteChangeStart = (url) => NProgress.start();
 Router.onRouteChangeComplete = (url) => NProgress.done();
@@ -26,9 +24,12 @@ NProgress.configure({ showSpinner: false });
 const Header = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState(false);
-  const [role, setRole] = useState(null)
+  const [role, setRole] = useState(null);
+  const [appName, setAppName] = useState(process.env.APP_NAME)
 
   useEffect(() => {
+    setAppName(process.env.APP_NAME);
+
     if(isAuth() && JSON.parse(isAuth()).role === 0) {
       setAuth(true);
       setRole("user");
@@ -52,7 +53,7 @@ const Header = (props) => {
       <Navbar color="light" light expand="md">
         <Link href="/">
           <NavbarBrand>
-            <span>{APP_NAME}</span>
+            <span>{appName}</span>
           </NavbarBrand>
         </Link>
         <NavbarToggler onClick={toggle} />

@@ -5,7 +5,10 @@ import Link from "next/link";
 import Layout from "../../components/Layout";
 import {getBlogsWithCategoriesAndTags} from "../../actions/blog";
 import Card from "../../components/blog/Card";
-import {API, DOMAIN, APP_NAME} from "../../config";
+// import {API, DOMAIN, APP_NAME} from "../../config";
+
+const APP_NAME = process.env.APP_NAME;
+const DOMAIN = process.env.DOMAIN;
 
 const Blogs = (props) => {
   const {blogs, categories, tags, results, blogsLimit, blogSkip, error, router} = props;

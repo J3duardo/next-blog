@@ -2,7 +2,8 @@ import {useState, useEffect, useRef} from "react";
 import Router, {withRouter} from "next/router";
 import {getCurrentUserProfile, updateCurrentUserProfile} from "../../actions/user";
 import {getCookie, updateUserAuthData, sessionExpiredHandler, isAuth} from "../../actions/auth";
-import {API} from "../../config";
+// import {API} from "../../config";
+const API = process.env.NODE_ENV === "production" ? process.env.API : process.env.API_DEV;
 
 const ProfileUpdate = () => {
   const [username, setUsername] = useState("");

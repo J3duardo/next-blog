@@ -6,8 +6,12 @@ import moment from "moment";
 moment.locale("es")
 import Layout from "../../components/Layout";
 import {getPublicUserProfile} from "../../actions/user";
-import {API, DOMAIN, APP_NAME} from "../../config";
 import ContactForm from "../../components/contactForm/ContactForm";
+// import {API, DOMAIN, APP_NAME} from "../../config";
+
+const APP_NAME = process.env.APP_NAME;
+const API = process.env.API;
+const DOMAIN = process.env.DOMAIN;
 
 const UserPublicProfile = (props) => {
   const imgRef = useRef();

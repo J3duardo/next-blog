@@ -1,7 +1,8 @@
 import Router from "next/router";
 import axios from "axios";
-import {API} from "../config";
 import cookieJs from "js-cookie";
+
+const API = process.env.NODE_ENV === "production" ? process.env.API : process.env.API_DEV;
 
 // Funcionalidad para registrar nuevos usuarios
 export const signup = async (userData) => {

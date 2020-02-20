@@ -4,12 +4,15 @@ import Router from "next/router";
 import GoogleLogin from "react-google-login";
 import {googleLogin, authenticateUser, isAuth} from "../../actions/auth";
 
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-
 const GoogleLoginComponent = (props) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
+  const [googleClientId, setGoogleClientId] = useState(process.env.GOOGLE_CLIENT_ID);
+
+  useEffect(() => {
+    setGoogleClientId(process.env.GOOGLE_CLIENT_ID);
+  })
 
   const responseGoogle = async (res) => {
     setLoading(true);
@@ -77,7 +80,7 @@ const GoogleLoginComponent = (props) => {
       {showMessage()}
       <div className="login-with-google">
         <GoogleLogin
-          clientId={GOOGLE_CLIENT_ID}
+          clientId={googleClientId}
           buttonText="Iniciar sesión con Google"
           onSuccess={responseGoogle}
           onFailure={responseGoogle}
