@@ -1,5 +1,6 @@
 import axios from "axios";
-import { API } from "../config";
+// import { API } from "../config";
+const API = process.env.NODE_ENV === "production" ? process.env.API : process.env.API_DEV;
 
 // Funcionalidad para crear categorías
 export const createTag = async (name, token) => {

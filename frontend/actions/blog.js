@@ -1,6 +1,7 @@
 import axios from "axios";
 import queryString from "query-string";
-import {API} from "../config";
+// import {API} from "../config";
+const API = process.env.NODE_ENV === "production" ? process.env.API : process.env.API_DEV;
 
 // Crear un blog
 export const createBlog = async (blogData, token) => {
