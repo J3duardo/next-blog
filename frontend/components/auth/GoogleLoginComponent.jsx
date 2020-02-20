@@ -3,7 +3,8 @@ import Link from "next/link";
 import Router from "next/router";
 import GoogleLogin from "react-google-login";
 import {googleLogin, authenticateUser, isAuth} from "../../actions/auth";
-import {GOOGLE_CLIENT_ID} from "../../config";
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 
 const GoogleLoginComponent = (props) => {
   const [loading, setLoading] = useState(false);
@@ -76,7 +77,7 @@ const GoogleLoginComponent = (props) => {
       {showMessage()}
       <div className="login-with-google">
         <GoogleLogin
-          clientId={`${GOOGLE_CLIENT_ID}`}
+          clientId={GOOGLE_CLIENT_ID}
           buttonText="Iniciar sesión con Google"
           onSuccess={responseGoogle}
           onFailure={responseGoogle}
