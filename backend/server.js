@@ -3,7 +3,10 @@ const cookieParser = require("cors");
 const cors = require("cors");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
-require("dotenv").config();
+
+if(process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 // Router
 const blogRoutes = require("./routes/blogRoutes");
@@ -67,4 +70,6 @@ next();
 
 // Puerto
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => console.log(`Servidor escuchando el puerto ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando el puerto ${PORT}`)
+});

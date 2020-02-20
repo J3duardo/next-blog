@@ -6,6 +6,8 @@ const sendgridMail = require("@sendgrid/mail");
 const {OAuth2Client} = require("google-auth-library");
 sendgridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+const CLIENT_URL = process.env.NODE_ENV !== "production" ? process.env.CLIENT_URL : process.env.CLIENT_URL_PROD
+
 // Controller para registro de usuarios sin activación mediante comprobación de email
 exports.signup = async (req, res) => {
   const {name, email, password, passwordConfirm} = req.body;
@@ -32,7 +34,7 @@ exports.signup = async (req, res) => {
 
     // Crear el username y el profile
     let username = shortId.generate();
-    let profile = `${process.env.CLIENT_URL}/profile/${username}`;
+    let profile = `${CLIENT_URL}/profile/${username}`;
 
     // Crear el nuevo usuario
     const newUser = await User.create({
@@ -103,7 +105,7 @@ exports.preSignup = async (req, res) => {
       html: `
         <h4>Comprobación de su cuenta</h4>
         <p>Por favor, use el siguiente link para confirmar y activar su cuenta de ${process.env.APP_NAME}</p>
-        <a href=${process.env.CLIENT_URL}/activate-account?token=${token}>${process.env.CLIENT_URL}/activate-account?token=${token}</a>
+        <a href=${CLIENT_URL}/activate-account?token=${token}>${CLIENT_URL}/activate-account?token=${token}</a>
         <p style="text-align: center">El link es válido por 15 minutos, de no completar la operación en este periodo de tiempo tendrá que enviar un nuevo email</p>
         <hr/>
         <p>SeoBlog Team</p>
@@ -145,7 +147,7 @@ exports.createAccount = async (req, res) => {
 
       // Crear el username y el profile
       let username = shortId.generate();
-      let profile = `${process.env.CLIENT_URL}/profile/${username}`;
+      let profile = `${CLIENT_URL}/profile/${username}`;
 
       try {
         // Crear el nuevo usuario
@@ -186,6 +188,7 @@ exports.createAccount = async (req, res) => {
 
 // Controller para inicio de sesión
 exports.login = async (req, res) => {
+  console.log(CLIENT_URL)
   try {
     // Chequear si el usuario existe
     const user = await User.findOne({email: req.body.email}).select("+password");
@@ -295,7 +298,7 @@ exports.googleLogin = async (req, res) => {
     } else {
       // Si el usuario no existe, crear un nuevo usuario con su información de google
       const username = shortId.generate();
-      const profile = `${process.env.CLIENT_URL}/profile/${username}`;
+      const profile = `${CLIENT_URL}/profile/${username}`;
       const password = jti;
       const passwordConfirm = jti;
       const isGoogleUser = true;
@@ -435,7 +438,7 @@ exports.forgotPassword = async (req, res) => {
       html: `
         <h4>Restablecimiento de contraseña</h4>
         <p>Por favor, use el siguiente link para restablecer la contraseña de su cuenta de ${process.env.APP_NAME}</p>
-        <a href=${process.env.CLIENT_URL}/reset-password?token=${resetPasswordToken}>${process.env.CLIENT_URL}/reset-password?token=${resetPasswordToken}</a>
+        <a href=${CLIENT_URL}/reset-password?token=${resetPasswordToken}>${CLIENT_URL}/reset-password?token=${resetPasswordToken}</a>
         <p style="text-align: center">El link es válido por 10 minutos, de no completar la operación en este periodo de tiempo tendrá que enviar un nuevo email</p>
         <hr/>
         <p>Si usted no solicitó el restablecimiento de su contraseña, puede ignorar este mensaje</p>

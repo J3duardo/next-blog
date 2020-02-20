@@ -4,6 +4,8 @@ const formidable = require("formidable");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 
+const CLIENT_URL = process.env.NODE_ENV !== "production" ? process.env.CLIENT_URL : process.env.CLIENT_URL_PROD
+
 // Buscar el perfil público de un usuario específico
 exports.publicProfile = async (req, res) => {
   try {
@@ -147,7 +149,7 @@ exports.updateUserProfile = async (req, res) => {
         user.name = name;
         user.email = email;
         user.about = about;
-        user.profile = `${process.env.CLIENT_URL}/profile/${username}`;
+        user.profile = `${CLIENT_URL}/profile/${username}`;
   
         // Actualizar perfil en la base de datos
         await user.save();
