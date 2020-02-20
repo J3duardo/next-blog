@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Router from "next/router";
-import {APP_NAME} from "../config";
 import {isAuth, signout} from "../actions/auth";
 import NProgress from "nprogress";
 // import "../node_modules/nprogress/nprogress.css";
@@ -15,6 +14,8 @@ import {
   NavItem,
   NavLink
 } from "reactstrap";
+
+const APP_NAME = process.env.APP_NAME;
 
 // Mostrar barra de progreso al cambiar de página
 Router.onRouteChangeStart = (url) => NProgress.start();

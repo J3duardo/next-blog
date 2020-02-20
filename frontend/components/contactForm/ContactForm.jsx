@@ -2,7 +2,8 @@ import {useState} from "react";
 import {withRouter} from "next/router";
 import Head from "next/head";
 import {contactAdmin, contactAuthor} from "../../actions/contactForm";
-import {APP_NAME} from "../../config";
+
+const APP_NAME = process.env.APP_NAME;
 
 const ContactForm = (props) => {
   const [state, setState] = useState({

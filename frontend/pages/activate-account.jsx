@@ -1,8 +1,19 @@
 import {useEffect, useState} from "react";
 import Router, {withRouter} from "next/router";
 import Link from "next/link";
+import Head from "next/head";
 import {isAuth, activateAccount} from "../actions/auth";
 import Layout from "../components/Layout";
+
+const APP_NAME = process.env.APP_NAME;
+
+const head = () => {
+  return (
+    <Head>
+      <title>Registrarse | {APP_NAME}</title>
+    </Head>
+  )
+}
 
 const ActivateAccount = (props) => {
   const [message, setMessage] = useState(null);
@@ -53,44 +64,47 @@ const ActivateAccount = (props) => {
   }
 
   return (
-    <Layout>
-      <div className="row mx-0">
-        <div className="col-md-6 offset-md-3">
-          <div className="jumbotron text-center">
-            <h1>Activación de cuenta</h1>
-            <p className="lead">Por favor, espere mientras procesamos su información...</p>
-            <hr className="my-4"/>
-            {loading &&
-              <div className="d-flex justify-content-center align-items-center">
-                <div className="spinner-border" style={{width: "3rem", height: "3rem"}} role="status">
-                  <span className="sr-only">Cargando...</span>
+    <React.Fragment>
+      {head()}
+      <Layout>
+        <div className="row mx-0">
+          <div className="col-md-6 offset-md-3">
+            <div className="jumbotron text-center">
+              <h1>Activación de cuenta</h1>
+              <p className="lead">Por favor, espere mientras procesamos su información...</p>
+              <hr className="my-4"/>
+              {loading &&
+                <div className="d-flex justify-content-center align-items-center">
+                  <div className="spinner-border" style={{width: "3rem", height: "3rem"}} role="status">
+                    <span className="sr-only">Cargando...</span>
+                  </div>
                 </div>
-              </div>
-            }
-            {error &&
-              <React.Fragment>
-                <p className="lead">Ocurrió un error al procesar su información</p>
-                <p className="text-danger lead font-weight-bold">{error}</p>
-                {error.includes("expirado") &&
-                  <button onClick={() => Router.push("/signup")} className="btn btn-secondary mt-3">Intentar de nuevo</button>
-                }
-                {error.includes("conexión") &&
-                  <button onClick={() => activateUserAccount(props.token)} className="btn btn-secondary mt-3">Intentar de nuevo</button>
-                }
-              </React.Fragment>
-            }
-            {message &&
-              <React.Fragment>
-                <p className="lead font-weight-bold">{message}</p>
-                <Link href="/login">
-                  <a className="btn btn-primary">Iniciar sesión</a>
-                </Link>
-              </React.Fragment>
-            }
+              }
+              {error &&
+                <React.Fragment>
+                  <p className="lead">Ocurrió un error al procesar su información</p>
+                  <p className="text-danger lead font-weight-bold">{error}</p>
+                  {error.includes("expirado") &&
+                    <button onClick={() => Router.push("/signup")} className="btn btn-secondary mt-3">Intentar de nuevo</button>
+                  }
+                  {error.includes("conexión") &&
+                    <button onClick={() => activateUserAccount(props.token)} className="btn btn-secondary mt-3">Intentar de nuevo</button>
+                  }
+                </React.Fragment>
+              }
+              {message &&
+                <React.Fragment>
+                  <p className="lead font-weight-bold">{message}</p>
+                  <Link href="/login">
+                    <a className="btn btn-primary">Iniciar sesión</a>
+                  </Link>
+                </React.Fragment>
+              }
+            </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </React.Fragment>
   );
 }
 
