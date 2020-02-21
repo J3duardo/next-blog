@@ -1,3 +1,22 @@
+:root {
+  --azul-oscuro: #304269;
+  --azul-oscuro-hover: #172033;
+
+  --azul-medio: #91BED4;
+  --azul-medio-hover: #607e8d;
+
+  --azul-claro: #D9E8F5;
+  --azul-claro-hover: #a5b1bb;
+
+  --blanco: #FFFFFF;
+  --blanco-hover: #adadad;
+
+  --naranja: #F26101;
+  --naranja-hover: #a74300;
+
+  --transition-hover: background-color 450ms;
+}
+
 a {
   cursor: pointer
 }
@@ -21,4 +40,40 @@ a {
   border: 1px solid red;
   color: red;
   border-radius: 10px;
+}
+
+.btn-generic {
+  background-color: var(--blanco);
+  transition: var(--transition-hover);
+}
+
+.btn-generic:hover {
+  background-color: var(--blanco-hover);
+  transition: var(--transition-hover);
+}
+
+.btn-action {
+  background-color: var(--naranja);
+  transition: var(--transition-hover);
+  color: #fff;
+}
+
+.btn-action:hover {
+  background-color: var(--naranja-hover);
+  transition: var(--transition-hover);
+  color: #fff;
+}
+
+.btn-dark {
+  background-color: var(--azul-oscuro);
+  transition: var(--transition-hover);
+}
+
+.btn-dark:hover {
+  background-color: var(--azul-oscuro-hover);
+  transition: var(--transition-hover);
+}
+
+.navbar-wrapper, .footer-wrapper {
+  background-color: var(--azul-medio);
 }

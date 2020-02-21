@@ -12,7 +12,7 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink
+  a
 } from "reactstrap";
 
 // Mostrar barra de progreso al cambiar de página
@@ -50,133 +50,135 @@ const Header = (props) => {
 
   return (
     <div className="mb-4">
-      <Navbar color="light" light expand="md">
-        <Link href="/">
-          <NavbarBrand>
-            <span>{appName}</span>
-          </NavbarBrand>
-        </Link>
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
-          {!auth ?
-            <React.Fragment>
+      <div className="navbar-wrapper">
+        <Navbar expand="md">
+          <Link href="/">
+            <NavbarBrand>
+              <span className="text-white font-weight-bold">{appName}</span>
+            </NavbarBrand>
+          </Link>
+          <NavbarToggler onClick={toggle} />
+          <Collapse isOpen={isOpen} navbar>
+            {!auth ?
+              <React.Fragment>
+                <Nav className="ml-auto" navbar>
+                  <NavItem>
+                    <Link href="/blogs">
+                      <a className="btn btn-generic mr-2">
+                        Blogs
+                      </a>
+                    </Link>
+                  </NavItem>
+                  <NavItem>
+                    <Link href="/contact">
+                      <a className="btn btn-generic mr-2">
+                        Contáctanos
+                      </a>
+                    </Link>
+                  </NavItem>
+                  <NavItem>
+                    <Link href="/login">
+                      <a className="btn btn-generic mr-2">
+                        Iniciar sesión
+                      </a>
+                    </Link>
+                  </NavItem>
+                  <NavItem>
+                    <Link href="/signup">
+                      <a className="btn btn-action">
+                        Registrarse
+                      </a>
+                    </Link>
+                  </NavItem>
+                </Nav>
+              </React.Fragment>
+              :
+              auth && role === "user" ?
+                <Nav className="ml-auto" navbar>
+                  <NavItem>
+                    <Link href="/blogs">
+                      <a className="btn btn-generic mr-2">
+                        Blogs
+                      </a>
+                    </Link>
+                  </NavItem>
+                  <NavItem>
+                    <Link href="/user/create/blog">
+                      <a className="btn btn-action mr-2">
+                        Crear Blog
+                      </a>
+                    </Link>
+                  </NavItem>
+                  <NavItem>
+                    <Link href="/user">
+                      <a className="btn btn-generic mr-2">
+                        Dashboard
+                      </a>
+                    </Link>
+                  </NavItem>
+                  <NavItem>
+                    <Link href="/contact">
+                      <a className="btn btn-generic mr-2">
+                        Contactar
+                      </a>
+                    </Link>
+                  </NavItem>
+                  <button
+                    className="btn btn-generic ml-auto"
+                    onClick={signoutHandler}
+                  >
+                    Cerrar sesión
+                  </button>                
+                </Nav>
+              :
+              auth && role === "admin" &&
               <Nav className="ml-auto" navbar>
                 <NavItem>
                   <Link href="/blogs">
-                    <NavLink>
+                    <a className="btn btn-generic mr-2">
                       Blogs
-                    </NavLink>
-                  </Link>
-                </NavItem>
-                <NavItem>
-                  <Link href="/login">
-                    <NavLink>
-                      Iniciar sesión
-                    </NavLink>
-                  </Link>
-                </NavItem>
-                <NavItem>
-                  <Link href="/signup">
-                    <NavLink>
-                      Registrarse
-                    </NavLink>
-                  </Link>
-                </NavItem>
-                <NavItem>
-                  <Link href="/contact">
-                    <NavLink>
-                      Contactar
-                    </NavLink>
-                  </Link>
-                </NavItem>
-              </Nav>
-            </React.Fragment>
-            :
-            auth && role === "user" ?
-              <Nav className="ml-auto" navbar>
-                <NavItem>
-                  <Link href="/blogs">
-                    <NavLink>
-                      Blogs
-                    </NavLink>
+                    </a>
                   </Link>
                 </NavItem>
                 <NavItem>
                   <Link href="/user/create/blog">
-                    <NavLink>
+                    <a className="btn btn-action mr-2">
                       Crear Blog
-                    </NavLink>
+                    </a>
                   </Link>
                 </NavItem>
                 <NavItem>
                   <Link href="/user">
-                    <NavLink>
+                    <a className="btn btn-generic mr-2">
                       Dashboard
-                    </NavLink>
+                    </a>
+                  </Link>
+                </NavItem>
+                <NavItem>
+                  <Link href="/admin">
+                    <a className="btn btn-generic mr-2">
+                      Administrar
+                    </a>
                   </Link>
                 </NavItem>
                 <NavItem>
                   <Link href="/contact">
-                    <NavLink>
-                      Contactar
-                    </NavLink>
+                    <a className="btn btn-generic mr-2">
+                      Contáctanos
+                    </a>
                   </Link>
                 </NavItem>
                 <button
-                  className="btn btn-primary ml-auto"
+                  className="btn btn-generic"
                   onClick={signoutHandler}
                 >
                   Cerrar sesión
-                </button>                
+                </button>
               </Nav>
-            :
-            auth && role === "admin" &&
-            <Nav className="ml-auto" navbar>
-              <NavItem>
-                <Link href="/blogs">
-                  <NavLink>
-                    Blogs
-                  </NavLink>
-                </Link>
-              </NavItem>
-              <NavItem>
-                <Link href="/user/create/blog">
-                  <NavLink>
-                    Crear Blog
-                  </NavLink>
-                </Link>
-              </NavItem>
-              <NavItem>
-                <Link href="/user">
-                  <NavLink>
-                    Dashboard
-                  </NavLink>
-                </Link>
-              </NavItem>
-              <NavItem>
-                <Link href="/admin">
-                  <NavLink>
-                    Administrar
-                  </NavLink>
-                </Link>
-              </NavItem>
-              <NavItem>
-                <Link href="/contact">
-                  <NavLink>
-                    Contactar
-                  </NavLink>
-                </Link>
-              </NavItem>
-              <button
-                className="btn btn-primary ml-auto"
-                onClick={signoutHandler}
-              >
-                Cerrar sesión
-              </button>
-            </Nav>
-          }
-        </Collapse>
-      </Navbar>
+            }
+          </Collapse>
+        </Navbar>
+      </div>
       <SearchBlogs />
     </div>
   );

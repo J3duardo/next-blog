@@ -12,8 +12,8 @@ const footerStyle = {
 
 const Footer = () => {
   return (
-    <div style={footerStyle} className="page-footer font-small bg-light">
-      <div className="footer-copyright text-muted">&copy; {new Date().getFullYear()} - Desarrollado por Jesús Guzmán</div>
+    <div style={footerStyle} className="page-footer font-small footer-wrapper">
+      <div className="footer-copyright text-white">&copy; {new Date().getFullYear()} - Desarrollado por Jesús Guzmán</div>
     </div>
   );
 }

@@ -24,10 +24,10 @@ const Index = () => {
               <p className="lead text-light mb-5">Crea tus propios blogs, compártelos e interactúa con otros usuarios.</p>
               <div className="landing-page__btns">
                 <Link href="/blogs">
-                  <a className="btn btn-light mr-3">Ver blogs</a>
+                  <a className="btn btn-generic mr-3">Ver blogs</a>
                 </Link>
                 <Link href="/signup">
-                  <a className="btn btn-warning">Registrarse</a>                
+                  <a className="btn btn-action">Registrarse</a>                
                 </Link>
               </div>
             </div>

@@ -93,7 +93,7 @@ const SearchBlogs = () => {
           </div>
           <div className="col-md-3">
             <button
-              className="btn btn-block btn-primary"
+              className="btn btn-block btn-action"
               type="submit"
               disabled={loading}
             >
