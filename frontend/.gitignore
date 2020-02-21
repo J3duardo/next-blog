@@ -4,3 +4,4 @@ next.config.js
 .next
 yarn.lock
 .now
+now.json
