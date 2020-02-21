@@ -1,0 +1,15 @@
+.landing-page {
+  background-image: linear-gradient(to right, rgba(0,0,0,0.9) 10%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.3) 80%, rgba(0,0,0,0.1)), url("/images/landing-background.jpg");
+  background-size: cover;
+  background-position: left center;
+}
+
+.landing-page h1 {
+  line-height: 1.2;
+  text-shadow: 3px 3px 3px rgb(0, 0, 0);
+}
+
+.landing-page__btns {
+  display: flex;
+  width: 100%;
+}

@@ -78,10 +78,10 @@ const SearchBlogs = () => {
   }
 
   return (
-    <div className="container-fluid mt-3">
-      <form onSubmit={onSubmitHandler}>
+    <div className="container-fluid px-0" style={{backdropFilter: "blur(10px)", background: "rgba(0, 0, 0, 0.1)"}}>
+      <form className="py-3" onSubmit={onSubmitHandler}>
         <div className="row mx-0">
-          <div className="col-md-8">
+          <div className="col-md-9">
             <input
               type="text"
               className="form-control"
@@ -91,9 +91,9 @@ const SearchBlogs = () => {
               value={search}
             />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
             <button
-              className="btn btn-block btn-outline-primary"
+              className="btn btn-block btn-primary"
               type="submit"
               disabled={loading}
             >
