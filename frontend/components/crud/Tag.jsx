@@ -164,7 +164,7 @@ const Tag = () => {
           key={tag._id}
           id={`category-${tag._id}`}
           onDoubleClick={() => deleteTagHandler(tag.slug, state.token)}
-          className="btn btn-outline-primary mr-1 ml-1"
+          className="btn btn-dark mr-1 ml-1"
           disabled={state.loadingDeletion}
         >
           {state.loadingDeletion &&
@@ -220,7 +220,7 @@ const Tag = () => {
         </div>
         <button
           type="submit"
-          className="btn btn-primary"
+          className="btn btn-action"
           disabled={state.loadingCreation}
         >
           {state.loadingCreation &&

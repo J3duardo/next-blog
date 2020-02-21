@@ -52,11 +52,11 @@ const BlogsByTag = (props) => {
         />
         <meta
           property="og:image"
-          content={`/images/ogimage.jpg`}
+          content={`/images/landing-background.jpg`}
         />
         <meta
           property="og:image:secure_url"
-          content={`/images/ogimage.jpg`}
+          content={`/images/landing-background.jpg`}
         />
         <meta
           property="og:image:type"

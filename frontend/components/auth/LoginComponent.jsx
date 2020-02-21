@@ -4,7 +4,7 @@ import {signin, authenticateUser, isAuth} from "../../actions/auth";
 import Router from "next/router";
 import GoogleLoginComponent from "./GoogleLoginComponent";
 
-const LoginComponent = () => {
+const LoginComponent = (props) => {
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -127,7 +127,7 @@ const LoginComponent = () => {
           style={{display: "flex", justifyContent: "center"}} className="mb-2"
         >
           <button
-            className="btn btn-primary mr-2"
+            className="btn btn-action mr-2"
             disabled={state.loading || !state.showForm}
           >
             Iniciar sesión

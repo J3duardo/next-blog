@@ -110,11 +110,11 @@ const BlogRead = (props) => {
           }
           {isAuth() && JSON.parse(isAuth()).role === 1 &&
             <Link href="/admin/create/[slug]" as={`/admin/create/${blog.slug}`}>
-              <a className="btn btn-sm btn-primary mr-2">Editar blog</a>
+              <a className="btn btn-sm btn-dark mr-2">Editar blog</a>
             </Link>
           }
           <button
-            className="btn btn-sm btn-danger"
+            className="btn btn-sm btn-action"
             onClick={() => {setBlogSlug(blog.slug); toggle()}}
             disabled={loading && blogDeleted === blog.slug}
           >

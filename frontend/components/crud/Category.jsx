@@ -164,7 +164,7 @@ const Category = () => {
           key={category._id}
           id={`category-${category._id}`}
           onDoubleClick={() => deleteCategoryHandler(category.slug, state.token)}
-          className="btn btn-outline-primary mr-1 ml-1"
+          className="btn btn-dark mr-1 ml-1"
           disabled={state.loadingDeletion}
         >
           {state.loadingDeletion &&
@@ -220,7 +220,7 @@ const Category = () => {
         </div>
         <button
           type="submit"
-          className="btn btn-primary"
+          className="btn btn-action"
           disabled={state.loadingCreation}
         >
           {state.loadingCreation &&

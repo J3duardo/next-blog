@@ -302,9 +302,9 @@ const BlogEdit = (props) => {
               />
             </div>
             <div>
-              <button className="btn btn-primary mr-2">Publicar</button>
+              <button className="btn btn-dark mr-2">Publicar</button>
               <button
-                className="btn btn-danger"
+                className="btn btn-action"
                 onClick={() => Router.push(JSON.parse(isAuth()).role === 1 ? "/admin/create/blogs" : "/user/create/blogs")}
               >
                 Cancelar

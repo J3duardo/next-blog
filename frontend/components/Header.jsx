@@ -43,7 +43,7 @@ const Header = (props) => {
     await signout();
     setAuth(false);
     setRole(null)
-    Router.push("/login");
+    Router.push("/");
   }
 
   const toggle = () => setIsOpen(!isOpen);

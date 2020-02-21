@@ -142,7 +142,7 @@ const ResetPasswordComponent = (props) => {
         </div>
         <div>
           <button
-            className="btn btn-primary"
+            className="btn btn-action"
             disabled={state.loading}
           >
             Actualizar contraseña

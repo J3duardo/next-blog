@@ -139,7 +139,7 @@ const SignupComponent = () => {
         </div>
         <div>
           <button
-            className="btn btn-primary"
+            className="btn btn-action"
             disabled={state.loading || !state.showForm}
           >
             Registrarse

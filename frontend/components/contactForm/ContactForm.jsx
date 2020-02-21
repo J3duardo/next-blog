@@ -178,7 +178,7 @@ const ContactForm = (props) => {
         <div>
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn btn-action"
             disabled={state.loading}
           >
             {state.loading &&

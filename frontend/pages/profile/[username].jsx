@@ -40,8 +40,8 @@ const UserPublicProfile = (props) => {
         <meta property="og:type" content="web site" />
         <meta property="og:url" content={`${DOMAIN}${props.router.asPath}`} />
         <meta property="og:site_name" content={`${DOMAIN}`} />
-        <meta property="og:image" content={`/images/ogimage.jpg`} />
-        <meta property="og:image:secure_url" content={`/images/ogimage.jpg`} />
+        <meta property="og:image" content={`/images/landing-background.jpg`} />
+        <meta property="og:image:secure_url" content={`/images/landing-background.jpg`} />
         <meta property="og:image:type" content={"image/jpg"} />
         <link rel="canonical" href={`${DOMAIN}${props.router.asPath}`}/>
       </Head>

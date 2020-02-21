@@ -96,7 +96,7 @@ const ActivateAccount = (props) => {
                 <React.Fragment>
                   <p className="lead font-weight-bold">{message}</p>
                   <Link href="/login">
-                    <a className="btn btn-primary">Iniciar sesión</a>
+                    <a className="btn btn-action">Iniciar sesión</a>
                   </Link>
                 </React.Fragment>
               }

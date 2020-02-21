@@ -304,7 +304,7 @@ const BlogCreate = (props) => {
               />
             </div>
             <div>
-              <button className="btn btn-primary">Publicar</button>
+              <button className="btn btn-dark">Publicar</button>
             </div>
           </form>
         </div>

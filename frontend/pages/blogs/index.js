@@ -40,7 +40,7 @@ const Blogs = (props) => {
     return categories.map(category => {
       return (
         <Link key={category._id} href={`/category/${category.slug}`}>
-          <a className="btn btn-primary btn-sm mr-1 ml-1">{category.name}</a>
+          <a className="btn btn-dark btn-sm mr-1 ml-1">{category.name}</a>
         </Link>
       )
     })
@@ -51,7 +51,7 @@ const Blogs = (props) => {
     return tags.map(tag => {
       return (
         <Link key={tag._id} href={`/category/${tag.slug}`}>
-          <a className="btn btn-outline-primary btn-sm mr-1 ml-1">{tag.name}</a>
+          <a className="btn btn-dark btn-sm mr-1 ml-1">{tag.name}</a>
         </Link>
       )
     })
@@ -77,7 +77,7 @@ const Blogs = (props) => {
       <div className="text-center">
         <button
           disabled={loading}
-          className="btn btn-warning"
+          className="btn btn-action"
           onClick={loadMoreBlogs}
         >
           {loading && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"/>}
@@ -118,11 +118,11 @@ const Blogs = (props) => {
         />
         <meta
           property="og:image"
-          content={`/images/ogimage.jpg`}
+          content={`/images/landing-background.jpg`}
         />
         <meta
           property="og:image:secure_url"
-          content={`/images/ogimage.jpg`}
+          content={`/images/landing-background.jpg`}
         />
         <meta
           property="og:image:type"

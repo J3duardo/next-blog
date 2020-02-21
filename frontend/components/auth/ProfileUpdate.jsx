@@ -332,7 +332,7 @@ const ProfileUpdate = () => {
                 <button
                   disabled={loading}
                   type="submit"
-                  className="btn btn-primary btn-block"
+                  className="btn btn-action btn-block"
                 >
                   {loading &&
                     <span
