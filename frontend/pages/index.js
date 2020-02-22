@@ -1,27 +1,66 @@
 import {useEffect} from "react";
 import Link from "next/link";
 import Router from "next/router";
+import {withRouter} from "next/router";
 import Head from "next/head";
 import {isAuth} from "../actions/auth";
 import Layout from "../components/Layout";
 import LoginComponent from "../components/auth/LoginComponent";
 const APP_NAME = process.env.APP_NAME;
+const DOMAIN = process.env.NODE_ENV === "production" ? process.env.DOMAIN_PROD : process.env.DOMAIN_DEV;
 
-const head = () => {
+const Index = (props) => {
   useEffect(() => {
     if(isAuth()) {
       Router.push("/user")
     }
-  }, [])
+  }, []);
 
-  return (
-    <Head>
-      <title>Home | {APP_NAME}</title>
-    </Head>
-  )
-}
+  const head = () => {  
+    return (
+      <Head>
+        <title>Home | {APP_NAME}</title>
+        <meta
+          name="description"
+          content="Blogs y tutoriales sobre tecnologías web."
+        />
+        <meta
+          property="og:title"
+          content={`Blogs y tutoriales sobre tecnologías web.`}
+        />
+        <meta
+          property="og:description"
+          content="Blogs y tutoriales sobre tecnologías web."
+        />
+        <meta
+          property="og:type"
+          content="web site"
+        />
+        <meta
+          property="og:url"
+          content={`${DOMAIN}${props.router.pathname}`}
+        />
+        <meta
+          property="og:site_name"
+          content={`${DOMAIN}`}
+        />
+        <meta
+          property="og:image"
+          content={`${DOMAIN}/images/landing-background.jpg`}
+        />
+        <meta
+          property="og:image:secure_url"
+          content={`${DOMAIN}/images/landing-background.jpg`}
+        />
+        <meta
+          property="og:image:type"
+          content={"image/jpg"}
+        />
+        <link rel="canonical" href={`${DOMAIN}${props.router.pathname}`}/>
+      </Head>
+    )
+  }
 
-const Index = () => {
   return (
     <div className="landing-page">
       {head()}
@@ -62,7 +101,7 @@ const Index = () => {
         </div>
       </Layout>
     </div>
-  )
+  )  
 }
 
-export default Index;
+export default withRouter(Index);

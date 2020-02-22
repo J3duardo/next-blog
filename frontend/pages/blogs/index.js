@@ -118,11 +118,11 @@ const Blogs = (props) => {
         />
         <meta
           property="og:image"
-          content={`/images/landing-background.jpg`}
+          content={`${DOMAIN}/images/landing-background.jpg`}
         />
         <meta
           property="og:image:secure_url"
-          content={`/images/landing-background.jpg`}
+          content={`${DOMAIN}/images/landing-background.jpg`}
         />
         <meta
           property="og:image:type"
