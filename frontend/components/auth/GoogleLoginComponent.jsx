@@ -58,6 +58,15 @@ const GoogleLoginComponent = (props) => {
         style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
         className="alert alert-danger text-center"
       >
+        <button
+          style={{position: "absolute", top: 0, right: "5px"}}
+          type="button"
+          class="close"
+          onClick={() => setError(null)}
+          aria-label="Close"
+        >
+          <span style={{lineHeight: 0}} aria-hidden="true">&times;</span>
+        </button>
         {error}
       </div>
       : null
@@ -69,6 +78,15 @@ const GoogleLoginComponent = (props) => {
         style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
         className="alert alert-info text-center"
       >
+        <button
+          style={{position: "absolute", top: 0, right: "5px"}}
+          type="button"
+          class="close"
+          onClick={() => setMessage(null)}
+          aria-label="Close"
+        >
+          <span style={{lineHeight: 0}} aria-hidden="true">&times;</span>
+        </button>
         {message} Redirigiendo...
       </div>
       : null

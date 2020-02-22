@@ -107,6 +107,15 @@ const ContactForm = (props) => {
         style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
         className="alert alert-danger"
       >
+        <button
+        style={{position: "absolute", top: 0, right: "5px"}}
+        type="button"
+        class="close"
+        onClick={() => setState({...state, error: null})}
+        aria-label="Close"
+        >
+          <span style={{lineHeight: 0}} aria-hidden="true">&times;</span>
+        </button>
         {state.error}.
       </div>
       : null
@@ -118,6 +127,15 @@ const ContactForm = (props) => {
       style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
       className="alert alert-info"
     >
+      <button
+        style={{position: "absolute", top: 0, right: "5px"}}
+        type="button"
+        class="close"
+        onClick={() => setState({...state, successMessage: null})}
+        aria-label="Close"
+      >
+        <span style={{lineHeight: 0}} aria-hidden="true">&times;</span>
+      </button>
       {state.successMessage}.
     </div>
     : null
