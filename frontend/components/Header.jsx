@@ -51,7 +51,7 @@ const Header = (props) => {
   return (
     <div className="mb-4">
       <div className="navbar-wrapper">
-        <Navbar expand="md">
+        <Navbar expand="md" dark>
           <Link href="/">
             <NavbarBrand>
               <span className="text-white font-weight-bold">{appName}</span>
@@ -64,28 +64,28 @@ const Header = (props) => {
                 <Nav className="ml-auto" navbar>
                   <NavItem>
                     <Link href="/blogs">
-                      <a className="btn btn-generic mr-2">
+                      <a className="btn btn-transparent">
                         Blogs
                       </a>
                     </Link>
                   </NavItem>
                   <NavItem>
                     <Link href="/contact">
-                      <a className="btn btn-generic mr-2">
+                      <a className="btn btn-transparent">
                         Contáctanos
                       </a>
                     </Link>
                   </NavItem>
                   <NavItem>
                     <Link href="/login">
-                      <a className="btn btn-generic mr-2">
+                      <a className="btn btn-transparent">
                         Iniciar sesión
                       </a>
                     </Link>
                   </NavItem>
                   <NavItem>
                     <Link href="/signup">
-                      <a className="btn btn-action">
+                      <a className="btn btn-action ml-1">
                         Registrarse
                       </a>
                     </Link>
@@ -97,34 +97,34 @@ const Header = (props) => {
                 <Nav className="ml-auto" navbar>
                   <NavItem>
                     <Link href="/blogs">
-                      <a className="btn btn-generic mr-2">
+                      <a className="btn btn-transparent">
                         Blogs
                       </a>
                     </Link>
                   </NavItem>
                   <NavItem>
                     <Link href="/user/create/blog">
-                      <a className="btn btn-action mr-2">
+                      <a className="btn btn-action mx-1">
                         Crear Blog
                       </a>
                     </Link>
                   </NavItem>
                   <NavItem>
                     <Link href="/user">
-                      <a className="btn btn-generic mr-2">
+                      <a className="btn btn-transparent">
                         Dashboard
                       </a>
                     </Link>
                   </NavItem>
                   <NavItem>
                     <Link href="/contact">
-                      <a className="btn btn-generic mr-2">
-                        Contactar
+                      <a className="btn btn-transparent">
+                        Contáctanos
                       </a>
                     </Link>
                   </NavItem>
                   <button
-                    className="btn btn-generic ml-auto"
+                    className="btn btn-transparent ml-auto"
                     onClick={signoutHandler}
                   >
                     Cerrar sesión
@@ -135,41 +135,42 @@ const Header = (props) => {
               <Nav className="ml-auto" navbar>
                 <NavItem>
                   <Link href="/blogs">
-                    <a className="btn btn-generic mr-2">
+                    <a className="btn btn-transparent">
                       Blogs
                     </a>
                   </Link>
                 </NavItem>
                 <NavItem>
                   <Link href="/user/create/blog">
-                    <a className="btn btn-action mr-2">
+                    <a className="btn btn-action mx-1">
                       Crear Blog
                     </a>
                   </Link>
                 </NavItem>
                 <NavItem>
                   <Link href="/user">
-                    <a className="btn btn-generic mr-2">
+                    <a className="btn btn-transparent">
                       Dashboard
                     </a>
                   </Link>
                 </NavItem>
                 <NavItem>
                   <Link href="/admin">
-                    <a className="btn btn-generic mr-2">
+                    <a className="btn btn-transparent">
                       Administrar
                     </a>
                   </Link>
                 </NavItem>
                 <NavItem>
                   <Link href="/contact">
-                    <a className="btn btn-generic mr-2">
+                    <a className="btn btn-transparent">
                       Contáctanos
                     </a>
                   </Link>
                 </NavItem>
                 <button
-                  className="btn btn-generic"
+                  style={{textAlign: "left"}}
+                  className="btn btn-transparent"
                   onClick={signoutHandler}
                 >
                   Cerrar sesión

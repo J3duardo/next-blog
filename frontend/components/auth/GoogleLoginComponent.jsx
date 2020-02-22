@@ -56,7 +56,7 @@ const GoogleLoginComponent = (props) => {
     return error ?
       <div
         style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
-        className="alert alert-danger"
+        className="alert alert-danger text-center"
       >
         {error}
       </div>
@@ -67,7 +67,7 @@ const GoogleLoginComponent = (props) => {
     return message ?
       <div
         style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
-        className="alert alert-info"
+        className="alert alert-info text-center"
       >
         {message} Redirigiendo...
       </div>

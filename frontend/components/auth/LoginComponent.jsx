@@ -78,7 +78,7 @@ const LoginComponent = (props) => {
   return state.error ?
     <div
       style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
-      className="alert alert-danger"
+      className="alert alert-danger text-center"
     >
       {state.error.error || state.error}
     </div>
@@ -89,7 +89,7 @@ const LoginComponent = (props) => {
   return state.message ?
     <div
       style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
-      className="alert alert-info"
+      className="alert alert-info text-center"
     >
       {state.message}. Redirigiendo...
     </div>

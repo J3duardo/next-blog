@@ -74,6 +74,22 @@ a {
   transition: var(--transition-hover);
 }
 
+.btn-transparent {
+  color: #fff;
+  background-color: transparent;
+  transition: var(--transition-hover)
+}
+
+.btn-transparent:hover {
+  color: #fff;
+  background-color: var(--azul-oscuro-hover);
+  transition: var(--transition-hover)
+}
+
 .navbar-wrapper, .footer-wrapper {
   background-color: var(--azul-oscuro);
+}
+
+.navbar-toggler {
+  border: 2px solid #fff;
 }
