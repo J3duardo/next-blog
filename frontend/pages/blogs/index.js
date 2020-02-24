@@ -162,10 +162,10 @@ const Blogs = (props) => {
                     </h1>
                   </div>
                   <section className="mb-4">
-                    <div className="mb-3">
+                    <div className="mb-3 text-center">
                       {renderAllCategories()}
                     </div>
-                    <div>
+                    <div className="text-center">
                       {renderAllTags()}
                     </div>
                   </section>
