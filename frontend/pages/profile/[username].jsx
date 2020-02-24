@@ -91,7 +91,7 @@ const UserPublicProfile = (props) => {
             <div className="col-md-6">
               <div className="card">
                 <div className="card-body">
-                  <h5 className="text-white text-center card-title bg-primary py-3 px-3">
+                  <h5 className="text-white text-center card-title py-3 px-3" style={{backgroundColor: "#304269"}}>
                     Blogs recientes de {props.user.name}
                   </h5>
                   <hr/>
@@ -102,7 +102,7 @@ const UserPublicProfile = (props) => {
             <div className="col-md-6">
               <div className="card">
                 <div className="card-body">
-                  <h5 className="text-white text-center card-title bg-primary py-3 px-3">
+                  <h5 className="text-white text-center card-title py-3 px-3" style={{backgroundColor: "#304269"}}>
                     Contactar a {props.user.name}
                   </h5>
                   <hr/>
