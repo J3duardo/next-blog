@@ -93,3 +93,8 @@ a {
 .navbar-toggler {
   border: 2px solid #fff;
 }
+
+.ql-editor .ql-video {
+  display: block;
+  margin: 0 auto;
+}
