@@ -202,9 +202,9 @@ const SingleBlog = (props) => {
                   <div className="container">
                     <h1 className="display-4 mb-4 text-center font-weight-bold">{blog.title}</h1>
                     <p className="lead mark">
-                    Autor: <Link href="/profile/[username]" as={`/profile/${blog.postedBy.username}`}><a>{blog.postedBy.name}</a></Link>
-                    {" | "}
-                    Actualizado: {moment(blog.updatedAt).calendar()}
+                      Autor: <Link href="/profile/[username]" as={`/profile/${blog.postedBy.username}`}><a>{blog.postedBy.name}</a></Link>
+                      {" | "}
+                      Creado: {moment(blog.createdAt).calendar()} | Actualizado: {moment(blog.updatedAt).calendar()}
                     </p>
                   </div>
                 </section>

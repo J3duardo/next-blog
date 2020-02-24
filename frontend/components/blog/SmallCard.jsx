@@ -75,7 +75,9 @@ const SmallCard = (props) => {
             <a className="btn btn-action btn-sm mb-3">Leer más...</a>
           </Link>
           <hr/>
-          <p className="mb-0 text-muted">Creado: {moment(blog.updatedAt).calendar()}</p>
+          <p className="mb-0 text-muted">
+            Creado: {moment(blog.createdAt).calendar()} | Actualizado: {moment(blog.updatedAt).calendar()}
+          </p>
           <p className="mb-0 text-muted">
             Autor:  <Link href="/profile/[username]" as={`/profile/${blog.postedBy.username}`}>
                       <a>{blog.postedBy.name}</a>

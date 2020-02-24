@@ -63,7 +63,9 @@ const Card = (props) => {
       </header>
       <section className="mb-3">
         <small style={{display: "inline-block", padding: "5px 10px"}} className="mark ml-1 text-muted text-small">
-          Autor: <Link href="/profile/[username]" as={`/profile/${blog.postedBy.username}`}><a>{blog.postedBy.name}</a></Link> | Actualizado: {moment(blog.updatedAt).calendar()}
+          Autor: <Link href="/profile/[username]" as={`/profile/${blog.postedBy.username}`}>
+              <a>{blog.postedBy.name}</a>
+            </Link> | Creado: {moment(blog.createdAt).calendar()} | Actualizado: {moment(blog.updatedAt).calendar()}
         </small>
       </section>
       <section className="mb-4" style={{display: "flex"}}>
