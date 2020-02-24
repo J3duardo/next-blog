@@ -50,7 +50,7 @@ const Blogs = (props) => {
   const renderAllTags = () => {
     return tags.map(tag => {
       return (
-        <Link key={tag._id} href={`/category/${tag.slug}`}>
+        <Link key={tag._id} href={`/tag/${tag.slug}`}>
           <a className="btn btn-dark btn-sm mr-1 ml-1">{tag.name}</a>
         </Link>
       )
@@ -91,7 +91,7 @@ const Blogs = (props) => {
   const head = () => {
     return (
       <Head>
-        <title>Blogs de Programación | {APP_NAME}</title>
+        <title>Blogs de Programación y Tecnologías Web| {APP_NAME}</title>
         <meta
           name="description"
           content="Blogs y tutoriales de programación sobre JavaScript, ReactJS, NodeJS, VueJS y más..."
@@ -158,7 +158,7 @@ const Blogs = (props) => {
                 <header>
                   <div className="col-md-12">
                     <h1 className="text-center font-weight-bold mb-4">
-                      Blogs y tutoriales de programación
+                      Blogs y Tutoriales de Programación y Tecnologías Web
                     </h1>
                   </div>
                   <section className="mb-4">
