@@ -367,6 +367,7 @@ exports.updateBlog = async (req, res) => {
         updatedBlog.postedBy = req.user.userId;
         updatedBlog.categories = categories.split(",");
         updatedBlog.tags = tags.split(",");
+        updatedBlog.updatedAt = Date.now();
 
         // Aceptar contenido no mayor de 15MB
         if(body.size > 15000000) {

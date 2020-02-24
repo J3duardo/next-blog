@@ -53,9 +53,16 @@ const blogSchema = new mongoose.Schema(
     postedBy: {
       type: mongoose.Schema.ObjectId,
       ref: "User"
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now()
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now()
     }
-  }, 
-  {timestamps: true}
+  }
 );
 
 module.exports = mongoose.model("Blog", blogSchema);
