@@ -1,5 +1,5 @@
 import Head from "next/head";
-import {withRouter} from "next/router";
+import Router, {withRouter} from "next/router";
 import {getTag} from "../../actions/tag";
 import Layout from "../../components/Layout";
 import Card from "../../components/blog/Card";
@@ -12,13 +12,33 @@ const BlogsByTag = (props) => {
 
   // Mostrar los blogs
   const renderBlogs = () => {
-    return props.blogs.map(blog => {
+    if(props.blogs.length > 0) {
+      return props.blogs.map(blog => {
+        return (
+          <div key={blog._id} className="mb-4">
+            <Card blog={blog} />
+          </div>
+        )
+      })
+    } else {
       return (
-        <div key={blog._id} className="mb-4">
-          <Card blog={blog} />
+        <div className="container-fluid">
+          <div className="jumbotron">
+            <h2 className="text-center font-weight-light">No se encontraron blogs para la etiqueta seleccionada.</h2>
+            <hr className="my-5"/>
+            <p class="lead text-center">
+              <button
+                class="btn btn-action btn-lg"
+                role="button"
+                onClick={() => Router.push("/blogs")}
+              >
+                Volver
+              </button>
+            </p>
+          </div>
         </div>
       )
-    })
+    }
   }
 
   // Contenido del Head de la página para SEO
