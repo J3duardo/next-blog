@@ -226,7 +226,7 @@ exports.login = async (req, res) => {
       }
 
       // Enviar el token en los cookies
-      res.cookie("token", token, {expiresIn: "1d", httpOnly: true, secure: req.protocol === "https"});
+      res.cookie("token", token, {expires: new Date(Date.now() + 24 * 3600 * 1000), httpOnly: true, secure: req.protocol === "https"});
 
       // Enviar el token y la data del usuario en la respuesta
       return res.json({
@@ -277,7 +277,7 @@ exports.googleLogin = async (req, res) => {
         }
 
         // Enviar el token en los cookies
-        res.cookie("token", token, {expiresIn: "1d", httpOnly: true, secure: req.protocol === "https"});
+        res.cookie("token", token, {expires: new Date(Date.now() + 24 * 3600 * 1000), httpOnly: true, secure: req.protocol === "https"});
         // Enviar token y data del usuario en la respuesta  
         return res.json({
           status: "success",
@@ -317,7 +317,7 @@ exports.googleLogin = async (req, res) => {
         }
   
         // Enviar el token en los cookies
-        res.cookie("token", token, {expiresIn: "1d", httpOnly: true, secure: req.protocol === "https"});
+        res.cookie("token", token, {expires: new Date(Date.now() + 24 * 3600 * 1000), httpOnly: true, secure: req.protocol === "https"});
 
         return res.json({
           status: "success",
@@ -524,6 +524,69 @@ exports.resetPassword = async (req, res) => {
         })
       }
     });
+
+  } catch (error) {
+    return res.status(500).json({
+      status: "failed",
+      message: "Internal server error",
+      error: {...error}
+    })
+  }
+}
+
+// Eliminar cuenta de usuario
+exports.deleteUserAccount = async (req, res) => {
+  try {
+    // Chequear si hay contraseña
+    if(req.body.password === "") {
+      return res.status(400).json({
+        status: "failed",
+        message: "Debe agregar su contraseña"
+      })
+    }
+
+    // Chequear si hay confirmación de contraseña
+    if(req.body.passwordConfirm === "") {
+      return res.status(400).json({
+        status: "failed",
+        message: "Debe confirmar su contraseña"
+      })
+    }
+
+    // Chequear si las contraseñas coinciden
+    if(req.body.password !== req.body.passwordConfirm) {
+      return res.status(400).json({
+        status: "failed",
+        message: "Las contraseñas no coinciden"
+      })
+    }
+
+    // Buscar el usuario y chequear si la contraseña es correcta
+    const user = await User.findById(req.user.userId).select("+password");
+
+    if(!user) {
+      return res.status(404).json({
+        status: "failed",
+        message: "Usuario no encontrado"
+      })
+    }
+
+    const check = await user.checkPassword(req.body.password, user.password);
+
+    if(!check) {
+      return res.status(400).json({
+        status: "failed",
+        message: "Contraseña incorrecta"
+      })
+    }
+
+    // Eliminar el usuario si todo es correcto
+    await user.remove();
+
+    return res.json({
+      status: "success",
+      message: "Cuenta de usuario eliminada exitosamente"
+    })
 
   } catch (error) {
     return res.status(500).json({

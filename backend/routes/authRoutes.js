@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {runValidation} = require("../middleware/validationMiddlewares");
 const {signupValidator, loginValidator, forgotPasswordValidator, resetPasswordValidator} = require("../middleware/validationMiddlewares/authValidators");
-const {preSignup, signup, createAccount, login, googleLogin, signout, forgotPassword, resetPassword} = require("../controllers/authController");
+const {preSignup, signup, createAccount, login, googleLogin, signout, forgotPassword, resetPassword, deleteUserAccount, protectRoute} = require("../controllers/authController");
 
 // Registrar usuarios implementando activación de cuenta por email
 router.post("/pre-signup", signupValidator, runValidation, preSignup);
@@ -21,5 +21,7 @@ router.get("/activate-account", createAccount);
 router.post("/forgot-password", forgotPasswordValidator, runValidation, forgotPassword);
 // Resetear la contraseña
 router.post("/reset-password", resetPasswordValidator, runValidation, resetPassword);
+// Eliminar cuenta de usuario
+router.post("/delete-account", protectRoute, deleteUserAccount);
 
 module.exports = router;

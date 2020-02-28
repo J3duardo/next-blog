@@ -77,4 +77,14 @@ userSchema.methods.checkPassword = async function(providedPassword, realPassword
   return await bcrypt.compare(providedPassword, realPassword);
 }
 
+// Eliminar los blogs asociados a un usuario cuando éste elimina su cuenta
+userSchema.post("remove", async function(doc) {
+  try {
+    await mongoose.model("Blog").deleteMany({postedBy: doc._id});
+    console.log(`Blogs de ${doc.name} usuario eliminados correctamente`)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 module.exports = mongoose.model("User", userSchema);
