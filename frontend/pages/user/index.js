@@ -38,6 +38,11 @@ const userIndex = () => {
                       <a>Editar perfil</a>
                     </Link>
                   </li>
+                  <li className="list-group-item">
+                    <Link href="/delete-account">
+                      <a>Eliminar cuenta</a>
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>

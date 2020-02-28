@@ -190,3 +190,20 @@ export const resetPassword = async (data) => {
     }
   })
 }
+
+// Borrar cuenta de usuario
+export const deleteUserAccount = async (data) => {
+  return axios({
+    method: "POST",
+    url: `${API}/api/delete-account`,
+    data: {
+      password: data.password,
+      passwordConfirm: data.passwordConfirm
+    },
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${data.token}`
+    }
+  })
+}
