@@ -98,7 +98,7 @@ const Blogs = (props) => {
         />
         <meta
           property="og:title"
-          content={`Los blogs más recientes sobre ${APP_NAME}`}
+          content={`Los blogs más recientes sobre Programación y Tecnologías Web`}
         />
         <meta
           property="og:description"

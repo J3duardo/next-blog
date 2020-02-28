@@ -142,7 +142,7 @@ const SingleBlog = (props) => {
         />
         <meta
           property="og:url"
-          content={`${DOMAIN}/blogs/${props.router.asPath}`}
+          content={`${DOMAIN}/blogs${props.router.asPath}`}
         />
         <meta
           property="og:site_name"
@@ -150,17 +150,17 @@ const SingleBlog = (props) => {
         />
         <meta
           property="og:image"
-          content={!error ? `${API}/api/blog/${blog.slug}/photo` : ""}
+          content={!error ? `${DOMAIN}/images/landing-background.jpg` : ""}
         />
         <meta
           property="og:image:secure_url"
-          content={!error ? `${API}/api/blog/${blog.slug}/photo` : ""}
+          content={!error ? `${DOMAIN}/images/landing-background.jpg` : ""}
         />
         <meta
           property="og:image:type"
           content="image/jpg"
         />
-        <link rel="canonical" href={`${DOMAIN}/blogs/${props.router.asPath}`}/>
+        <link rel="canonical" href={`${DOMAIN}/blogs${props.router.asPath}`}/>
       </Head>
     )
   }
@@ -179,23 +179,25 @@ const SingleBlog = (props) => {
             <article>
               <div className="container-fluid">
                 <section className="mb-4">
-                  <div style={{position: "relative", minHeight: "250px"}} className="row">
-                    {loading &&
-                      <div
-                        style={{position: "absolute", width: "100%", minHeight: "250px", backgroundColor: "#fff"}}
-                        className="d-flex align-items-center justify-content-center"
-                      >
-                        <div className="spinner-border text-primary" role="status">
-                          <span className="sr-only">Cargando...</span>
+                  <div className="container">
+                    <div style={{position: "relative", minHeight: "250px"}} className="row px-0">
+                      {loading &&
+                        <div
+                          style={{position: "absolute", width: "100%", minHeight: "250px", backgroundColor: "#fff"}}
+                          className="d-flex align-items-center justify-content-center"
+                        >
+                          <div className="spinner-border text-primary" role="status">
+                            <span className="sr-only">Cargando...</span>
+                          </div>
                         </div>
-                      </div>
-                    }
-                    <img
-                      ref={blogImgRef}
-                      className="img img-fluid blog-image"
-                      src=""
-                      alt={`${blog.title}`}
-                    />
+                      }
+                      <img
+                        ref={blogImgRef}
+                        className="img img-fluid blog-image"
+                        src=""
+                        alt={`${blog.title}`}
+                      />
+                    </div>
                   </div>
                 </section>
                 <section className="mb-4">

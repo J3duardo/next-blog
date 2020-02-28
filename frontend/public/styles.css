@@ -21,6 +21,11 @@ a {
   cursor: pointer
 }
 
+img {
+  display: block;
+  max-width: 100%;
+}
+
 #nprogress .bar {
   height: 3px !important
 }
