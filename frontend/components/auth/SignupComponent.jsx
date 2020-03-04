@@ -48,6 +48,17 @@ const SignupComponent = () => {
         showForm: false
       });
     } catch (error) {
+      // Procesar error de límite de solicitudes excedido
+      if(error.response && error.response.status === 429) {
+        return setState({
+          ...state,
+          message: null,
+          error: error.response.data.message,
+          loading: false,
+          showForm: true
+        });
+      };
+      
       if(error.response && error.response.data) {
         return setState({
           ...state,

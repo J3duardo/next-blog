@@ -31,13 +31,24 @@ const ForgotPasswordComponent = () => {
       const response = await sendResetPasswordEmail(state.email);
       
       setState({
-        password: "",
+        email: "",
         message: response.data.message,
         error: null,
         loading: false
       });
 
     } catch (error) {
+      // Procesar error de límite de solicitudes excedido
+      if(error.response && error.response.status === 429) {
+        return setState({
+          ...state,
+          email: "",
+          message: null,
+          error: error.response.data.message,
+          loading: false
+        });
+      };
+
       if(error.response && error.response.data) {
         return setState({
           ...state,
@@ -58,7 +69,7 @@ const ForgotPasswordComponent = () => {
   return state.error ?
     <div
       style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
-      className="alert alert-danger"
+      className="alert alert-danger text-center"
     >
       <button
         style={{position: "absolute", top: 0, right: "5px"}}
@@ -78,7 +89,7 @@ const ForgotPasswordComponent = () => {
   return state.message ?
     <div
       style={{position: "fixed", top: 0, left: "50%", transform: "translateX(-50%)", zIndex: 10}}
-      className="alert alert-info"
+      className="alert alert-info text-center"
     >
       <button
         style={{position: "absolute", top: 0, right: "5px"}}
