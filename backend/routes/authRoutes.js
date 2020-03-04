@@ -40,7 +40,7 @@ router.get("/signout", signout);
 // Activar la cuenta del usuario
 router.get("/activate-account", createAccount);
 // Enviar el token de reseteo de contraseña
-router.post("/forgot-password", forgotPasswordLimiter, forgotPasswordValidator, runValidation, forgotPassword);
+router.post("/forgot-password", forgotPasswordValidator, runValidation, forgotPasswordLimiter, forgotPassword);
 // Resetear la contraseña
 router.post("/reset-password", resetPasswordValidator, runValidation, resetPassword);
 // Eliminar cuenta de usuario
