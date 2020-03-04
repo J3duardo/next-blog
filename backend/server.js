@@ -1,5 +1,9 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
+const xssClean = require("xss-clean");
+const hpp = require("hpp");
 const cors = require("cors");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
@@ -28,11 +32,18 @@ mongoose.connect(process.env.DATABASE, {
 
 // App
 const app = express();
+app.set("trust proxy", 1);
 
 // Middlewares
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
+
+// Middlewares de seguridad
+app.use(mongoSanitize());
+app.use(helmet());
+app.use(xssClean());
+app.use(hpp());
 app.use(cors());
 
 // Rutas
