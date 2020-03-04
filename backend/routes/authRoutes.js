@@ -31,7 +31,7 @@ router.post("/pre-signup", signupLimiter, signupValidator, runValidation, preSig
 // Registrar usuarios sin implementar activación de cuenta por email
 router.post("/signup", signupLimiter, signupValidator, runValidation, signup);
 // Iniciar sesión
-router.post("/login", loginLimiter, loginLimiter, loginValidator, runValidation, login);
+router.post("/login", loginLimiter, loginValidator, runValidation, login);
 // Iniciar sesión con google
 router.post("/google-login", googleLogin);
 // Cerrar sesión
