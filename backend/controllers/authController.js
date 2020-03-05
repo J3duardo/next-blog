@@ -6,6 +6,13 @@ const sendgridMail = require("@sendgrid/mail");
 const {OAuth2Client} = require("google-auth-library");
 sendgridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+const cloudinary = require("cloudinary");
+cloudinary.config({
+  cloud_name: `${process.env.CLOUD_NAME}`,
+  api_key: `${process.env.CLOUDINARY_API_KEY}`,
+  api_secret: `${process.env.CLOUDINARY_API_SECRET}`
+});
+
 const CLIENT_URL = process.env.NODE_ENV !== "production" ? process.env.CLIENT_URL : process.env.CLIENT_URL_PROD
 
 // Controller para registro de usuarios sin activación mediante comprobación de email
@@ -580,11 +587,11 @@ exports.deleteUserAccount = async (req, res) => {
       })
     }
 
-    // Eliminar el usuario si todo es correcto
-    await user.remove();
-
     // Eliminar la imagen avatar de Cloudinary
     await cloudinary.v2.uploader.destroy(user.avatarPublicId, {invalidate: true});
+
+    // Eliminar el usuario si todo es correcto
+    await user.remove();
 
     return res.json({
       status: "success",
@@ -595,7 +602,7 @@ exports.deleteUserAccount = async (req, res) => {
     return res.status(500).json({
       status: "failed",
       message: "Internal server error",
-      error: {...error}
+      error: error.message
     })
   }
 }
