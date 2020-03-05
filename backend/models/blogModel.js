@@ -32,9 +32,13 @@ const blogSchema = new mongoose.Schema(
     mdescription: {
       type: String
     },
-    photo: {
-      data: Buffer,
-      contentType: String
+    mainPhoto: {
+      type: String,
+      default: "/images/noimage.png"
+    },
+    mainPhotoPublicId: {
+      type: String,
+      default: "noimage"
     },
     categories: [
       {

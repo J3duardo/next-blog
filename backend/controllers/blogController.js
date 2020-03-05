@@ -6,6 +6,13 @@ const formidable = require("formidable");
 const slugify = require("slugify");
 const stripHtml = require("string-strip-html");
 
+const cloudinary = require("cloudinary");
+cloudinary.config({
+  cloud_name: `${process.env.CLOUD_NAME}`,
+  api_key: `${process.env.CLOUDINARY_API_KEY}`,
+  api_secret: `${process.env.CLOUDINARY_API_SECRET}`
+});
+
 // Controller para crear posts
 exports.createBlog = async (req, res) => {
   try {
@@ -104,8 +111,14 @@ exports.createBlog = async (req, res) => {
               error: "El tamaño de la imagen debe ser menor de 1MB"
             })
           };
-          blog.photo.data = fs.readFileSync(files.photo.path);
-          blog.photo.contentType = files.photo.type;
+
+          // Eliminar la imagen anterior de Cloudinary
+          await cloudinary.uploader.destroy(blog.mainPhotoPublicId);
+
+          // Actualizar la imagen en Cloudinary y en el blog
+          const uploadResponse = await cloudinary.uploader.upload(files.photo.path);
+          blog.mainPhoto = uploadResponse.url;
+          blog.mainPhotoPublicId = uploadResponse.public_id;
         };
   
         // Guardar post en la base de datos y enviar respuesta al cliente
@@ -259,6 +272,9 @@ exports.deleteBlog = async (req, res) => {
       })
     }
 
+    // Eliminar la imagen del blog de Cloudinary
+    await cloudinary.uploader.destroy(blog.mainPhotoPublicId);
+
     return res.json({
       status: "success",
       message: `Blog ${blog.title} eliminado correctamente`,
@@ -387,8 +403,14 @@ exports.updateBlog = async (req, res) => {
               error: "El tamaño de la imagen debe ser menor de 1MB"
             })
           };
-          updatedBlog.photo.data = fs.readFileSync(files.photo.path);
-          updatedBlog.photo.contentType = files.photo.type;
+
+          // Eliminar la imagen anterior de Cloudinary
+          await cloudinary.uploader.destroy(updatedBlog.mainPhotoPublicId);
+
+          // Actualizar la imagen en Cloudinary y en el blog
+          const uploadResponse = await cloudinary.uploader.upload(files.photo.path);
+          updatedBlog.mainPhoto = uploadResponse.url;
+          updatedBlog.mainPhotoPublicId = uploadResponse.public_id;
         };
   
         // Guardar post actualizado en la base de datos y enviar respuesta al cliente
@@ -430,31 +452,6 @@ exports.updateBlog = async (req, res) => {
   }
 }
 
-// Controller para tomar la foto de un blog específico
-exports.getBlogPhoto = async (req, res) => {
-  try {
-    const blog = await Blog.findOne({slug: req.params.slug}).select("photo");
-
-    if(!blog) {
-      return res.status(404).json({
-        status: "failed",
-        message: "Blog no encontrado",
-        error: "Blog no encontrado"
-      })
-    }
-
-    res.set("Content-Type", blog.photo.contentType);
-    return res.send(blog.photo.data)
-
-  } catch (error) {
-    res.status(500).json({
-      status: "failed",
-      message: "internal server error",
-      error: error
-    })
-  }
-}
-
 // Controller para buscar los blogs relacionados con un post específico
 exports.getRelatedPosts = async (req, res) => {
   try {
@@ -466,7 +463,7 @@ exports.getRelatedPosts = async (req, res) => {
     const blogs = await Blog.find({_id: {$ne: blogId}, categories: {$in: blogCategories}})
     .limit(limit)
     .populate({path: "postedBy", select: "_id name username profile"})
-    .select("title slug excerpt postedBy createdAt updatedAt");
+    .select("title mainPhoto slug excerpt postedBy createdAt updatedAt");
 
     return res.json({
       status: "success",

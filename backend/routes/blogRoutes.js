@@ -1,5 +1,5 @@
 const express = require("express");
-const {createBlog, getAllBlogs, getSingleBlog, getBlogsCategoriesAndTags, deleteBlog, updateBlog, getBlogPhoto, getRelatedPosts, searchBlogs} = require("../controllers/blogController");
+const {createBlog, getAllBlogs, getSingleBlog, getBlogsCategoriesAndTags, deleteBlog, updateBlog, getRelatedPosts, searchBlogs} = require("../controllers/blogController");
 const {protectRoute, adminMiddleware} = require("../controllers/authController");
 
 const router = express.Router();
@@ -10,8 +10,6 @@ router.post("/blog", protectRoute, adminMiddleware, createBlog);
 router.get("/blogs", getAllBlogs);
 // Buscar un blog específico
 router.get("/blog/:slug", getSingleBlog);
-// Buscar la imagen de un blog
-router.get("/blog/:slug/photo", getBlogPhoto);
 // Buscar todos los blogs, las categorías y los tags
 router.post("/blogs-categories-tags", getBlogsCategoriesAndTags);
 // Borrar un blog
