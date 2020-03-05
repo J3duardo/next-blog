@@ -4,12 +4,19 @@ const formidable = require("formidable");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 
+const cloudinary = require("cloudinary");
+cloudinary.config({
+  cloud_name: `${process.env.CLOUD_NAME}`,
+  api_key: `${process.env.CLOUDINARY_API_KEY}`,
+  api_secret: `${process.env.CLOUDINARY_API_SECRET}`
+});
+
 const CLIENT_URL = process.env.NODE_ENV !== "production" ? process.env.CLIENT_URL : process.env.CLIENT_URL_PROD
 
 // Buscar el perfil público de un usuario específico
 exports.publicProfile = async (req, res) => {
   try {
-    const user = await User.findOne({username: req.params.username}).select("-photo")
+    const user = await User.findOne({username: req.params.username});
 
     // Chequear si el usuario existe
     if(!user) {
@@ -140,8 +147,16 @@ exports.updateUserProfile = async (req, res) => {
               error: "La foto no debe ser mayor de 1MB"
             });
           }
-          user.photo.data = fs.readFileSync(files.photo.path);
-          user.photo.contentType = files.photo.type;
+          // user.photo.data = fs.readFileSync(files.photo.path);
+          // user.photo.contentType = files.photo.type;
+
+          // Eliminar la imagen anterior de Cloudinary
+          await cloudinary.v2.uploader.destroy(user.avatarPublicId, {invalidate: true});
+
+          // Actualizar la imagen en Cloudinary y en el blog
+          const uploadResponse = await cloudinary.v2.uploader.upload(files.photo.path, {folder: "thenextblog-imgs/users"});
+          user.avatar = uploadResponse.url;
+          user.avatarPublicId = uploadResponse.public_id;
         }
   
         // Actualizar información del usuario
@@ -195,36 +210,6 @@ exports.updateUserProfile = async (req, res) => {
 
   } catch (error) {
     // Manejo de errores globales del proceso de actualización
-    return res.status(500).json({
-      status: "failed",
-      message: "Internal server error",
-      error: error.message
-    })
-  }
-}
-
-// Buscar foto del perfil del usuario
-exports.getUserPhoto = async (req, res) => {
-  try {
-    // Buscar el usuario
-    const user = await User.findOne({username: req.params.username});
-
-    // Chaequear si el usuario existe
-    if(!user) {
-      return res.status(404).json({
-        status: "failed",
-        message: "Usuario no encontrado",
-        error: "Usuario no encontrado",
-      })
-    }
-
-    // Si existe, buscar su foto y enviarla al cliente
-    if(user.photo) {
-      res.set("Content-Type", user.photo.contentType);
-      return res.send(user.photo.data);
-    }
-
-  } catch (error) {
     return res.status(500).json({
       status: "failed",
       message: "Internal server error",

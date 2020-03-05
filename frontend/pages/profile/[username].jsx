@@ -7,10 +7,8 @@ moment.locale("es")
 import Layout from "../../components/Layout";
 import {getPublicUserProfile} from "../../actions/user";
 import ContactForm from "../../components/contactForm/ContactForm";
-// import {API, DOMAIN, APP_NAME} from "../../config";
 
 const APP_NAME = process.env.APP_NAME;
-const API = process.env.NODE_ENV === "production" ? process.env.API : process.env.API_DEV;
 const DOMAIN = process.env.NODE_ENV === "production" ? process.env.DOMAIN_PROD : process.env.DOMAIN_DEV;
 
 const UserPublicProfile = (props) => {
@@ -72,7 +70,7 @@ const UserPublicProfile = (props) => {
                     <div className="col-md-4">
                       <img
                         ref={imgRef}
-                        src={`${API}/api/user/photo/${props.user.username}`}
+                        src={`${props.user.avatar}`}
                         alt={`Foto de ${props.user.username}`}
                         className="img img-fluid img-thumbnail"
                         style={{display: "block", maxHeight: "180px", maxWidth: "100%", margin: "0 auto"}}

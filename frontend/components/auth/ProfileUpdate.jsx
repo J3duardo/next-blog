@@ -2,12 +2,10 @@ import {useState, useEffect, useRef} from "react";
 import Router, {withRouter} from "next/router";
 import {getCurrentUserProfile, updateCurrentUserProfile} from "../../actions/user";
 import {getCookie, updateUserAuthData, sessionExpiredHandler, isAuth} from "../../actions/auth";
-// import {API} from "../../config";
-const API = process.env.NODE_ENV === "production" ? process.env.API : process.env.API_DEV;
 
 const ProfileUpdate = () => {
   const [username, setUsername] = useState("");
-  const [photoSrcUsername, setPhotoSrcUsername] = useState("")
+  const [avatar, setAvatar] = useState("")
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -36,7 +34,7 @@ const ProfileUpdate = () => {
       const res = await getCurrentUserProfile(getCookie("token"));
       
       setUsername(res.data.profile.username);
-      setPhotoSrcUsername(res.data.profile.username);
+      setAvatar(res.data.profile.avatar);
       setName(res.data.profile.name);
       setEmail(res.data.profile.email);
       setPhoto(res.data.profile.photo);
@@ -210,8 +208,8 @@ const ProfileUpdate = () => {
           <div className="col-md-4">
             <img
               ref={imgRef}
-              src={`${API}/api/user/photo/${photoSrcUsername}`}
-              alt={`Foto de ${photoSrcUsername}`}
+              src={`${avatar}`}
+              alt={`Foto de ${username}`}
               className="img img-fluid img-thumbnail mb-2"
               style={{maxHeight: "auto", maxWidth:"100%"}}
               onError={loadDefaultImg}

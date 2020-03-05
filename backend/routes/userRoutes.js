@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {protectRoute, authMiddleware, readProfile} = require("../controllers/authController");
-const {publicProfile, updateUserProfile, getUserPhoto} = require("../controllers/user");
+const {publicProfile, updateUserProfile} = require("../controllers/user");
 const {getAllBlogs, createBlog, deleteBlog, updateBlog} = require("../controllers/blogController");
 
 // Buscar el perfil del usuario actual
@@ -10,8 +10,6 @@ router.get("/user/profile", protectRoute, authMiddleware, readProfile);
 router.get("/user/:username", publicProfile);
 // Actualizar el perfil del usuario actual
 router.patch("/user/update", protectRoute, authMiddleware, updateUserProfile);
-// Buscar la foto del perfil de un usuario
-router.get("/user/photo/:username", getUserPhoto);
 
 // Buscar todos los blogs del usuario
 router.get("/user-blogs", protectRoute, authMiddleware, getAllBlogs);

@@ -47,6 +47,14 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
+  avatar: {
+    type: String,
+    default: "/images/default-profile.jpg"
+  },
+  avatarPublicId: {
+    type: String,
+    default: "noimage"
+  },
   photo: {
     data: Buffer,
     contentType: String

@@ -583,6 +583,9 @@ exports.deleteUserAccount = async (req, res) => {
     // Eliminar el usuario si todo es correcto
     await user.remove();
 
+    // Eliminar la imagen avatar de Cloudinary
+    await cloudinary.v2.uploader.destroy(user.avatarPublicId, {invalidate: true});
+
     return res.json({
       status: "success",
       message: "Cuenta de usuario eliminada exitosamente"

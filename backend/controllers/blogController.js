@@ -113,7 +113,7 @@ exports.createBlog = async (req, res) => {
           };
 
           // Eliminar la imagen anterior de Cloudinary
-          await cloudinary.uploader.destroy(blog.mainPhotoPublicId);
+          await cloudinary.v2.uploader.destroy(blog.mainPhotoPublicId, {invalidate: true});
 
           // Actualizar la imagen en Cloudinary y en el blog
           const uploadResponse = await cloudinary.v2.uploader.upload(files.photo.path, {folder: "thenextblog-imgs/blogs"});
@@ -273,7 +273,7 @@ exports.deleteBlog = async (req, res) => {
     }
 
     // Eliminar la imagen del blog de Cloudinary
-    await cloudinary.uploader.destroy(blog.mainPhotoPublicId);
+    await cloudinary.v2.uploader.destroy(blog.mainPhotoPublicId, {invalidate: true});
 
     return res.json({
       status: "success",
@@ -405,7 +405,7 @@ exports.updateBlog = async (req, res) => {
           };
 
           // Eliminar la imagen anterior de Cloudinary
-          await cloudinary.uploader.destroy(updatedBlog.mainPhotoPublicId);
+          await cloudinary.v2.uploader.destroy(updatedBlog.mainPhotoPublicId, {invalidate: true});
 
           // Actualizar la imagen en Cloudinary y en el blog
           const uploadResponse = await cloudinary.v2.uploader.upload(files.photo.path, {folder: "thenextblog-imgs/blogs"});
