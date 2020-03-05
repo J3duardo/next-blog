@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
+const cloudinary = require("cloudinary");
+cloudinary.config({
+  cloud_name: `${process.env.CLOUD_NAME}`,
+  api_key: `${process.env.CLOUDINARY_API_KEY}`,
+  api_secret: `${process.env.CLOUDINARY_API_SECRET}`
+});
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -88,8 +93,20 @@ userSchema.methods.checkPassword = async function(providedPassword, realPassword
 // Eliminar los blogs asociados a un usuario cuando éste elimina su cuenta
 userSchema.post("remove", async function(doc) {
   try {
+    // Buscar los public_ids de las imágenes de los blogs a ser eliminados
+    let userPostsIds = [];
+    const userPosts = await mongoose.model("Blog").find({postedBy: doc._id}).select("mainPhotoPublicId -_id");
+    for(let key in userPosts) {
+      userPostsIds.push(userPosts[key].mainPhotoPublicId)
+    }
+
+    // Eliminar de cloudinary todas las imágenes asociadas a los blogs que van a ser eliminados
+    await cloudinary.v2.api.delete_resources(userPostsIds, {invalidate: true});
+
+    // Eliminar los blogs del usuario
     await mongoose.model("Blog").deleteMany({postedBy: doc._id});
-    console.log(`Blogs de ${doc.name} usuario eliminados correctamente`)
+    console.log(`Blogs de ${doc.name} usuario eliminados correctamente`);
+
   } catch (error) {
     console.log(error)
   }
