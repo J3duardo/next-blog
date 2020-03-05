@@ -119,11 +119,11 @@ const SingleBlog = (props) => {
         />
         <meta
           property="og:image"
-          content={!error ? `${DOMAIN}/images/landing-background.jpg` : ""}
+          content={!error ? blog.mainPhoto || `${DOMAIN}/images/landing-background.jpg` : ""}
         />
         <meta
           property="og:image:secure_url"
-          content={!error ? `${DOMAIN}/images/landing-background.jpg` : ""}
+          content={!error ? blog.mainPhoto || `${DOMAIN}/images/landing-background.jpg` : ""}
         />
         <meta
           property="og:image:type"
