@@ -116,7 +116,7 @@ exports.createBlog = async (req, res) => {
           await cloudinary.uploader.destroy(blog.mainPhotoPublicId);
 
           // Actualizar la imagen en Cloudinary y en el blog
-          const uploadResponse = await cloudinary.uploader.upload(files.photo.path);
+          const uploadResponse = await cloudinary.v2.uploader.upload(files.photo.path, {folder: "thenextblog-imgs/blogs"});
           blog.mainPhoto = uploadResponse.url;
           blog.mainPhotoPublicId = uploadResponse.public_id;
         };
@@ -408,7 +408,7 @@ exports.updateBlog = async (req, res) => {
           await cloudinary.uploader.destroy(updatedBlog.mainPhotoPublicId);
 
           // Actualizar la imagen en Cloudinary y en el blog
-          const uploadResponse = await cloudinary.uploader.upload(files.photo.path);
+          const uploadResponse = await cloudinary.v2.uploader.upload(files.photo.path, {folder: "thenextblog-imgs/blogs"});
           updatedBlog.mainPhoto = uploadResponse.url;
           updatedBlog.mainPhotoPublicId = uploadResponse.public_id;
         };
