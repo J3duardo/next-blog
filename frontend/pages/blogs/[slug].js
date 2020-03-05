@@ -1,18 +1,15 @@
-import {useState, useRef, useEffect} from "react";
+import {useState, useEffect} from "react";
 import Head from "next/head";
 import Link from "next/link";
 import {withRouter} from "next/router";
-import axios from "axios";
 import moment from "moment";
 import reactHTML from "react-render-html";
 import {getSingleBlog, getRelatedBlogs} from "../../actions/blog";
 import Layout from "../../components/Layout";
 import SmallCard from "../../components/blog/SmallCard";
 import DisqusThread from "../../components/DisqusThread";
-// import {API, DOMAIN} from "../../config";
 
 const APP_NAME = process.env.APP_NAME;
-const API = process.env.NODE_ENV === "production" ? process.env.API : process.env.API_DEV;
 const DOMAIN = process.env.NODE_ENV === "production" ? process.env.DOMAIN_PROD : process.env.DOMAIN_DEV;
 
 const SingleBlog = (props) => {
@@ -21,7 +18,6 @@ const SingleBlog = (props) => {
   const [loadingRelated, setLoadingRelated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(props.error);
-  const blogImgRef = useRef();
 
   // Cargar la data del blog seleccionado
   useEffect(() => {
@@ -30,13 +26,6 @@ const SingleBlog = (props) => {
     // Buscar los blog relacionados
     loadRelatedBlogs();
   }, [props.blog]);
-
-  // Cargar la imagen del blog al inicio y al cambiar la ruta
-  useEffect(() => {
-    if(!error || error && !error.includes("encontrado")) {
-      loadBlogImage()
-    }
-  }, [props.router.asPath]);
 
   // Funcionalidad para buscar los blogs relacionados
   const loadRelatedBlogs = async () => {
@@ -48,26 +37,6 @@ const SingleBlog = (props) => {
     } catch (error) {
       setLoadingRelated(false);
       console.log(error.message)
-    }
-  }
-
-  // Funcionalidad para cargar la imagen del blog o la imagen por defecto si el blog no contiene imagen
-  const loadBlogImage = async () => {
-    try {
-      setLoading(true);
-      blogImgRef.current.src = "";
-      const res = await axios.get(`${API}/api/blog/${props.router.query.slug}/photo`);
-      if(!res.data) {
-        blogImgRef.current.src = "/images/noimage.png"
-        blogImgRef.current.onload = () => setLoading(false);
-      } else {
-        blogImgRef.current.src = `${API}/api/blog/${props.router.query.slug}/photo`
-        blogImgRef.current.onload = () => setLoading(false);
-      }
-    } catch (error) {
-      blogImgRef.current.src = "/images/noimage.png"
-      setLoading(false);
-      console.log(error)
     }
   }
 
@@ -192,9 +161,8 @@ const SingleBlog = (props) => {
                         </div>
                       }
                       <img
-                        ref={blogImgRef}
                         className="img img-fluid blog-image"
-                        src=""
+                        src={blog.mainPhoto}
                         alt={`${blog.title}`}
                       />
                     </div>

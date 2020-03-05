@@ -1,38 +1,12 @@
-import {useRef, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import Link from "next/link";
-import axios from "axios";
 import moment from "moment";
 moment.locale("es");
 import reactHTML from "react-render-html";
-// import {API} from "../../config";
-const API = process.env.NODE_ENV === "production" ? process.env.API : process.env.API_DEV;
 
 const Card = (props) => {
   const {blog} = props;
-  const imageRef = useRef();
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    loadBlogImage()
-  }, []);
-
-  const loadBlogImage = async () => {
-    try {
-      setLoading(true);
-      const res = await axios.get(`${API}/api/blog/${blog.slug}/photo`);
-      if(!res.data) {
-        imageRef.current.src = "/images/noimage.png"
-        imageRef.current.onload = () => setLoading(false);
-      } else {
-        imageRef.current.src = `${API}/api/blog/${blog.slug}/photo`
-        imageRef.current.onload = () => setLoading(false);  
-      }
-    } catch (error) {
-      imageRef.current.src = "/images/noimage.png"
-      setLoading(false);
-      console.log(error)
-    }
-  }
 
   const renderCategories = () => {
     return blog.categories.map(category => {
@@ -93,10 +67,9 @@ const Card = (props) => {
               </div>
             }
             <img
-              ref={imageRef}
               className="img img-fluid"
               style={{display: "block", maxHeight: "150px", width: "auto"}}
-              src=""
+              src={blog.mainPhoto}
               alt={`${blog.title}`}
             />
           </section>
