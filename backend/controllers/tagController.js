@@ -54,7 +54,7 @@ exports.getTag = async (req, res) => {
     .populate("categories", "_id name slug")
     .populate("tags", "_id name slug")
     .populate("postedBy", "_id name")
-    .select("_id title slug excerpt categories postedBy tags createdAt updatedAt")
+    .select("_id title mainPhoto slug excerpt categories postedBy tags createdAt updatedAt")
 
     return res.json({
       status: "success",
