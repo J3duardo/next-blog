@@ -44,7 +44,9 @@ app.use(mongoSanitize());
 app.use(helmet());
 app.use(xssClean());
 app.use(hpp());
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:3000", "https://thenextblog.vercel.app"],
+}));
 
 // Rutas
 app.use("/api", blogRoutes);
